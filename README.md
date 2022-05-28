@@ -1,5 +1,5 @@
 <h1 align="center">Portfolio Theme</h1>
-<p><b>A light weight , responsive portfolio theme by <a href="https://github.com/saifalisew1508">SIF ALI</a></b></p>
+<p><b>A light weight , responsive portfolio theme by <a href="https://github.com/saifalisew1508">SAIF ALI</a></b></p>
 
 [![Demo](https://img.shields.io/badge/Live-Demo-blue?style=flat-square)](https://saifalisew1508.ml)
 [![Fork Now](https://img.shields.io/badge/Fork-Now-red?style=flat-square)](https://github.com/saifalisew1508/Portfolio/fork)
