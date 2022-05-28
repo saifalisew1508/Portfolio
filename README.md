@@ -16,7 +16,7 @@
 
 
 # Credit
-[all constributers](https://github.com/saifalisew1508/Portfofio/graphs/contributors)
+[all constributers](https://github.com/saifalisew1508/Portfolio/graphs/contributors)
 
 # License
 
