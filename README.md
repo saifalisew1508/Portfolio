@@ -35,3 +35,12 @@ Host in any platform, codes are responsive as well as friendly and simple to und
 * Open settings of the repo , scroll down and click on Pages.
 * In sources select main branch ( by default none is selected ) and click on Save then you will get your web link ( you can also add your custom domain that option is at the end of same page). 
 * Your web is ready!
+
+
+<h1 align="center"> For Pro Developers </h1>
+
+```
+Contributions are welcomed, But Kanging and editing a few lines wont make you a Developer.
+Fork the repo, Do not Import code.
+
+```
