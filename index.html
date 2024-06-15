@@ -52,19 +52,26 @@
     <script>
         new WOW().init();
 
+        // Function to load or remove particles.js configuration
+        function loadParticles() {
+            if (document.body.classList.contains('night-mode')) {
+                particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
+                    console.log('particles.js loaded - night mode');
+                });
+            } else {
+                particlesJS('particles-js', {}); // This will reset particles
+                document.getElementById('particles-js').innerHTML = ''; // Clear particles canvas
+            }
+        }
+
         // Day and Night Toggle Script
         document.getElementById('theme-toggle').addEventListener('change', function() {
             document.body.classList.toggle('night-mode');
             loadParticles();
         });
 
-        function loadParticles() {
-            if (document.body.classList.contains('night-mode')) {
-                particlesJS.load('particles-js', 'assets/particlesjs-config.json');
-            } else {
-                particlesJS('particles-js', {}); // Disable particles
-            }
-        }
+        // Initial load
+        loadParticles();
     </script>
 </body>
 
