@@ -79,7 +79,7 @@ body.night-mode {
 }
 
 body.night-mode .container {
-    background-image: none; /* Remove background image */
+    background-image: url(assets/images/night.jpg);
 }
 
 body.night-mode .card {
