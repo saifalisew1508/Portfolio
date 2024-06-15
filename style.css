@@ -12,6 +12,8 @@
     position: absolute;
     top: 20px;
     right: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .toggle-switch input[type="checkbox"] {
@@ -19,29 +21,40 @@
 }
 
 .toggle-switch label {
-    width: 50px;
-    height: 25px;
+    width: 60px;
+    height: 30px;
     background: #ccc;
     display: block;
-    border-radius: 25px;
+    border-radius: 30px;
     position: relative;
     cursor: pointer;
 }
 
-.toggle-switch label::after {
-    content: "";
-    width: 23px;
-    height: 23px;
-    background: #fff;
-    border-radius: 50%;
+.toggle-switch label .toggle-icon {
     position: absolute;
-    top: 1px;
-    left: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
     transition: all 0.3s;
 }
 
-.toggle-switch input[type="checkbox"]:checked + label::after {
-    left: 26px;
+.toggle-switch label .sun {
+    left: 5px;
+    color: #ff0;
+}
+
+.toggle-switch label .moon {
+    right: 5px;
+    color: #00f;
+    opacity: 0;
+}
+
+.toggle-switch input[type="checkbox"]:checked + label .sun {
+    opacity: 0;
+}
+
+.toggle-switch input[type="checkbox"]:checked + label .moon {
+    opacity: 1;
 }
 
 .toggle-switch input[type="checkbox"]:checked + label {
@@ -66,7 +79,7 @@ body.night-mode {
 }
 
 body.night-mode .container {
-    background-image: url(assets/images/night-background.jpg); /* Ensure you have a night version of your background image */
+    background-image: none; /* Remove background image */
 }
 
 body.night-mode .card {
