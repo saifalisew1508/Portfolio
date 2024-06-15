@@ -104,6 +104,7 @@ body.night-mode .card {
 .card img {
     width: 140px;
     border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .card h2 {
@@ -123,6 +124,7 @@ body.night-mode .card {
     border-radius: 50%;
     margin: 10px 5px;
     transition: background 0.5s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .card .links img:hover {
