@@ -11,14 +11,16 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-
 </head>
 
 <body>
     <!-- Day and Night Switch Toggle -->
     <div class="toggle-switch">
         <input type="checkbox" id="theme-toggle" />
-        <label for="theme-toggle"></label>
+        <label for="theme-toggle" class="toggle-label">
+            <span class="toggle-icon sun">☀️</span>
+            <span class="toggle-icon moon">🌙</span>
+        </label>
     </div>
 
     <!-- particles-js container -->
@@ -46,15 +48,24 @@
     <!-- Your existing scripts -->
     <script src="assets/js/vanilla-tilt.js"></script>
     <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/particles.min.js"></script>
     <script>
         new WOW().init();
 
         // Day and Night Toggle Script
         document.getElementById('theme-toggle').addEventListener('change', function() {
             document.body.classList.toggle('night-mode');
+            loadParticles();
         });
-    </script>
 
+        function loadParticles() {
+            if (document.body.classList.contains('night-mode')) {
+                particlesJS.load('particles-js', 'assets/particlesjs-config.json');
+            } else {
+                particlesJS('particles-js', {}); // Disable particles
+            }
+        }
+    </script>
 </body>
 
 </html>
