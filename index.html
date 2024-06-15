@@ -12,14 +12,18 @@
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
 
+    <!-- Include particle.js library -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <!-- particles-js container -->
+    <div id="particles-js" class="container">
         <div class="card wow fadeInUp" data-tilt>
-            <img src="assets/images/saifalisew1508.png" class="wow fadeInUp" data-wow-duration="0.4s" data-wow-delay="0.2s">
+            <img src="assets/images/saifalisew1508.png" class="wow fadeInUp" data-wow-duration="0.4s"
+                data-wow-delay="0.2s">
             <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Saif Ali</h2>
-            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Self Thaught Developer.</p>
+            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Self Taught Developer.</p>
             <div class="links wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">
                 <a href="https://github.com/saifalisew1508"><img src="assets/images/Github.png"></a>
                 <a href="https://facebook.com/saifalisew1508"><img src="assets/images/facebook.png"></a>
@@ -30,17 +34,18 @@
                 <a href="https://www.reddit.com/user/saifalisew1508"><img src="assets/images/reddit.png"></a>
                 <a href="http://discordapp.com/users/927678863864131584"><img src="assets/images/discord.png"></a>
             </div>
-            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
+            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp"
+                data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
         </div>
     </div>
-    <script src="assets/js/vanilla-tilt.js"></script>
 
+    <!-- Your existing scripts -->
+    <script src="assets/js/vanilla-tilt.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script>
+        new WOW().init();
+    </script>
 
 </body>
-<script src="assets/js/wow.min.js"></script>
-<script>
-    new WOW().init();
-</script>
-
 
 </html>
