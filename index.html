@@ -15,6 +15,12 @@
 </head>
 
 <body>
+    <!-- Day and Night Switch Toggle -->
+    <div class="toggle-switch">
+        <input type="checkbox" id="theme-toggle" />
+        <label for="theme-toggle"></label>
+    </div>
+
     <!-- particles-js container -->
     <div id="particles-js" class="container">
         <div class="card wow fadeInUp" data-tilt>
@@ -42,6 +48,11 @@
     <script src="assets/js/wow.min.js"></script>
     <script>
         new WOW().init();
+
+        // Day and Night Toggle Script
+        document.getElementById('theme-toggle').addEventListener('change', function() {
+            document.body.classList.toggle('night-mode');
+        });
     </script>
 
 </body>
