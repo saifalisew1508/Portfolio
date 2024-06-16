@@ -7,85 +7,51 @@
     text-shadow: 3px 3px 3px #eb3636;
 }
 
-/* Toggle Switch Styles */
+body.night-mode {
+    background: #000;
+}
+
 .toggle-switch {
     position: absolute;
     top: 20px;
     right: 20px;
-    display: flex;
-    align-items: center;
 }
 
-.toggle-switch input[type="checkbox"] {
+.toggle-switch input {
     display: none;
 }
 
 .toggle-switch label {
-    width: 60px;
-    height: 30px;
-    background: #ccc;
-    display: block;
-    border-radius: 30px;
-    position: relative;
+    display: flex;
+    align-items: center;
     cursor: pointer;
 }
 
-.toggle-switch label .toggle-icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    transition: all 0.3s;
+.toggle-icon {
+    display: none;
+    font-size: 24px;
 }
 
-.toggle-switch label .sun {
-    left: 5px;
-    color: #ff0;
+.sun {
+    display: block;
+    color: yellow;
 }
 
-.toggle-switch label .moon {
-    right: 5px;
-    color: #00f;
-    opacity: 0;
+body.night-mode .sun {
+    display: none;
 }
 
-.toggle-switch input[type="checkbox"]:checked + label .sun {
-    opacity: 0;
-}
-
-.toggle-switch input[type="checkbox"]:checked + label .moon {
-    opacity: 1;
-}
-
-.toggle-switch input[type="checkbox"]:checked + label {
-    background: #4e4e4e;
+body.night-mode .moon {
+    display: block;
+    color: blue;
 }
 
 .container {
     width: 100%;
     height: 100vh;
-    background-image: url(assets/images/iron-man.jpg);
-    background-position: center;
-    background-size: cover;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-/* Night Mode Styles */
-body.night-mode {
-    background-color: #121212;
-    color: #fff;
-}
-
-body.night-mode .container {
-    background-image: url(assets/images/night.jpg);
-}
-
-body.night-mode .card {
-    background: rgba(0, 0, 0, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
 }
 
 .card {
@@ -94,7 +60,7 @@ body.night-mode .card {
     color: #fff;
     text-align: center;
     padding: 50px 35px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255 0.3);
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -104,7 +70,7 @@ body.night-mode .card {
 .card img {
     width: 140px;
     border-radius: 50%;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 0px 10px #000;
 }
 
 .card h2 {
@@ -124,7 +90,7 @@ body.night-mode .card {
     border-radius: 50%;
     margin: 10px 5px;
     transition: background 0.5s;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 0px 10px #000;
 }
 
 .card .links img:hover {
@@ -141,9 +107,4 @@ body.night-mode .card {
     padding: 10px 30px;
     border-radius: 30px;
     margin: 30px 0 10px;
-}
-
-body.night-mode .btn {
-    background: #4e4e4e;
-    color: #fff;
 }
