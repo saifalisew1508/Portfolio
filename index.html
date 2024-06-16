@@ -14,13 +14,16 @@
 </head>
 
 <body>
+    <!-- Day and Night Switch Toggle -->
     <div class="toggle-switch">
-        <input type="checkbox" id="theme-toggle">
-        <label for="theme-toggle">
+        <input type="checkbox" id="theme-toggle" />
+        <label for="theme-toggle" class="toggle-label">
             <span class="toggle-icon sun">☀️</span>
             <span class="toggle-icon moon">🌙</span>
         </label>
     </div>
+
+    <!-- particles-js container -->
     <div id="particles-js" class="container">
         <div class="card wow fadeInUp" data-tilt>
             <img src="assets/images/saifalisew1508.png" class="wow fadeInUp" data-wow-duration="0.4s"
@@ -42,310 +45,33 @@
         </div>
     </div>
 
+    <!-- Your existing scripts -->
     <script src="assets/js/vanilla-tilt.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/particles.min.js"></script>
     <script>
         new WOW().init();
 
-        // Function to load particles.js configuration
-        function loadParticles(config) {
-            particlesJS("particles-js", config);
+        // Function to load or remove particles.js configuration
+        function loadParticles() {
+            if (document.body.classList.contains('night-mode')) {
+                particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
+                    console.log('particles.js loaded - night mode');
+                });
+            } else {
+                particlesJS('particles-js', {}); // This will reset particles
+                document.getElementById('particles-js').innerHTML = ''; // Clear particles canvas
+            }
         }
 
         // Day and Night Toggle Script
         document.getElementById('theme-toggle').addEventListener('change', function() {
             document.body.classList.toggle('night-mode');
-            if (document.body.classList.contains('night-mode')) {
-                loadParticles(nightConfig);
-            } else {
-                loadParticles(dayConfig);
-            }
+            loadParticles();
         });
 
         // Initial load
-        const dayConfig = {
-            "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    },
-                    "image": {
-                        "src": "img/github.svg",
-                        "width": 100,
-                        "height": 100
-                    }
-                },
-                "opacity": {
-                    "value": 0.5,
-                    "random": false,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 6,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "repulse"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 200,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true
-        };
-
-        const nightConfig = {
-            "particles": {
-                "number": {
-                    "value": 50,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "polygon",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 6
-                    },
-                    "image": {
-                        "src": "img/github.svg",
-                        "width": 100,
-                        "height": 100
-                    }
-                },
-                "opacity": {
-                    "value": 0.5,
-                    "random": false,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 6,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "repulse"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 200,
-                        "To achieve the `particles.js` effect similar to the one on [xditya.me](https://www.xditya.me/) and to add black shadows to the profile picture and social media icons, you can follow these steps:
-
-### HTML:
-Include the `particles.js` script and create a container for the particles.
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAIF ALI Official Website</title>
-    <meta name="description" content="Contact Page.">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-</head>
-
-<body>
-    <div class="toggle-switch">
-        <input type="checkbox" id="theme-toggle">
-        <label for="theme-toggle">
-            <span class="toggle-icon sun">☀️</span>
-            <span class="toggle-icon moon">🌙</span>
-        </label>
-    </div>
-    <div id="particles-js" class="container">
-        <div class="card wow fadeInUp" data-tilt>
-            <img src="assets/images/saifalisew1508.png" class="wow fadeInUp" data-wow-duration="0.4s"
-                data-wow-delay="0.2s">
-            <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Saif Ali</h2>
-            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Self Taught Developer.</p>
-            <div class="links wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">
-                <a href="https://github.com/saifalisew1508"><img src="assets/images/Github.png"></a>
-                <a href="https://facebook.com/saifalisew1508"><img src="assets/images/facebook.png"></a>
-                <a href="https://twitter.com/saifalisew1508"><img src="assets/images/twitter.png"></a>
-                <a href="https://t.me/DearSaif"><img src="assets/images/telegram.png"></a>
-                <a href="https://instagram.com/saifaliopp"><img src="assets/images/Instagram.png"></a>
-                <a href="https://pinterest.com/saifalisew1508"><img src="assets/images/pinterest.png"></a>
-                <a href="https://www.reddit.com/user/saifalisew1508"><img src="assets/images/reddit.png"></a>
-                <a href="http://discordapp.com/users/927678863864131584"><img src="assets/images/discord.png"></a>
-            </div>
-            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp"
-                data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
-        </div>
-    </div>
-
-    <script src="assets/js/vanilla-tilt.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/particles.min.js"></script>
-    <script>
-        new WOW().init();
-
-        // Function to load particles.js configuration
-        function loadParticles(config) {
-            particlesJS("particles-js", config);
-        }
-
-        // Day and Night Toggle Script
-        document.getElementById('theme-toggle').addEventListener('change', function() {
-            document.body.classList.toggle('night-mode');
-            if (document.body.classList.contains('night-mode')) {
-                loadParticles(nightConfig);
-            } else {
-                loadParticles(dayConfig);
-            }
-        });
-
-        // Initial load
-        loadParticles(dayConfig);
+        loadParticles();
     </script>
 </body>
 
