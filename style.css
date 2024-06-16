@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Sofia", sans-serif;
+    font-family: "Sofia", Arial, sans-serif;
     font-size: 30px;
     text-shadow: 3px 3px 3px #eb3636;
 }
@@ -107,7 +107,7 @@ body.night-mode .card {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
-.card h2 {
+.card h1 {
     font-size: 40px;
     font-weight: 600;
     margin-top: 20%;
