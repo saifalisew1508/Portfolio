@@ -8,9 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAIF ALI Official Website</title>
     <meta name="description" content="Contact Page.">
+    <meta name="keywords" content="Saif Ali, Developer, Portfolio, Contact">
+    <meta name="author" content="Saif Ali">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Sofia" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    </noscript>
 </head>
 
 <body>
@@ -26,46 +31,44 @@
     <!-- particles-js container -->
     <div id="particles-js" class="container">
         <div class="card wow fadeInUp" data-tilt>
-            <img src="assets/images/saifalisew1508.png" class="wow fadeInUp" data-wow-duration="0.4s"
-                data-wow-delay="0.2s">
-            <h2 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Saif Ali</h2>
+            <img src="assets/images/saifalisew1508.png" alt="Saif Ali" class="wow fadeInUp" data-wow-duration="0.4s" data-wow-delay="0.2s">
+            <h1 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Saif Ali</h1>
             <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Self Taught Developer.</p>
             <div class="links wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">
-                <a href="https://github.com/saifalisew1508"><img src="assets/images/Github.png"></a>
-                <a href="https://facebook.com/saifalisew1508"><img src="assets/images/facebook.png"></a>
-                <a href="https://twitter.com/saifalisew1508"><img src="assets/images/twitter.png"></a>
-                <a href="https://t.me/DearSaif"><img src="assets/images/telegram.png"></a>
-                <a href="https://instagram.com/saifaliopp"><img src="assets/images/Instagram.png"></a>
-                <a href="https://pinterest.com/saifalisew1508"><img src="assets/images/pinterest.png"></a>
-                <a href="https://www.reddit.com/user/saifalisew1508"><img src="assets/images/reddit.png"></a>
-                <a href="http://discordapp.com/users/927678863864131584"><img src="assets/images/discord.png"></a>
+                <a href="https://github.com/saifalisew1508"><img src="assets/images/Github.png" alt="GitHub"></a>
+                <a href="https://facebook.com/saifalisew1508"><img src="assets/images/facebook.png" alt="Facebook"></a>
+                <a href="https://twitter.com/saifalisew1508"><img src="assets/images/twitter.png" alt="Twitter"></a>
+                <a href="https://t.me/DearSaif"><img src="assets/images/telegram.png" alt="Telegram"></a>
+                <a href="https://instagram.com/saifaliopp"><img src="assets/images/Instagram.png" alt="Instagram"></a>
+                <a href="https://pinterest.com/saifalisew1508"><img src="assets/images/pinterest.png" alt="Pinterest"></a>
+                <a href="https://www.reddit.com/user/saifalisew1508"><img src="assets/images/reddit.png" alt="Reddit"></a>
+                <a href="http://discordapp.com/users/927678863864131584"><img src="assets/images/discord.png" alt="Discord"></a>
             </div>
-            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp"
-                data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
+            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
         </div>
     </div>
 
-    <!-- Your existing scripts -->
-    <script src="assets/js/vanilla-tilt.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/particles.min.js"></script>
+
+    <script src="assets/js/vanilla-tilt.js" defer></script>
+    <script src="assets/js/wow.min.js" defer></script>
+    <script src="assets/js/particles.min.js" defer></script>
     <script>
         new WOW().init();
 
         // Function to load or remove particles.js configuration
         function loadParticles() {
+            const particlesContainer = document.getElementById('particles-js');
             if (document.body.classList.contains('night-mode')) {
-                particlesJS.load('particles-js', 'assets/particlesjs-config.json', function() {
+                particlesJS.load('particles-js', 'assets/particlesjs-config.json', function () {
                     console.log('particles.js loaded - night mode');
                 });
             } else {
-                particlesJS('particles-js', {}); // This will reset particles
-                document.getElementById('particles-js').innerHTML = ''; // Clear particles canvas
+                particlesContainer.innerHTML = ''; // Clear particles canvas
             }
         }
 
         // Day and Night Toggle Script
-        document.getElementById('theme-toggle').addEventListener('change', function() {
+        document.getElementById('theme-toggle').addEventListener('change', function () {
             document.body.classList.toggle('night-mode');
             loadParticles();
         });
