@@ -2,20 +2,26 @@
 <html lang="en">
 
 <head>
-    <script defer src="/_vercel/insights/script.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SAIF ALI Official Website</title>
+    <title>Saif Ali Official Website</title>
     <meta name="description" content="Contact Page.">
     <meta name="keywords" content="Saif Ali, Developer, Portfolio, Contact">
     <meta name="author" content="Saif Ali">
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="assets/css/animate.css">
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Sofia" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
     </noscript>
+
+    <!-- Scripts -->
+    <script src="assets/js/vanilla-tilt.js" defer></script>
+    <script src="assets/js/wow.min.js" defer></script>
+    <script src="assets/js/particles.min.js" defer></script>
 </head>
 
 <body>
@@ -48,22 +54,18 @@
         </div>
     </div>
 
-
-    <script src="assets/js/vanilla-tilt.js" defer></script>
-    <script src="assets/js/wow.min.js" defer></script>
-    <script src="assets/js/particles.min.js" defer></script>
+    <!-- Scripts -->
     <script>
         new WOW().init();
 
         // Function to load or remove particles.js configuration
         function loadParticles() {
-            const particlesContainer = document.getElementById('particles-js');
             if (document.body.classList.contains('night-mode')) {
                 particlesJS.load('particles-js', 'assets/particlesjs-config.json', function () {
                     console.log('particles.js loaded - night mode');
                 });
             } else {
-                particlesContainer.innerHTML = ''; // Clear particles canvas
+                document.getElementById('particles-js').innerHTML = ''; // Clear particles canvas
             }
         }
 
