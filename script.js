@@ -50,7 +50,7 @@ fetch('https://ipapi.co/json/',{headers:{Accept:'application/json'}}).then(r=>{i
 const form=document.getElementById('contact-form'),status=document.getElementById('form-status'),button=form&&form.querySelector('button');
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;button.disabled=true;status.textContent='Sending your message…';try{const response=await fetch('https://formsubmit.co/ajax/md.saif2752@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:'New portfolio message from '+data.name,_template:'table'})});const result=await response.json();if(!response.ok||result.success===false)throw new Error(result.message||'Message could not be sent');form.reset();status.textContent='Message sent! Thanks for reaching out. I’ll get back to you soon.'}catch(error){status.textContent='Could not send right now. Please email md.saif2752@gmail.com directly.'}finally{button.disabled=false}});
 
-// Playlist player: local audio files already stored in the repository's /music folder.
+// Discover every MP3 in the public GitHub /music folder. New files appear without code edits.
 const audio=document.getElementById('portfolio-audio');
 const player=document.getElementById('music-player');
 const playBtn=document.getElementById('music-play');
@@ -59,31 +59,57 @@ const currentTimeEl=document.getElementById('music-current-time');
 const durationEl=document.getElementById('music-duration');
 const titleEl=document.getElementById('music-current-title');
 const artistEl=document.getElementById('music-current-artist');
+const extraMetaEl=document.getElementById('music-extra-meta');
 const statusEl=document.getElementById('music-status');
-const trackButtons=[...document.querySelectorAll('.music-track')];
-const tracks=[
- {title:'FUNK ABNORMAL',artist:'DJ V12 · Super Slowed x Dabura',src:'music/FUNK ABNORMAL - DJ V12 (Super Slowed) x Dabura(MP3_320K).mp3'},
- {title:'VOCE NA MIRA',artist:'Sped Up',src:'music/VOCE NA MIRA (Sped Up)(MP3_320K).mp3'}
-];
-let activeTrack=0,isSeeking=false;
+const trackList=document.getElementById('music-tracklist');
+const countEl=document.getElementById('music-count');
+const albumArtEl=document.getElementById('music-album-art');
+let tracks=[],activeTrack=0,isSeeking=false;
 const clockTime=value=>{if(!Number.isFinite(value))return'00:00';const m=Math.floor(value/60),sec=Math.floor(value%60);return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')};
+const fallbackTitle=name=>decodeURIComponent(name).replace(/\.mp3$/i,'').replace(/\s*\(MP3[^)]*\)/i,'').replace(/[_-]+/g,' ').trim();
+const parseTags=url=>new Promise(resolve=>{
+ if(!window.jsmediatags||!window.jsmediatags.read){resolve({});return}
+ window.jsmediatags.read(url,{onSuccess:result=>{
+  const tags=result.tags||{},picture=tags.picture;
+  let artwork='';
+  if(picture&&picture.data){try{const bytes=new Uint8Array(picture.data);let binary='';for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);artwork='data:'+picture.format+';base64,'+btoa(binary)}catch(e){}}
+  resolve({title:tags.title,artist:tags.artist,album:tags.album,genre:tags.genre,artwork});
+ },onError:()=>resolve({})});
+});
+const renderTrackList=()=>{
+ trackList.innerHTML='';
+ if(!tracks.length){trackList.innerHTML='<p class="music-empty">No MP3 files found in the GitHub music folder.</p>';countEl.textContent='0 TRACKS';return}
+ countEl.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';
+ tracks.forEach((track,index)=>{
+  const button=document.createElement('button');button.type='button';button.className='music-track'+(index===activeTrack?' active':'');button.setAttribute('role','listitem');button.dataset.track=String(index);
+  const number=document.createElement('span');number.className='track-index';number.textContent=String(index+1).padStart(2,'0');
+  const details=document.createElement('span');details.className='track-details';
+  const title=document.createElement('strong');title.textContent=track.title;
+  const artist=document.createElement('small');artist.textContent=track.artist||'Unknown artist';
+  const meta=document.createElement('small');meta.className='track-meta-extra';meta.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre not embedded';
+  details.append(title,artist,meta);
+  const state=document.createElement('span');state.className='track-state';state.textContent=index===activeTrack?'♫':'▶';
+  button.append(number,details,state);
+  button.addEventListener('click',()=>{setTrack(index);playAudio()});
+  trackList.append(button);
+ });
+};
 const setTrack=index=>{
+ if(!tracks.length)return;
  activeTrack=(index+tracks.length)%tracks.length;
- const track=tracks[activeTrack];
- audio.pause();audio.src=track.src;audio.load();
- titleEl.textContent=track.title;artistEl.textContent=track.artist;
+ const track=tracks[activeTrack];audio.pause();audio.src=track.url;audio.load();
+ titleEl.textContent=track.title;artistEl.textContent=track.artist||'Unknown artist';
+ extraMetaEl.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre not embedded';
+ albumArtEl.style.backgroundImage=track.artwork?'url("'+track.artwork+'")':'';
+ albumArtEl.classList.toggle('has-art',!!track.artwork);albumArtEl.textContent=track.artwork?'':'♫';
  currentTimeEl.textContent='00:00';durationEl.textContent='--:--';progress.value=0;
- trackButtons.forEach((button,i)=>{button.classList.toggle('active',i===activeTrack);button.querySelector('.track-state').textContent=i===activeTrack?'♫':'▶'});
+ [...trackList.querySelectorAll('.music-track')].forEach((button,i)=>{button.classList.toggle('active',i===activeTrack);button.querySelector('.track-state').textContent=i===activeTrack?'♫':'▶'});
  player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');statusEl.textContent='READY TO PLAY';
 };
-const playAudio=async()=>{
- try{await audio.play();player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'}
- catch(error){statusEl.textContent='AUDIO COULD NOT LOAD';player.classList.remove('is-playing');}
-};
-playBtn.addEventListener('click',()=>{if(audio.paused)playAudio();else audio.pause()});
-document.getElementById('music-prev').addEventListener('click',()=>{setTrack(activeTrack-1);playAudio()});
-document.getElementById('music-next').addEventListener('click',()=>{setTrack(activeTrack+1);playAudio()});
-trackButtons.forEach(button=>button.addEventListener('click',()=>{setTrack(Number(button.dataset.track));playAudio()}));
+const playAudio=async()=>{try{await audio.play();player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'}catch(error){statusEl.textContent='AUDIO COULD NOT LOAD';player.classList.remove('is-playing')}};
+playBtn.addEventListener('click',()=>{if(!tracks.length)return;if(audio.paused)playAudio();else audio.pause()});
+document.getElementById('music-prev').addEventListener('click',()=>{if(tracks.length){setTrack(activeTrack-1);playAudio()}});
+document.getElementById('music-next').addEventListener('click',()=>{if(tracks.length){setTrack(activeTrack+1);playAudio()}});
 audio.addEventListener('pause',()=>{player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');if(audio.ended)statusEl.textContent='TRACK FINISHED';else if(audio.currentTime>0)statusEl.textContent='PAUSED'});
 audio.addEventListener('play',()=>{player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'});
 audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=clockTime(audio.duration)});
@@ -92,5 +118,33 @@ progress.addEventListener('input',()=>{isSeeking=true;currentTimeEl.textContent=
 progress.addEventListener('change',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=(Number(progress.value)/100)*audio.duration;isSeeking=false});
 audio.addEventListener('ended',()=>{if(activeTrack<tracks.length-1){setTrack(activeTrack+1);playAudio()}else{statusEl.textContent='PLAYLIST COMPLETE'}});
 audio.addEventListener('error',()=>{statusEl.textContent='TRACK UNAVAILABLE';player.classList.remove('is-playing')});
-setTrack(0);
+const loadGitHubPlaylist=async()=>{
+ try{
+  const response=await fetch('https://api.github.com/repos/saifalisew1508/Portfolio/contents/music?ref=main',{headers:{Accept:'application/vnd.github+json'}});
+  if(!response.ok)throw new Error('GitHub playlist request failed ('+response.status+')');
+  const files=await response.json();
+  const mp3s=files.filter(file=>file.type==='file'&&/\.mp3$/i.test(file.name)).sort((a,b)=>a.name.localeCompare(b.name));
+  const discovered=await Promise.all(mp3s.map(async file=>{
+   const url='https://raw.githubusercontent.com/saifalisew1508/Portfolio/main/'+file.path.split('/').map(encodeURIComponent).join('/');
+   const tags=await parseTags(url);
+   return {title:tags.title||fallbackTitle(file.name),artist:tags.artist||'Unknown artist',album:tags.album||'',genre:tags.genre||'',artwork:tags.artwork||'',url,name:file.name};
+  }));
+  tracks=discovered;renderTrackList();
+  if(tracks.length){setTrack(0);statusEl.textContent='LIBRARY READY'}else statusEl.textContent='NO TRACKS FOUND';
+ }catch(error){countEl.textContent='LIBRARY OFFLINE';trackList.innerHTML='<p class="music-empty">Could not load the GitHub music folder. Please try again later.</p>';statusEl.textContent='LIBRARY UNAVAILABLE'}
+};
+loadGitHubPlaylist();
+
+// Scroll reveal enters from the direction the visitor is moving.
+const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section,.info-card,.project-card,.resume-panel,.contact-card')];
+revealTargets.forEach(el=>el.classList.add('scroll-reveal'));
+let previousScrollY=window.scrollY;
+const revealObserver=new IntersectionObserver(entries=>{
+ const movingDown=window.scrollY>=previousScrollY;previousScrollY=window.scrollY;
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){entry.target.classList.remove('reveal-from-up');if(!movingDown)entry.target.classList.add('reveal-from-up');requestAnimationFrame(()=>entry.target.classList.add('is-visible'))}
+  else if(entry.boundingClientRect.top>0||entry.boundingClientRect.bottom<0){entry.target.classList.remove('is-visible')}
+ });
+},{threshold:.08,rootMargin:'0px 0px -5% 0px'});
+revealTargets.forEach(el=>revealObserver.observe(el));
 })();
