@@ -1,83 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saif Ali Official Website</title>
-    <meta name="description" content="Contact Page.">
-    <meta name="keywords" content="Saif Ali, Developer, Portfolio, Contact">
-    <meta name="author" content="Saif Ali">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="assets/css/animate.css">
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Sofia" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
-    </noscript>
-
-    <!-- Scripts -->
-    <script src="assets/js/vanilla-tilt.js" defer></script>
-    <script src="assets/js/wow.min.js" defer></script>
-    <script src="assets/js/particles.min.js" defer></script>
-</head>
-
-<body>
-    <!-- Day and Night Switch Toggle -->
-    <div class="toggle-switch">
-        <input type="checkbox" id="theme-toggle" />
-        <label for="theme-toggle" class="toggle-label">
-            <span class="toggle-icon sun">☀️</span>
-            <span class="toggle-icon moon">🌙</span>
-        </label>
-    </div>
-
-    <!-- particles-js container -->
-    <div id="particles-js" class="container">
-        <div class="card wow fadeInUp" data-tilt>
-            <img src="assets/images/saifalisew1508.png" alt="Saif Ali" class="wow fadeInUp" data-wow-duration="0.4s" data-wow-delay="0.2s">
-            <h1 class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Saif Ali</h1>
-            <p class="wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.6s">Self Taught Developer.</p>
-            <div class="links wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">
-                <a href="https://github.com/saifalisew1508"><img src="assets/images/Github.png" alt="GitHub"></a>
-                <a href="https://facebook.com/saifalisew1508"><img src="assets/images/facebook.png" alt="Facebook"></a>
-                <a href="https://twitter.com/saifalisew1508"><img src="assets/images/twitter.png" alt="Twitter"></a>
-                <a href="https://t.me/DearSaif"><img src="assets/images/telegram.png" alt="Telegram"></a>
-                <a href="https://instagram.com/saifaliopp"><img src="assets/images/Instagram.png" alt="Instagram"></a>
-                <a href="https://pinterest.com/saifalisew1508"><img src="assets/images/pinterest.png" alt="Pinterest"></a>
-                <a href="https://www.reddit.com/user/saifalisew1508"><img src="assets/images/reddit.png" alt="Reddit"></a>
-                <a href="http://discordapp.com/users/927678863864131584"><img src="assets/images/discord.png" alt="Discord"></a>
-            </div>
-            <a href="https://website-saifalisew1508.vercel.app/" class="btn wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.8s">View Portfolio</a>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script>
-        new WOW().init();
-
-        // Function to load or remove particles.js configuration
-        function loadParticles() {
-            if (document.body.classList.contains('night-mode')) {
-                particlesJS.load('particles-js', 'assets/particlesjs-config.json', function () {
-                    console.log('particles.js loaded - night mode');
-                });
-            } else {
-                document.getElementById('particles-js').innerHTML = ''; // Clear particles canvas
-            }
-        }
-
-        // Day and Night Toggle Script
-        document.getElementById('theme-toggle').addEventListener('change', function () {
-            document.body.classList.toggle('night-mode');
-            loadParticles();
-        });
-
-        // Initial load
-        loadParticles();
-    </script>
-</body>
-
-</html>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080b12">
+<meta name="description" content="Saif Ali — self-taught developer, open-source enthusiast and bot builder. Explore projects and get in touch."><meta name="author" content="Saif Ali">
+<meta property="og:title" content="Saif Ali — Developer & Bot Builder"><meta property="og:description" content="Building useful things for the web and Telegram."><meta property="og:type" content="website">
+<title>Saif Ali — Developer & Bot Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><script src="script.js" defer></script></head><body>
+<div class="ambient" aria-hidden="true"></div><canvas id="fog-canvas" aria-hidden="true"></canvas>
+<header class="site-header"><a class="wordmark" href="#home" aria-label="Saif Ali home">saif<span>.</span></a><nav class="desktop-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#contact">Contact</a></nav><a class="header-cta" href="#contact">Let's talk <span>↗</span></a></header>
+<main>
+<section class="hero section-wrap" id="home"><div class="eyebrow"><span class="status-dot"></span> AVAILABLE FOR COLLABORATION</div><p class="hero-kicker">INDEPENDENT DEVELOPER <span>·</span> INDIA</p>
+<h1>Building the<br>internet, <span class="gradient-text">one idea</span><br>at a time<span class="accent-dot">.</span></h1>
+<div class="hero-bottom"><p class="hero-intro">I'm <strong>Saif Ali</strong> — a self-taught developer, open-source enthusiast and bot builder. I enjoy turning curious ideas into useful digital experiences.</p><a class="round-link" href="#about" aria-label="Scroll to about section">↓</a></div><div class="hero-meta"><span>SCROLL TO EXPLORE</span><span>01 / 04</span></div></section>
+<section class="section-wrap about-section" id="about"><div class="section-label"><span>01</span> / ABOUT</div><div class="section-content"><h2>Curiosity first.<br><span class="muted">Code follows.</span></h2><p class="large-copy">I like exploring how things work, learning by building, and creating tools that make everyday digital life a little easier.</p>
+<div class="about-grid"><article class="info-card"><span class="card-index">01 — WHAT I DO</span><h3>Web & digital experiences</h3><p>Building responsive websites and experimenting with front-end technologies.</p></article><article class="info-card"><span class="card-index">02 — WHAT I BUILD</span><h3>Telegram bots & tools</h3><p>Creating bot-based utilities, automation experiments and community tools.</p></article><article class="info-card"><span class="card-index">03 — HOW I LEARN</span><h3>Open-source mindset</h3><p>Learning through documentation, experimentation and shared code.</p></article></div>
+<div class="skills-line"><span>INTERESTS</span><p>HTML <i>·</i> CSS <i>·</i> JavaScript <i>·</i> Python <i>·</i> Telegram Bots <i>·</i> Open Source</p></div></div></section>
+<section class="section-wrap projects-section" id="projects"><div class="section-label"><span>02</span> / SELECTED WORK</div><div class="section-content"><div class="section-heading-row"><h2>Things I've<br><span class="muted">been building.</span></h2><a class="text-link" href="https://github.com/saifalisew1508?tab=repositories" target="_blank" rel="noreferrer">All repositories ↗</a></div>
+<div class="project-grid"><a class="project-card" href="https://github.com/saifalisew1508/MissCutieRobot" target="_blank" rel="noreferrer"><span class="project-number">01 / TELEGRAM</span><div class="project-icon">✳</div><h3>MissCutieRobot</h3><p>A Telegram bot project from my bot-building experiments.</p><span class="project-arrow">↗</span></a><a class="project-card" href="https://github.com/saifalisew1508/Portfolio" target="_blank" rel="noreferrer"><span class="project-number">02 / WEB</span><div class="project-icon">⌘</div><h3>Portfolio</h3><p>My personal corner of the web, built to evolve over time.</p><span class="project-arrow">↗</span></a><a class="project-card" href="https://github.com/saifalisew1508/Serverless_TG" target="_blank" rel="noreferrer"><span class="project-number">03 / AUTOMATION</span><div class="project-icon">⌁</div><h3>Serverless TG</h3><p>Exploring lightweight, serverless Telegram bot workflows.</p><span class="project-arrow">↗</span></a></div>
+<p class="github-note"><span class="status-dot"></span> Explore more experiments on <a href="https://github.com/saifalisew1508" target="_blank" rel="noreferrer">GitHub ↗</a></p></div></section>
+<section class="section-wrap contact-section" id="contact"><div class="section-label"><span>03</span> / CONTACT</div><div class="section-content contact-layout"><div><h2>Have an idea?<br><span class="muted">Let's make it real.</span></h2><p class="contact-copy">Got a project, collaboration idea, or just want to say hello? Send me a message.</p><a class="email-direct" href="mailto:md.saif2752@gmail.com">md.saif2752@gmail.com ↗</a></div>
+<form class="contact-card" id="contact-form"><label for="name">YOUR NAME</label><input id="name" name="name" autocomplete="name" placeholder="What should I call you?" required><label for="sender-email">YOUR EMAIL</label><input id="sender-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required><label for="message">MESSAGE</label><textarea id="message" name="message" rows="4" placeholder="Tell me what's on your mind..." required></textarea><input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="submit-button" type="submit"><span>Send message</span><span>↗</span></button><p class="form-status" id="form-status" role="status" aria-live="polite">Your message will be sent to my email.</p></form></div></section>
+</main>
+<footer class="site-footer" id="footer"><div class="footer-top"><a class="wordmark" href="#home">saif<span>.</span></a><p>Made with curiosity & code.</p><a href="#home" class="back-top">BACK TO TOP ↑</a></div>
+<div class="socials" aria-label="Social links"><a href="https://github.com/saifalisew1508" target="_blank" rel="noreferrer"><span>GH</span> GitHub ↗</a><a href="https://t.me/DearSaif" target="_blank" rel="noreferrer"><span>TG</span> Telegram ↗</a><a href="https://instagram.com/saifaliopp" target="_blank" rel="noreferrer"><span>IG</span> Instagram ↗</a><a href="https://facebook.com/saifalisew1508" target="_blank" rel="noreferrer"><span>FB</span> Facebook ↗</a><a href="https://twitter.com/saifalisew1508" target="_blank" rel="noreferrer"><span>X</span> Twitter ↗</a><a href="mailto:md.saif2752@gmail.com"><span>@</span> Email ↗</a></div>
+<div class="footer-bottom"><span>© <span id="year"></span> SAIF ALI</span><span>DESIGNED TO KEEP EVOLVING</span><a href="#home">INDIA ↗</a></div></footer>
+<nav class="mobile-nav" aria-label="Mobile navigation"><a class="active" href="#home">Home</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#contact">Contact</a><a href="#footer">More</a></nav>
+</body></html>
