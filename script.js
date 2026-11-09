@@ -120,7 +120,7 @@ audio.addEventListener('ended',()=>{if(activeTrack<tracks.length-1){setTrack(act
 audio.addEventListener('error',()=>{statusEl.textContent='TRACK UNAVAILABLE';player.classList.remove('is-playing')});
 const loadGitHubPlaylist=async()=>{
  try{
-  const response=await fetch('https://api.github.com/repos/saifalisew1508/Portfolio/contents/music?ref=main',{headers:{Accept:'application/vnd.github+json'}});
+  const response=await fetch('https://api.github.com/repos/saifalisew1508/Portfolio/contents/music?ref=main',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
   if(!response.ok)throw new Error('GitHub playlist request failed ('+response.status+')');
   const files=await response.json();
   const mp3s=files.filter(file=>file.type==='file'&&/\.mp3$/i.test(file.name)).sort((a,b)=>a.name.localeCompare(b.name));
@@ -139,12 +139,14 @@ loadGitHubPlaylist();
 const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section,.info-card,.project-card,.resume-panel,.contact-card')];
 revealTargets.forEach(el=>el.classList.add('scroll-reveal'));
 let previousScrollY=window.scrollY;
-const revealObserver=new IntersectionObserver(entries=>{
- const movingDown=window.scrollY>=previousScrollY;previousScrollY=window.scrollY;
- entries.forEach(entry=>{
-  if(entry.isIntersecting){entry.target.classList.remove('reveal-from-up');if(!movingDown)entry.target.classList.add('reveal-from-up');requestAnimationFrame(()=>entry.target.classList.add('is-visible'))}
-  else if(entry.boundingClientRect.top>0||entry.boundingClientRect.bottom<0){entry.target.classList.remove('is-visible')}
- });
-},{threshold:.08,rootMargin:'0px 0px -5% 0px'});
-revealTargets.forEach(el=>revealObserver.observe(el));
+if('IntersectionObserver'in window){
+ const revealObserver=new IntersectionObserver(entries=>{
+  const movingDown=window.scrollY>=previousScrollY;previousScrollY=window.scrollY;
+  entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.remove('reveal-from-up');if(!movingDown)entry.target.classList.add('reveal-from-up');requestAnimationFrame(()=>entry.target.classList.add('is-visible'))}
+   else if(entry.boundingClientRect.top>0||entry.boundingClientRect.bottom<0){entry.target.classList.remove('is-visible')}
+  });
+ },{threshold:.08,rootMargin:'0px 0px -5% 0px'});
+ revealTargets.forEach(el=>revealObserver.observe(el));
+}else{revealTargets.forEach(el=>el.classList.add('is-visible'))}
 })();
