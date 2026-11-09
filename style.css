@@ -49,3 +49,12 @@ body[data-theme="day"] .mobile-nav a.active{color:#172033}
 .mobile-nav a{position:relative;z-index:1;white-space:nowrap;transition:background .2s,color .2s,box-shadow .2s}
 @media(max-width:760px){.site-header{gap:8px}.local-clock{min-width:90px}.local-clock span{font-size:11px}.local-clock small{font-size:7px}.header-cta{font-size:10px;padding:9px 10px}.mobile-nav{left:2vw;width:96vw;padding:8px 5px;gap:0}.mobile-nav a{font-size:10px;padding:11px 7px}}
 @media(max-width:380px){.local-clock{min-width:78px}.local-clock small{font-size:6px}.header-cta{padding:8px}.mobile-nav a{font-size:9px;padding:10px 5px}}
+
+.resume-role{color:#d8e0f5!important;font-weight:700}
+.resume-skills-panel{margin-top:14px}
+.resume-skill-groups{display:grid;grid-template-columns:1fr 1fr;gap:25px}
+.skill-group-label{font:9px var(--mono);letter-spacing:1.2px;color:var(--muted)}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.skill-tags span{font-size:11px;line-height:1.5;color:#cbd5eb;background:rgba(113,132,255,.09);border:1px solid rgba(140,157,230,.18);padding:8px 10px;border-radius:8px}
+body[data-theme="day"] .skill-tags span{color:#33415c;background:rgba(111,139,205,.1);border-color:rgba(75,99,155,.16)}
+@media(max-width:760px){.resume-skill-groups{grid-template-columns:1fr}.resume-skills-panel{margin-top:12px}}
