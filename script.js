@@ -49,4 +49,48 @@ fetch('https://ipapi.co/json/',{headers:{Accept:'application/json'}}).then(r=>{i
 }).catch(()=>renderClock());
 const form=document.getElementById('contact-form'),status=document.getElementById('form-status'),button=form&&form.querySelector('button');
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;button.disabled=true;status.textContent='Sending your message…';try{const response=await fetch('https://formsubmit.co/ajax/md.saif2752@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:'New portfolio message from '+data.name,_template:'table'})});const result=await response.json();if(!response.ok||result.success===false)throw new Error(result.message||'Message could not be sent');form.reset();status.textContent='Message sent! Thanks for reaching out. I’ll get back to you soon.'}catch(error){status.textContent='Could not send right now. Please email md.saif2752@gmail.com directly.'}finally{button.disabled=false}});
+
+// Playlist player: local audio files already stored in the repository's /music folder.
+const audio=document.getElementById('portfolio-audio');
+const player=document.getElementById('music-player');
+const playBtn=document.getElementById('music-play');
+const progress=document.getElementById('music-progress');
+const currentTimeEl=document.getElementById('music-current-time');
+const durationEl=document.getElementById('music-duration');
+const titleEl=document.getElementById('music-current-title');
+const artistEl=document.getElementById('music-current-artist');
+const statusEl=document.getElementById('music-status');
+const trackButtons=[...document.querySelectorAll('.music-track')];
+const tracks=[
+ {title:'FUNK ABNORMAL',artist:'DJ V12 · Super Slowed x Dabura',src:'music/FUNK ABNORMAL - DJ V12 (Super Slowed) x Dabura(MP3_320K).mp3'},
+ {title:'VOCE NA MIRA',artist:'Sped Up',src:'music/VOCE NA MIRA (Sped Up)(MP3_320K).mp3'}
+];
+let activeTrack=0,isSeeking=false;
+const clockTime=value=>{if(!Number.isFinite(value))return'00:00';const m=Math.floor(value/60),sec=Math.floor(value%60);return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')};
+const setTrack=index=>{
+ activeTrack=(index+tracks.length)%tracks.length;
+ const track=tracks[activeTrack];
+ audio.pause();audio.src=track.src;audio.load();
+ titleEl.textContent=track.title;artistEl.textContent=track.artist;
+ currentTimeEl.textContent='00:00';durationEl.textContent='--:--';progress.value=0;
+ trackButtons.forEach((button,i)=>{button.classList.toggle('active',i===activeTrack);button.querySelector('.track-state').textContent=i===activeTrack?'♫':'▶'});
+ player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');statusEl.textContent='READY TO PLAY';
+};
+const playAudio=async()=>{
+ try{await audio.play();player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'}
+ catch(error){statusEl.textContent='AUDIO COULD NOT LOAD';player.classList.remove('is-playing');}
+};
+playBtn.addEventListener('click',()=>{if(audio.paused)playAudio();else audio.pause()});
+document.getElementById('music-prev').addEventListener('click',()=>{setTrack(activeTrack-1);playAudio()});
+document.getElementById('music-next').addEventListener('click',()=>{setTrack(activeTrack+1);playAudio()});
+trackButtons.forEach(button=>button.addEventListener('click',()=>{setTrack(Number(button.dataset.track));playAudio()}));
+audio.addEventListener('pause',()=>{player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');if(audio.ended)statusEl.textContent='TRACK FINISHED';else if(audio.currentTime>0)statusEl.textContent='PAUSED'});
+audio.addEventListener('play',()=>{player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'});
+audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=clockTime(audio.duration)});
+audio.addEventListener('timeupdate',()=>{if(!isSeeking&&Number.isFinite(audio.duration)&&audio.duration>0)progress.value=(audio.currentTime/audio.duration)*100;currentTimeEl.textContent=clockTime(audio.currentTime)});
+progress.addEventListener('input',()=>{isSeeking=true;currentTimeEl.textContent=clockTime((Number(progress.value)/100)*(audio.duration||0))});
+progress.addEventListener('change',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=(Number(progress.value)/100)*audio.duration;isSeeking=false});
+audio.addEventListener('ended',()=>{if(activeTrack<tracks.length-1){setTrack(activeTrack+1);playAudio()}else{statusEl.textContent='PLAYLIST COMPLETE'}});
+audio.addEventListener('error',()=>{statusEl.textContent='TRACK UNAVAILABLE';player.classList.remove('is-playing')});
+setTrack(0);
 })();
