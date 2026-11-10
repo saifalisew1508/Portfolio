@@ -9,7 +9,7 @@ resize();window.addEventListener('resize',resize,{passive:true});
 const add=(x,y)=>{points.push({x,y,r:10,life:1,dx:(Math.random()-.5)*.65,dy:(Math.random()-.5)*.65,hue:Math.random()>.5?215:252});if(points.length>20)points.shift()};
 let last=0;window.addEventListener('pointermove',e=>{const now=performance.now();if(now-last>24){add(e.clientX,e.clientY);last=now}},{passive:true});
 window.addEventListener('pointerdown',e=>{for(let i=0;i<4;i++)add(e.clientX+(Math.random()-.5)*34,e.clientY+(Math.random()-.5)*34)},{passive:true});
-const draw=()=>{ctx.clearRect(0,0,w,h);points=points.filter(p=>p.life>.015);for(const p of points){p.r+=.72;p.life*=.96;p.x+=p.dx;p.y+=p.dy;const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.6);g.addColorStop(0,'hsla('+p.hue+',100%,62%,'+(.13*p.life)+')');g.addColorStop(.32,'hsla('+p.hue+',95%,58%,'+(.055*p.life)+')');g.addColorStop(1,'hsla('+p.hue+',90%,48%,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*4.2,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)};draw()
+const draw=()=>{ctx.clearRect(0,0,w,h);points=points.filter(p=>p.life>.015);for(const p of points){p.r+=.72;p.life*=.96;p.x+=p.dx;p.y+=p.dy;const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.6);g.addColorStop(0,'hsla('+p.hue+',100%,62%,'+(.13*p.life)+')');g.addColorStop(.32,'hsla('+p.hue+',95%,58%,'+(.055*p.life)+')');g.addColorStop(1,'hsla('+p.hue+',90%,48%,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*2.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)};draw()
 }
 // Reliable mobile navigation: click-to-scroll plus scroll-position-based active state.
 const nav=[...document.querySelectorAll('.mobile-nav a, .desktop-nav a')];
@@ -121,7 +121,7 @@ const ytScript=document.createElement('script');ytScript.src='https://www.youtub
 loadPlaylist();
 
 // Scroll reveal enters from the direction the visitor is moving.
-const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section,.info-card,.project-card,.resume-panel,.contact-card')];
+const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section')];
 revealTargets.forEach(el=>el.classList.add('scroll-reveal'));
 let previousScrollY=window.scrollY;
 if('IntersectionObserver'in window){
