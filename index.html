@@ -5,7 +5,7 @@
 <meta property="og:title" content="Saif Ali — Developer & Bot Builder"><meta property="og:description" content="Building useful things for the web and Telegram."><meta property="og:type" content="website">
 <title>Saif Ali — Developer & Bot Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"><script src="assets/js/vanilla-tilt.js" defer></script><script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js" defer></script><script src="script.js" defer></script></head><body>
+<link rel="stylesheet" href="style.css"><script src="assets/js/vanilla-tilt.js" defer></script><script src="script.js" defer></script></head><body>
 <div class="ambient" aria-hidden="true"></div><canvas id="fog-canvas" aria-hidden="true"></canvas>
 <header class="site-header"><a class="wordmark" href="#home" aria-label="Saif Ali home">saif<span>.</span></a><div class="local-clock" aria-label="Visitor local date and time"><span id="visitor-time">--:--:--</span><small id="visitor-date">Loading local time…</small></div><nav class="desktop-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#about">About</a><a href="#resume">Resume</a><a href="#projects">Projects</a><a href="#contact">Contact</a></nav><a class="header-cta" href="#contact">Let's talk <span>↗</span></a></header>
 <main>
@@ -19,14 +19,13 @@
 <div class="music-player" id="music-player">
 <div class="music-artwork"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="art-equalizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="art-label">SAIF / SOUND</span></div>
 <div class="music-player-main">
-<div class="music-player-top"><div class="music-track-meta"><span class="music-kicker">GITHUB MUSIC LIBRARY</span><h4 id="music-current-title">FUNK ABNORMAL</h4><p id="music-current-artist">Loading track metadata…</p><p class="music-extra-meta" id="music-extra-meta">Album · Genre</p></div><span class="music-disc" id="music-album-art" aria-hidden="true">♫</span></div>
-<div class="music-progress-wrap"><input id="music-progress" class="music-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Track progress"><div class="music-time"><span id="music-current-time">00:00</span><span id="music-duration">--:--</span></div></div>
+<div class="music-player-top"><div class="music-track-meta"><span class="music-kicker">YOUTUBE MUSIC LIBRARY</span><h4 id="music-current-title">FUNK ABNORMAL</h4><p id="music-current-artist">Loading track metadata…</p><p class="music-extra-meta" id="music-extra-meta">Album · Genre</p></div><span class="music-disc" id="music-album-art" aria-hidden="true">♫</span></div>
+<div class="music-progress-wrap"><div id="youtube-player-container" class="youtube-player-container"><div id="youtube-player"></div></div></div>
 <div class="music-controls"><button type="button" id="music-prev" aria-label="Previous track">|◀</button><button type="button" id="music-play" class="music-play" aria-label="Play music">▶</button><button type="button" id="music-next" aria-label="Next track">▶|</button><span class="music-playing-label" id="music-status">READY TO PLAY</span></div>
 </div>
 </div>
 <div class="music-tracklist" id="music-tracklist" role="list" aria-label="Music playlist"><p class="music-loading" id="music-loading">Discovering MP3 files from GitHub…</p></div>
-<p class="music-footnote">Choose a track to play. Audio starts only when you press play.</p>
-<audio id="portfolio-audio" preload="metadata"></audio>
+<p class="music-footnote">Choose a track to play. Playback uses the official YouTube player.</p>
 </section></div></section>
 <section class="section-wrap resume-section" id="resume"><div class="section-label"><span>02</span> / RESUME</div><div class="section-content">
 <div class="resume-heading"><div><p class="resume-overline">CLINICAL LABORATORY PROFESSIONAL</p><h2>Science in the lab.<br><span class="muted">Curiosity in tech.</span></h2></div><span class="resume-mark">CV / 2026</span></div>
