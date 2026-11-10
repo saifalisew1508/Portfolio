@@ -3,13 +3,47 @@ const year=document.getElementById('year');if(year)year.textContent=new Date().g
 if(window.VanillaTilt){VanillaTilt.init(document.querySelectorAll('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}
 const canvas=document.getElementById('fog-canvas'),ctx=canvas&&canvas.getContext('2d');
 if(canvas&&ctx&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-let w=0,h=0,dpr=1,points=[];
-const resize=()=>{dpr=Math.min(window.devicePixelRatio||1,1.6);w=window.innerWidth;h=window.innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0)};
-resize();window.addEventListener('resize',resize,{passive:true});
-const add=(x,y)=>{points.push({x,y,r:10,life:1,dx:(Math.random()-.5)*.65,dy:(Math.random()-.5)*.65,hue:Math.random()>.5?215:252});if(points.length>20)points.shift()};
-let last=0;window.addEventListener('pointermove',e=>{const now=performance.now();if(now-last>24){add(e.clientX,e.clientY);last=now}},{passive:true});
-window.addEventListener('pointerdown',e=>{for(let i=0;i<4;i++)add(e.clientX+(Math.random()-.5)*34,e.clientY+(Math.random()-.5)*34)},{passive:true});
-const draw=()=>{ctx.clearRect(0,0,w,h);points=points.filter(p=>p.life>.015);for(const p of points){p.r+=.72;p.life*=.96;p.x+=p.dx;p.y+=p.dy;const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*2.6);g.addColorStop(0,'hsla('+p.hue+',100%,62%,'+(.13*p.life)+')');g.addColorStop(.32,'hsla('+p.hue+',95%,58%,'+(.055*p.life)+')');g.addColorStop(1,'hsla('+p.hue+',90%,48%,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,p.r*2.6,0,Math.PI*2);ctx.fill()}requestAnimationFrame(draw)};draw()
+ let w=0,h=0,dpr=1,smoke=[],last=0,pointer={x:0,y:0};
+ const resize=()=>{dpr=Math.min(window.devicePixelRatio||1,1.35);w=window.innerWidth;h=window.innerHeight;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);canvas.style.width=w+'px';canvas.style.height=h+'px';ctx.setTransform(dpr,0,0,dpr,0,0)};
+ resize();window.addEventListener('resize',resize,{passive:true});
+ const puff=(x,y,vx,vy)=>{
+  const count=9;
+  for(let i=0;i<count;i++){
+   const angle=Math.random()*Math.PI*2,speed=.25+Math.random()*1.05;
+   smoke.push({x:x+(Math.random()-.5)*15,y:y+(Math.random()-.5)*15,vx:vx*.18+Math.cos(angle)*speed,vy:vy*.18+Math.sin(angle)*speed-0.18,
+    size:13+Math.random()*24,life:.72+Math.random()*.28,max:.9+Math.random()*.65,turn:(Math.random()-.5)*.045,
+    phase:Math.random()*Math.PI*2,hue:218+Math.random()*30});
+  }
+  if(smoke.length>190)smoke.splice(0,smoke.length-190);
+ };
+ window.addEventListener('pointermove',e=>{
+  const now=performance.now(),dt=Math.max(12,now-last),vx=(e.clientX-pointer.x)/dt*16,vy=(e.clientY-pointer.y)/dt*16;
+  if(now-last>22)puff(e.clientX,e.clientY,vx,vy);
+  pointer.x=e.clientX;pointer.y=e.clientY;last=now;
+ },{passive:true});
+ let previous=0;
+ const draw=now=>{
+  const delta=Math.min(2,(now-previous)/16.67||1);previous=now;
+  ctx.clearRect(0,0,w,h);
+  smoke=smoke.filter(p=>p.life>0.025);
+  for(const p of smoke){
+   p.phase+=p.turn*delta;
+   const swirl=Math.sin(p.phase)*.16;
+   p.vx=(p.vx+swirl)*.986;p.vy=(p.vy-.012)*.988;
+   p.x+=p.vx*delta;p.y+=p.vy*delta;
+   p.size+=.16*delta;p.life-=.0065*delta;
+   const alpha=Math.min(.105,(p.life/p.max)*.085);
+   const radius=p.size*2.35;
+   const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius);
+   g.addColorStop(0,'hsla('+p.hue+',88%,66%,'+alpha+')');
+   g.addColorStop(.28,'hsla('+p.hue+',82%,60%,'+(alpha*.72)+')');
+   g.addColorStop(.68,'hsla('+(p.hue+8)+',78%,54%,'+(alpha*.22)+')');
+   g.addColorStop(1,'hsla('+p.hue+',75%,50%,0)');
+   ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(p.x,p.y,radius,radius*(.72+Math.sin(p.phase)*.12),p.phase,0,Math.PI*2);ctx.fill();
+  }
+  requestAnimationFrame(draw);
+ };
+ requestAnimationFrame(draw);
 }
 // Reliable mobile navigation: click-to-scroll plus scroll-position-based active state.
 const nav=[...document.querySelectorAll('.mobile-nav a, .desktop-nav a')];
