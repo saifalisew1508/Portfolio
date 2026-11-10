@@ -170,3 +170,9 @@ body[data-theme="day"] .desktop-nav .nav-indicator,body[data-theme="day"] .mobil
 .resume-role{margin:9px 0 12px!important}
 .resume-role span{display:inline-flex;align-items:center;min-height:27px;padding:5px 11px;border:1px solid rgba(113,132,255,.32);border-radius:999px;background:rgba(113,132,255,.12);color:#bfcaff;font-size:10px;line-height:1.3;letter-spacing:.35px;font-weight:700}
 body[data-theme="day"] .resume-role span{color:#344a83;background:rgba(112,137,219,.13);border-color:rgba(90,113,178,.25)}
+
+
+/* WebGL fluid smoke canvas: transparent, subtle and non-blocking. */
+#fog-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;mix-blend-mode:screen;opacity:.58}
+body[data-theme="day"] #fog-canvas{mix-blend-mode:multiply;opacity:.32}
+body[data-theme="night"] #fog-canvas{mix-blend-mode:screen;opacity:.58}
