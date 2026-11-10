@@ -13,7 +13,7 @@ const startFluidFog=()=>{
    TRIGGER:'hover',
    IMMEDIATE:true,
    AUTO:true,
-   INTERVAL:2600,
+   INTERVAL:3200,
    SIM_RESOLUTION:mobile?64:128,
    DYE_RESOLUTION:mobile?384:768,
    DENSITY_DISSIPATION:0.97,
@@ -23,7 +23,7 @@ const startFluidFog=()=>{
    CURL:32,
    SPLAT_RADIUS:0.28,
    SPLAT_FORCE:5200,
-   SPLAT_COUNT:3,
+   SPLAT_COUNT:2,
    SPLAT_COLOR:{r:0.22,g:0.31,b:0.82},
    COLORFUL:false,
    SHADING:true,
@@ -38,6 +38,22 @@ const startFluidFog=()=>{
    BLOOM_SOFT_KNEE:0.7,
    SUNRAYS:false
   });
+  // The canvas is intentionally pointer-events:none so links remain clickable.
+  // Forward real document pointer movement to the fluid engine's canvas listener.
+  let pointerInside=false,lastX=-1,lastY=-1;
+  const forwardPointer=event=>{
+   const x=event.clientX,y=event.clientY;
+   if(x<0||y<0||x>window.innerWidth||y>window.innerHeight)return;
+   if(!pointerInside){
+    pointerInside=true;
+    fogCanvas.dispatchEvent(new MouseEvent('mouseenter',{clientX:x,clientY:y,bubbles:false}));
+   }
+   if(Math.abs(x-lastX)+Math.abs(y-lastY)<1.5)return;
+   lastX=x;lastY=y;
+   fogCanvas.dispatchEvent(new MouseEvent('mousemove',{clientX:x,clientY:y,bubbles:true,view:window}));
+  };
+  document.addEventListener('pointermove',forwardPointer,{passive:true});
+  window.addEventListener('blur',()=>{pointerInside=false;lastX=lastY=-1;});
   document.documentElement.classList.add('fluid-fog-ready');
  }catch(error){console.error('Fluid WebGL initialization failed:',error)}
 };
