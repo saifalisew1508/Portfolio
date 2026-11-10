@@ -215,3 +215,45 @@ body[data-theme="day"] #fog-canvas{opacity:.42;mix-blend-mode:multiply}
  .header-cta:hover span,.header-cta:focus-visible span{transform:translate(3px,-2px);color:#fff}
 }
 @media(prefers-reduced-motion:reduce){.header-cta{transition:none}.header-cta span{transition:none}}
+
+
+/* Persistent mobile dock + section-by-section page snapping. */
+@media(max-width:760px){
+  .mobile-nav{
+    position:fixed!important;
+    display:flex!important;
+    visibility:visible!important;
+    opacity:1!important;
+    left:2vw!important;
+    right:2vw!important;
+    bottom:calc(12px + env(safe-area-inset-bottom))!important;
+    width:96vw!important;
+    z-index:1000!important;
+    transform:translateZ(0);
+  }
+  .site-footer{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+}
+html{
+  scroll-snap-type:y mandatory;
+  scroll-padding-top:82px;
+}
+main>.section-wrap,
+.site-footer{
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+main>.section-wrap{
+  scroll-margin-top:82px;
+}
+@media(max-width:760px){
+  html{scroll-padding-top:70px}
+  main>.section-wrap,.site-footer{scroll-margin-top:70px}
+}
+/* Let visitors read long sections normally; snapping happens at section boundaries. */
+main>.section-wrap{
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-snap-type:y proximity}
+}
