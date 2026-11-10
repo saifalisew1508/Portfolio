@@ -176,3 +176,23 @@ body[data-theme="day"] .resume-role span{color:#344a83;background:rgba(112,137,2
 #fog-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;mix-blend-mode:screen;opacity:.58}
 body[data-theme="day"] #fog-canvas{mix-blend-mode:multiply;opacity:.32}
 body[data-theme="night"] #fog-canvas{mix-blend-mode:screen;opacity:.58}
+
+/* Futuristic liquid-glass refinement */
+:root{--glass:rgba(18,25,43,.52);--glass-edge:rgba(190,207,255,.2);--glass-glow:rgba(105,130,255,.22)}
+body{background:radial-gradient(ellipse at 50% -15%,rgba(69,89,180,.2),transparent 48%),#070a12}
+.ambient{z-index:-1;opacity:.9;background:radial-gradient(ellipse at 18% 24%,rgba(55,85,190,.23),transparent 34%),radial-gradient(ellipse at 82% 48%,rgba(38,160,190,.13),transparent 35%),radial-gradient(ellipse at 52% 100%,rgba(101,64,180,.17),transparent 42%),#070a12}
+#fog-canvas{z-index:2;opacity:.82;mix-blend-mode:screen;pointer-events:none}
+.site-header{background:rgba(8,12,24,.56);border:1px solid rgba(190,207,255,.13);border-top:0;border-radius:0 0 22px 22px;backdrop-filter:blur(28px) saturate(165%);-webkit-backdrop-filter:blur(28px) saturate(165%);box-shadow:0 14px 50px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.08)}
+.desktop-nav,.mobile-nav{border:1px solid rgba(196,210,255,.23)!important;background:linear-gradient(135deg,rgba(255,255,255,.105),rgba(255,255,255,.025))!important;box-shadow:0 12px 34px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.13);backdrop-filter:blur(24px) saturate(175%);-webkit-backdrop-filter:blur(24px) saturate(175%)}
+.desktop-nav .nav-indicator,.mobile-nav .nav-indicator{background:linear-gradient(135deg,rgba(130,151,255,.34),rgba(75,207,231,.16));border:1px solid rgba(205,218,255,.34);box-shadow:0 5px 22px rgba(91,115,255,.22),inset 0 1px rgba(255,255,255,.24);transition:transform .72s cubic-bezier(.2,.9,.18,1.18),width .52s cubic-bezier(.2,.9,.18,1.18),height .52s ease,opacity .2s ease}
+.desktop-nav a,.mobile-nav a{position:relative;z-index:1}
+.info-card,.resume-panel,.project-card,.contact-card,.music-section{background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.025) 52%,rgba(111,131,255,.055));border:1px solid rgba(190,207,255,.17);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%);box-shadow:0 18px 60px rgba(0,0,0,.16),inset 0 1px rgba(255,255,255,.1)}
+.info-card:before,.project-card:before,.contact-card:before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(420px circle at var(--glass-x,50%) var(--glass-y,0%),rgba(155,180,255,.12),transparent 45%);opacity:.85}
+.info-card:hover,.project-card:hover,.resume-panel:hover{border-color:rgba(145,165,255,.4);box-shadow:0 22px 70px rgba(30,50,120,.2),inset 0 1px rgba(255,255,255,.16)}
+.contact-card input,.contact-card textarea{background:rgba(3,7,16,.34);border-color:rgba(195,210,255,.17);backdrop-filter:blur(12px)}
+.header-cta,.round-link,.email-direct,.submit-button{box-shadow:0 8px 28px rgba(74,102,230,.12)}
+.gradient-text{background-image:linear-gradient(105deg,#f5f7ff 8%,#a7b7ff 48%,#69d9ec 82%,#c4a5ff);background-size:180% 180%;animation:liquidTextGlow 9s ease-in-out infinite alternate}
+@keyframes liquidTextGlow{from{background-position:0% 50%}to{background-position:100% 50%}}
+@media(max-width:760px){.site-header{border-radius:0 0 16px 16px}.mobile-nav{background:rgba(10,14,27,.72)!important;border:1px solid rgba(190,207,255,.24)!important;box-shadow:0 12px 38px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.12);backdrop-filter:blur(25px) saturate(170%);-webkit-backdrop-filter:blur(25px) saturate(170%)}}
+body[data-theme="day"] #fog-canvas{opacity:.42;mix-blend-mode:multiply}
+@media(prefers-reduced-motion:reduce){.gradient-text{animation:none}}
