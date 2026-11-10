@@ -159,3 +159,14 @@ body[data-theme="night"] #fog-canvas{mix-blend-mode:screen;opacity:1}
 .info-card,.resume-panel,.project-card,.contact-card{transform-style:preserve-3d;will-change:transform}
 @media(max-width:760px){.resume-skill-cards{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.info-card,.resume-panel,.project-card,.contact-card{transform:none!important}}
+
+
+/* Sliding active capsule inspired by xditya.me navigation motion. */
+.desktop-nav,.mobile-nav{position:relative;isolation:isolate}
+.desktop-nav .nav-indicator,.mobile-nav .nav-indicator{position:absolute;z-index:-1;left:0;top:0;width:0;height:0;border-radius:999px;opacity:0;pointer-events:none;background:rgba(90,105,239,.22);box-shadow:inset 0 0 0 1px rgba(113,132,255,.38);transition:transform .58s cubic-bezier(.22,1,.36,1),width .58s cubic-bezier(.22,1,.36,1),height .58s cubic-bezier(.22,1,.36,1),opacity .2s ease}
+.desktop-nav .nav-indicator.is-ready,.mobile-nav .nav-indicator.is-ready{opacity:1}
+.desktop-nav a.active,.mobile-nav a.active{position:relative;background:transparent!important;box-shadow:none!important;color:var(--text)}
+body[data-theme="day"] .desktop-nav .nav-indicator,body[data-theme="day"] .mobile-nav .nav-indicator{background:rgba(110,132,235,.2);box-shadow:inset 0 0 0 1px rgba(95,116,190,.28)}
+.resume-role{margin:9px 0 12px!important}
+.resume-role span{display:inline-flex;align-items:center;min-height:27px;padding:5px 11px;border:1px solid rgba(113,132,255,.32);border-radius:999px;background:rgba(113,132,255,.12);color:#bfcaff;font-size:10px;line-height:1.3;letter-spacing:.35px;font-weight:700}
+body[data-theme="day"] .resume-role span{color:#344a83;background:rgba(112,137,219,.13);border-color:rgba(90,113,178,.25)}
