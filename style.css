@@ -120,3 +120,17 @@ body[data-theme="day"] .music-track.active{background:rgba(105,126,225,.13)}
 .scroll-reveal.reveal-from-up{transform:translate3d(0,-24px,0)}
 .scroll-reveal.is-visible{opacity:1;transform:translate3d(0,0,0)}
 @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1;transform:none;transition:none}}
+
+/* YouTube player and compact scrollable playlist */
+.youtube-player-container{width:100%;aspect-ratio:16/9;max-height:220px;overflow:hidden;border-radius:10px;background:#05070d;border:1px solid rgba(170,190,255,.18)}
+.youtube-player-container iframe{display:block;width:100%;height:100%;border:0}
+.music-player{grid-template-columns:150px 1fr}
+.music-player-main{gap:12px}
+.music-progress-wrap{margin:10px 0 4px}
+.music-time{display:none}
+.music-tracklist{max-height:248px;overflow-y:auto;overscroll-behavior:contain;padding-right:5px;scrollbar-width:thin;scrollbar-color:rgba(129,145,255,.55) transparent}
+.music-tracklist::-webkit-scrollbar{width:5px}
+.music-tracklist::-webkit-scrollbar-thumb{background:rgba(129,145,255,.5);border-radius:10px}
+.music-track{min-height:59px}
+.music-track .track-details{max-width:calc(100% - 55px)}
+@media(max-width:760px){.music-player{grid-template-columns:1fr}.music-artwork{min-height:105px}.music-player-main{padding:14px}.youtube-player-container{max-height:none}.music-tracklist{max-height:236px}}
