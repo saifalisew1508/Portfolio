@@ -196,3 +196,22 @@ body{background:radial-gradient(ellipse at 50% -15%,rgba(69,89,180,.2),transpare
 @media(max-width:760px){.site-header{border-radius:0 0 16px 16px}.mobile-nav{background:rgba(10,14,27,.72)!important;border:1px solid rgba(190,207,255,.24)!important;box-shadow:0 12px 38px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.12);backdrop-filter:blur(25px) saturate(170%);-webkit-backdrop-filter:blur(25px) saturate(170%)}}
 body[data-theme="day"] #fog-canvas{opacity:.42;mix-blend-mode:multiply}
 @media(prefers-reduced-motion:reduce){.gradient-text{animation:none}}
+
+
+/* Expand the contact capsule as the pointer approaches. */
+.header-cta{
+ display:inline-flex;align-items:center;justify-content:center;gap:10px;
+ transform-origin:center;transition:padding .38s cubic-bezier(.2,.9,.2,1),transform .38s cubic-bezier(.2,.9,.2,1),background .3s,border-color .3s,box-shadow .3s;
+ will-change:transform,padding;
+}
+.header-cta span{display:inline-block;transition:transform .38s cubic-bezier(.2,.9,.2,1),color .3s}
+@media(hover:hover) and (pointer:fine){
+ .header-cta:hover,.header-cta:focus-visible{
+  padding-left:27px;padding-right:27px;transform:translateY(-2px) scale(1.045);
+  background:linear-gradient(115deg,rgba(108,128,255,.28),rgba(75,205,226,.14));
+  border-color:rgba(155,184,255,.58);
+  box-shadow:0 8px 30px rgba(91,115,255,.24),inset 0 1px rgba(255,255,255,.2);
+ }
+ .header-cta:hover span,.header-cta:focus-visible span{transform:translate(3px,-2px);color:#fff}
+}
+@media(prefers-reduced-motion:reduce){.header-cta{transition:none}.header-cta span{transition:none}}
