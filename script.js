@@ -1,44 +1,60 @@
 (() => {
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
 if(window.VanillaTilt){VanillaTilt.init(document.querySelectorAll('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}
-// GPU fluid-smoke cursor trail (WebGL). Uses the MIT-licensed webgl-fluid engine.
+// GPU fluid smoke: browser-side WebGL simulation (works on static Vercel hosting).
 const fogCanvas=document.getElementById('fog-canvas');
 const startFluidFog=()=>{
- if(!fogCanvas||typeof window.WebGLFluid!=='function')return;
+ if(!fogCanvas){console.warn('Fluid canvas #fog-canvas is missing');return;}
  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ if(typeof window.WebGLFluid!=='function'){console.warn('WebGLFluid library did not load');return;}
  try{
+  const mobile=window.matchMedia('(max-width: 760px)').matches;
   window.WebGLFluid(fogCanvas,{
    TRIGGER:'hover',
-   IMMEDIATE:false,
-   AUTO:false,
-   SIM_RESOLUTION:96,
-   DYE_RESOLUTION:512,
-   DENSITY_DISSIPATION:2.0,
-   VELOCITY_DISSIPATION:1.05,
+   IMMEDIATE:true,
+   AUTO:true,
+   INTERVAL:2600,
+   SIM_RESOLUTION:mobile?64:128,
+   DYE_RESOLUTION:mobile?384:768,
+   DENSITY_DISSIPATION:0.97,
+   VELOCITY_DISSIPATION:0.42,
    PRESSURE:0.82,
-   PRESSURE_ITERATIONS:12,
-   CURL:22,
-   SPLAT_RADIUS:0.16,
-   SPLAT_FORCE:3000,
-   SPLAT_COUNT:0,
-   SPLAT_COLOR:{r:0.16,g:0.38,b:0.92},
+   PRESSURE_ITERATIONS:18,
+   CURL:32,
+   SPLAT_RADIUS:0.28,
+   SPLAT_FORCE:5200,
+   SPLAT_COUNT:3,
+   SPLAT_COLOR:{r:0.22,g:0.31,b:0.82},
    COLORFUL:false,
    SHADING:true,
    COLOR_UPDATE_SPEED:0,
    TRANSPARENT:true,
    BACK_COLOR:{r:0,g:0,b:0},
-   BLOOM:false,
+   BLOOM:true,
+   BLOOM_ITERATIONS:6,
+   BLOOM_RESOLUTION:mobile?128:256,
+   BLOOM_INTENSITY:0.48,
+   BLOOM_THRESHOLD:0.18,
+   BLOOM_SOFT_KNEE:0.7,
    SUNRAYS:false
   });
   document.documentElement.classList.add('fluid-fog-ready');
- }catch(error){console.warn('Fluid fog could not initialize; keeping the page usable.',error)}
+ }catch(error){console.error('Fluid WebGL initialization failed:',error)}
 };
 if(window.WebGLFluid)startFluidFog();
 else window.addEventListener('load',startFluidFog,{once:true});
 // Reliable mobile navigation: click-to-scroll plus scroll-position-based active state.
 const nav=[...document.querySelectorAll('.mobile-nav a, .desktop-nav a')];
 const navBars=[...document.querySelectorAll('.mobile-nav,.desktop-nav')];
-const moveNavIndicator=bar=>{const indicator=bar.querySelector('.nav-indicator'),active=bar.querySelector('a.active');if(!indicator||!active)return;const barRect=bar.getBoundingClientRect(),linkRect=active.getBoundingClientRect();indicator.style.width=linkRect.width+'px';indicator.style.height=linkRect.height+'px';indicator.style.transform='translate3d('+(linkRect.left-barRect.left)+'px,'+(linkRect.top-barRect.top)+'px,0)';indicator.classList.add('is-ready')};
+const moveNavIndicator=bar=>{
+ const indicator=bar.querySelector('.nav-indicator'),active=bar.querySelector('a.active');
+ if(!indicator||!active)return;
+ const barRect=bar.getBoundingClientRect(),linkRect=active.getBoundingClientRect();
+ indicator.style.width=linkRect.width+'px';
+ indicator.style.height=linkRect.height+'px';
+ indicator.style.transform='translate3d('+(linkRect.left-barRect.left)+'px,'+(linkRect.top-barRect.top)+'px,0)';
+ indicator.classList.add('is-ready');
+};
 const syncNavIndicators=()=>navBars.forEach(moveNavIndicator);
 const sections=['home','about','resume','projects','contact'].map(id=>document.getElementById(id)).filter(Boolean);
 nav.forEach(link=>link.addEventListener('click',event=>{
