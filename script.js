@@ -13,6 +13,9 @@ const draw=()=>{ctx.clearRect(0,0,w,h);points=points.filter(p=>p.life>.015);for(
 }
 // Reliable mobile navigation: click-to-scroll plus scroll-position-based active state.
 const nav=[...document.querySelectorAll('.mobile-nav a, .desktop-nav a')];
+const navBars=[...document.querySelectorAll('.mobile-nav,.desktop-nav')];
+const moveNavIndicator=bar=>{const indicator=bar.querySelector('.nav-indicator'),active=bar.querySelector('a.active');if(!indicator||!active)return;const barRect=bar.getBoundingClientRect(),linkRect=active.getBoundingClientRect();indicator.style.width=linkRect.width+'px';indicator.style.height=linkRect.height+'px';indicator.style.transform='translate3d('+(linkRect.left-barRect.left)+'px,'+(linkRect.top-barRect.top)+'px,0)';indicator.classList.add('is-ready')};
+const syncNavIndicators=()=>navBars.forEach(moveNavIndicator);
 const sections=['home','about','resume','projects','contact'].map(id=>document.getElementById(id)).filter(Boolean);
 nav.forEach(link=>link.addEventListener('click',event=>{
  const target=document.querySelector(link.getAttribute('href'));
@@ -27,10 +30,10 @@ const updateActive=()=>{
  let current=sections[0];
  for(const section of sections){if(section.offsetTop<=marker)current=section;}
  nav.forEach(link=>link.classList.toggle('active',link.getAttribute('href')==='#'+current.id));
- scrollTick=false;
+ syncNavIndicators();scrollTick=false;
 };
 window.addEventListener('scroll',()=>{if(!scrollTick){requestAnimationFrame(updateActive);scrollTick=true}},{passive:true});
-window.addEventListener('resize',updateActive,{passive:true});updateActive();
+window.addEventListener('resize',()=>{updateActive();syncNavIndicators()},{passive:true});updateActive();requestAnimationFrame(syncNavIndicators);
 
 // Resolve visitor timezone from public IP; fall back to the device timezone if unavailable.
 const timeEl=document.getElementById('visitor-time'),dateEl=document.getElementById('visitor-date');
