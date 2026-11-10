@@ -50,13 +50,9 @@ fetch('https://ipapi.co/json/',{headers:{Accept:'application/json'}}).then(r=>{i
 const form=document.getElementById('contact-form'),status=document.getElementById('form-status'),button=form&&form.querySelector('button');
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;button.disabled=true;status.textContent='Sending your message…';try{const response=await fetch('https://formsubmit.co/ajax/md.saif2752@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:'New portfolio message from '+data.name,_template:'table'})});const result=await response.json();if(!response.ok||result.success===false)throw new Error(result.message||'Message could not be sent');form.reset();status.textContent='Message sent! Thanks for reaching out. I’ll get back to you soon.'}catch(error){status.textContent='Could not send right now. Please email md.saif2752@gmail.com directly.'}finally{button.disabled=false}});
 
-// Discover every MP3 in the public GitHub /music folder. New files appear without code edits.
-const audio=document.getElementById('portfolio-audio');
+// Dynamic YouTube playlist loaded from music/playlist.json.
 const player=document.getElementById('music-player');
 const playBtn=document.getElementById('music-play');
-const progress=document.getElementById('music-progress');
-const currentTimeEl=document.getElementById('music-current-time');
-const durationEl=document.getElementById('music-duration');
 const titleEl=document.getElementById('music-current-title');
 const artistEl=document.getElementById('music-current-artist');
 const extraMetaEl=document.getElementById('music-extra-meta');
@@ -64,76 +60,65 @@ const statusEl=document.getElementById('music-status');
 const trackList=document.getElementById('music-tracklist');
 const countEl=document.getElementById('music-count');
 const albumArtEl=document.getElementById('music-album-art');
-let tracks=[],activeTrack=0,isSeeking=false;
-const clockTime=value=>{if(!Number.isFinite(value))return'00:00';const m=Math.floor(value/60),sec=Math.floor(value%60);return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')};
-const fallbackTitle=name=>decodeURIComponent(name).replace(/\.mp3$/i,'').replace(/\s*\(MP3[^)]*\)/i,'').replace(/[_-]+/g,' ').trim();
-const parseTags=url=>new Promise(resolve=>{
- if(!window.jsmediatags||!window.jsmediatags.read){resolve({});return}
- window.jsmediatags.read(url,{onSuccess:result=>{
-  const tags=result.tags||{},picture=tags.picture;
-  let artwork='';
-  if(picture&&picture.data){try{const bytes=new Uint8Array(picture.data);let binary='';for(let i=0;i<bytes.length;i++)binary+=String.fromCharCode(bytes[i]);artwork='data:'+picture.format+';base64,'+btoa(binary)}catch(e){}}
-  resolve({title:tags.title,artist:tags.artist,album:tags.album,genre:tags.genre,artwork});
- },onError:()=>resolve({})});
-});
+let tracks=[],activeTrack=0,ytPlayer=null,ytReady=false;
 const renderTrackList=()=>{
  trackList.innerHTML='';
- if(!tracks.length){trackList.innerHTML='<p class="music-empty">No MP3 files found in the GitHub music folder.</p>';countEl.textContent='0 TRACKS';return}
  countEl.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';
  tracks.forEach((track,index)=>{
-  const button=document.createElement('button');button.type='button';button.className='music-track'+(index===activeTrack?' active':'');button.setAttribute('role','listitem');button.dataset.track=String(index);
+  const button=document.createElement('button');button.type='button';button.className='music-track'+(index===activeTrack?' active':'');button.setAttribute('role','listitem');
   const number=document.createElement('span');number.className='track-index';number.textContent=String(index+1).padStart(2,'0');
   const details=document.createElement('span');details.className='track-details';
   const title=document.createElement('strong');title.textContent=track.title;
-  const artist=document.createElement('small');artist.textContent=track.artist||'Unknown artist';
-  const meta=document.createElement('small');meta.className='track-meta-extra';meta.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre not embedded';
+  const artist=document.createElement('small');artist.textContent=track.artist||'Artist not listed';
+  const meta=document.createElement('small');meta.className='track-meta-extra';meta.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre unavailable';
   details.append(title,artist,meta);
   const state=document.createElement('span');state.className='track-state';state.textContent=index===activeTrack?'♫':'▶';
-  button.append(number,details,state);
-  button.addEventListener('click',()=>{setTrack(index);playAudio()});
-  trackList.append(button);
+  button.append(number,details,state);button.addEventListener('click',()=>selectTrack(index,true));trackList.append(button);
  });
 };
-const setTrack=index=>{
+const updatePlayingState=playing=>{
+ player.classList.toggle('is-playing',playing);playBtn.textContent=playing?'Ⅱ':'▶';
+ playBtn.setAttribute('aria-label',playing?'Pause music':'Play music');
+ statusEl.textContent=playing?'NOW PLAYING':'PAUSED';
+};
+const selectTrack=(index,autoplay)=>{
  if(!tracks.length)return;
- activeTrack=(index+tracks.length)%tracks.length;
- const track=tracks[activeTrack];audio.pause();audio.src=track.url;audio.load();
- titleEl.textContent=track.title;artistEl.textContent=track.artist||'Unknown artist';
- extraMetaEl.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre not embedded';
- albumArtEl.style.backgroundImage=track.artwork?'url("'+track.artwork+'")':'';
- albumArtEl.classList.toggle('has-art',!!track.artwork);albumArtEl.textContent=track.artwork?'':'♫';
- currentTimeEl.textContent='00:00';durationEl.textContent='--:--';progress.value=0;
+ activeTrack=(index+tracks.length)%tracks.length;const track=tracks[activeTrack];
+ titleEl.textContent=track.title;artistEl.textContent=track.artist||'Artist not listed';
+ extraMetaEl.textContent=[track.album,track.genre].filter(Boolean).join(' · ')||'Album / genre unavailable';
+ albumArtEl.style.backgroundImage='url("https://i.ytimg.com/vi/'+track.videoId+'/hqdefault.jpg")';
+ albumArtEl.classList.add('has-art');albumArtEl.textContent='';
  [...trackList.querySelectorAll('.music-track')].forEach((button,i)=>{button.classList.toggle('active',i===activeTrack);button.querySelector('.track-state').textContent=i===activeTrack?'♫':'▶'});
- player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');statusEl.textContent='READY TO PLAY';
+ if(ytReady&&ytPlayer){ytPlayer.loadVideoById(track.videoId);if(!autoplay)ytPlayer.pauseVideo()}
+ else statusEl.textContent='LOADING YOUTUBE PLAYER';
 };
-const playAudio=async()=>{try{await audio.play();player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'}catch(error){statusEl.textContent='AUDIO COULD NOT LOAD';player.classList.remove('is-playing')}};
-playBtn.addEventListener('click',()=>{if(!tracks.length)return;if(audio.paused)playAudio();else audio.pause()});
-document.getElementById('music-prev').addEventListener('click',()=>{if(tracks.length){setTrack(activeTrack-1);playAudio()}});
-document.getElementById('music-next').addEventListener('click',()=>{if(tracks.length){setTrack(activeTrack+1);playAudio()}});
-audio.addEventListener('pause',()=>{player.classList.remove('is-playing');playBtn.textContent='▶';playBtn.setAttribute('aria-label','Play music');if(audio.ended)statusEl.textContent='TRACK FINISHED';else if(audio.currentTime>0)statusEl.textContent='PAUSED'});
-audio.addEventListener('play',()=>{player.classList.add('is-playing');playBtn.textContent='Ⅱ';playBtn.setAttribute('aria-label','Pause music');statusEl.textContent='NOW PLAYING'});
-audio.addEventListener('loadedmetadata',()=>{durationEl.textContent=clockTime(audio.duration)});
-audio.addEventListener('timeupdate',()=>{if(!isSeeking&&Number.isFinite(audio.duration)&&audio.duration>0)progress.value=(audio.currentTime/audio.duration)*100;currentTimeEl.textContent=clockTime(audio.currentTime)});
-progress.addEventListener('input',()=>{isSeeking=true;currentTimeEl.textContent=clockTime((Number(progress.value)/100)*(audio.duration||0))});
-progress.addEventListener('change',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=(Number(progress.value)/100)*audio.duration;isSeeking=false});
-audio.addEventListener('ended',()=>{if(activeTrack<tracks.length-1){setTrack(activeTrack+1);playAudio()}else{statusEl.textContent='PLAYLIST COMPLETE'}});
-audio.addEventListener('error',()=>{statusEl.textContent='TRACK UNAVAILABLE';player.classList.remove('is-playing')});
-const loadGitHubPlaylist=async()=>{
+playBtn.addEventListener('click',()=>{
+ if(!tracks.length)return;
+ if(!ytReady||!ytPlayer){statusEl.textContent='YOUTUBE PLAYER LOADING';return}
+ const state=ytPlayer.getPlayerState();
+ if(state===1)ytPlayer.pauseVideo();else if(state===2)ytPlayer.playVideo();else ytPlayer.playVideo();
+});
+document.getElementById('music-prev').addEventListener('click',()=>selectTrack(activeTrack-1,true));
+document.getElementById('music-next').addEventListener('click',()=>selectTrack(activeTrack+1,true));
+const loadPlaylist=async()=>{
  try{
-  const response=await fetch('https://api.github.com/repos/saifalisew1508/Portfolio/contents/music?ref=main',{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
-  if(!response.ok)throw new Error('GitHub playlist request failed ('+response.status+')');
-  const files=await response.json();
-  const mp3s=files.filter(file=>file.type==='file'&&/\.mp3$/i.test(file.name)).sort((a,b)=>a.name.localeCompare(b.name));
-  const discovered=await Promise.all(mp3s.map(async file=>{
-   const url='https://raw.githubusercontent.com/saifalisew1508/Portfolio/main/'+file.path.split('/').map(encodeURIComponent).join('/');
-   const tags=await parseTags(url);
-   return {title:tags.title||fallbackTitle(file.name),artist:tags.artist||'Unknown artist',album:tags.album||'',genre:tags.genre||'',artwork:tags.artwork||'',url,name:file.name};
-  }));
-  tracks=discovered;renderTrackList();
-  if(tracks.length){setTrack(0);statusEl.textContent='LIBRARY READY'}else statusEl.textContent='NO TRACKS FOUND';
- }catch(error){countEl.textContent='LIBRARY OFFLINE';trackList.innerHTML='<p class="music-empty">Could not load the GitHub music folder. Please try again later.</p>';statusEl.textContent='LIBRARY UNAVAILABLE'}
+  const response=await fetch('music/playlist.json',{cache:'no-store'});
+  if(!response.ok)throw new Error('Playlist JSON unavailable');
+  const data=await response.json();
+  tracks=Array.isArray(data.tracks)?data.tracks.filter(t=>t.videoId):[];
+  if(!tracks.length)throw new Error('Playlist is empty');
+  renderTrackList();selectTrack(0,false);statusEl.textContent='LIBRARY READY';
+ }catch(error){countEl.textContent='LIBRARY OFFLINE';trackList.textContent='Could not load music/playlist.json';statusEl.textContent='LIBRARY UNAVAILABLE'}
 };
-loadGitHubPlaylist();
+window.onYouTubeIframeAPIReady=()=>{
+ ytPlayer=new YT.Player('youtube-player',{width:'100%',height:'100%',videoId:tracks[activeTrack]?.videoId||'',playerVars:{playsinline:1,rel:0,modestbranding:1,origin:window.location.origin},events:{
+  onReady:()=>{ytReady=true;if(tracks.length){ytPlayer.cueVideoById(tracks[activeTrack].videoId);statusEl.textContent='READY TO PLAY'}},
+  onStateChange:event=>{if(event.data===YT.PlayerState.PLAYING)updatePlayingState(true);else if(event.data===YT.PlayerState.PAUSED||event.data===YT.PlayerState.ENDED)updatePlayingState(false);if(event.data===YT.PlayerState.ENDED)selectTrack(activeTrack+1,true)},
+  onError:()=>{statusEl.textContent='VIDEO UNAVAILABLE'}
+ }});
+};
+const ytScript=document.createElement('script');ytScript.src='https://www.youtube.com/iframe_api';document.head.appendChild(ytScript);
+loadPlaylist();
 
 // Scroll reveal enters from the direction the visitor is moving.
 const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section,.info-card,.project-card,.resume-panel,.contact-card')];
