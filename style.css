@@ -149,3 +149,13 @@ body[data-theme="day"] .music-track.active{background:rgba(105,126,225,.13)}
 body[data-theme="day"] #fog-canvas{mix-blend-mode:multiply;opacity:.88}
 body[data-theme="night"] #fog-canvas{mix-blend-mode:screen;opacity:1}
 @media(max-width:760px){.desktop-nav{display:none}}
+
+
+/* Split laboratory and technical skills into independent tilt cards. */
+.resume-skill-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.resume-skill-card{margin:0;min-width:0;transform-style:preserve-3d;will-change:transform}
+.resume-skill-card .skill-group-label{display:block;margin:2px 0 12px}
+.resume-skill-card .resume-disclaimer{margin-bottom:0}
+.info-card,.resume-panel,.project-card,.contact-card{transform-style:preserve-3d;will-change:transform}
+@media(max-width:760px){.resume-skill-cards{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.info-card,.resume-panel,.project-card,.contact-card{transform:none!important}}
