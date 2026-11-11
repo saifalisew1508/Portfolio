@@ -155,4 +155,21 @@ if('IntersectionObserver'in window){
  },{threshold:.08,rootMargin:'0px 0px -5% 0px'});
  revealTargets.forEach(el=>revealObserver.observe(el));
 }else{revealTargets.forEach(el=>el.classList.add('is-visible'))}
+
+// Gather the footer's scattered liquid droplets into glass social capsules on entry.
+const socialCluster=document.querySelector('.socials');
+if(socialCluster){
+ if('IntersectionObserver'in window){
+  const socialObserver=new IntersectionObserver(entries=>{
+   entries.forEach(entry=>{
+    if(entry.isIntersecting){
+     socialCluster.classList.add('is-formed');
+     socialObserver.unobserve(socialCluster);
+    }
+   });
+  },{threshold:.18,rootMargin:'0px 0px -8% 0px'});
+  socialObserver.observe(socialCluster);
+ }else socialCluster.classList.add('is-formed');
+}
+
 })();
