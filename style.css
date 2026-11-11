@@ -372,3 +372,11 @@ body[data-theme="day"] .socials a span{color:#6377db;background:rgba(113,132,255
 .music-track .track-details small{font-size:10px;color:var(--muted)}
 .music-track .track-state{margin-left:auto}
 @media(max-width:760px){.music-intro{align-items:flex-start;flex-direction:column}.music-open-link{align-self:flex-start}}
+
+
+/* Real platform marks inside the social glass buttons. */
+.socials a span{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;min-width:30px;padding:6px;}
+.socials a span img,.socials a span svg{display:block;width:100%;height:100%;object-fit:contain;}
+.socials a span img{filter:none;}
+.socials a:nth-child(5) span img{filter:invert(1);}
+body[data-theme="day"] .socials a:nth-child(5) span img{filter:none;}
