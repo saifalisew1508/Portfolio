@@ -109,7 +109,37 @@ fetch('https://ipapi.co/json/',{headers:{Accept:'application/json'}}).then(r=>{i
 const form=document.getElementById('contact-form'),status=document.getElementById('form-status'),button=form&&form.querySelector('button');
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;button.disabled=true;status.textContent='Sending your message…';try{const response=await fetch('https://formsubmit.co/ajax/md.saif2752@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:'New portfolio message from '+data.name,_template:'table'})});const result=await response.json();if(!response.ok||result.success===false)throw new Error(result.message||'Message could not be sent');form.reset();status.textContent='Message sent! Thanks for reaching out. I’ll get back to you soon.'}catch(error){status.textContent='Could not send right now. Please email md.saif2752@gmail.com directly.'}finally{button.disabled=false}});
 
-// Music is embedded through Spotify's official album player in index.html.
+// Simple YouTube Music link library. No embedded video player or audio extraction.
+const musicList=document.getElementById('music-tracklist');
+const musicCount=document.getElementById('music-count');
+const loadMusicLinks=async()=>{
+ if(!musicList)return;
+ try{
+  const response=await fetch('music/playlist.json',{cache:'no-store'});
+  if(!response.ok)throw new Error('Playlist unavailable');
+  const data=await response.json();
+  const tracks=Array.isArray(data.tracks)?data.tracks.filter(track=>track&&typeof track.url==='string'):[];
+  musicList.innerHTML='';
+  musicCount.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';
+  tracks.forEach((track,index)=>{
+   let id='';
+   try{const u=new URL(track.url);id=u.hostname==='youtu.be'?u.pathname.slice(1):u.searchParams.get('v')||'';}catch{}
+   if(!id)return;
+   const link=document.createElement('a');
+   link.className='music-track';link.href='https://music.youtube.com/watch?v='+encodeURIComponent(id);
+   link.target='_blank';link.rel='noopener noreferrer';
+   const number=document.createElement('span');number.className='track-index';number.textContent=String(index+1).padStart(2,'0');
+   const details=document.createElement('span');details.className='track-details';
+   const title=document.createElement('strong');title.textContent='Track '+String(index+1).padStart(2,'0');
+   const artist=document.createElement('small');artist.textContent='Listen on YouTube Music';
+   details.append(title,artist);
+   const action=document.createElement('span');action.className='track-state';action.textContent='↗';
+   link.append(number,details,action);musicList.append(link);
+  });
+  if(!musicList.children.length)throw new Error('No valid tracks in playlist');
+ }catch(error){musicCount.textContent='LIBRARY UNAVAILABLE';musicList.textContent='Could not load music/playlist.json';console.error(error);}
+};
+loadMusicLinks();
 
 // Scroll reveal enters from the direction the visitor is moving.
 const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section')];
