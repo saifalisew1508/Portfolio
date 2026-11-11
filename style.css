@@ -518,3 +518,16 @@ main>.section-wrap,.site-footer{scroll-snap-align:none!important;scroll-snap-sto
  .section-label,.section-content>.section-heading-row,.section-content>h2,.section-content>.large-copy,.section-content>.about-intro-row,.section-content>.about-grid,.section-content>.skills-line,.section-content>.resume-heading,.section-content>.resume-columns,.section-content>.resume-skill-cards,.section-content>.project-grid,.section-content>.github-note,.section-content>.contact-layout,.section-content>.music-section{opacity:1;transform:none;transition:none}
  .section-wrap.section-arrived .about-grid>.info-card,.section-wrap.section-arrived .project-grid>.project-card,.section-wrap.section-arrived .resume-columns>.resume-panel,.section-wrap.section-arrived .resume-skill-cards>.resume-skill-card{animation:none}
 }
+
+
+/* Compliant visible YouTube player and in-page track selection. */
+.youtube-player-container{position:relative;width:100%;aspect-ratio:16/9;min-height:200px;max-height:360px;overflow:hidden;border-radius:13px;background:#05070d;border:1px solid rgba(170,190,255,.2);box-shadow:0 12px 34px rgba(0,0,0,.2)}
+.youtube-player-container iframe{display:block;width:100%;height:100%;border:0}
+.music-now-playing{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;align-items:center;padding:13px 4px 4px}
+.music-now-label{font:8px var(--mono);letter-spacing:1.3px;color:var(--blue)}
+.music-now-playing strong{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.music-now-playing>span:last-child{grid-column:2;font-size:10px;color:var(--muted)}
+.music-track{font-family:inherit;cursor:pointer;min-width:0}
+.music-track.active{background:rgba(113,132,255,.14);border-color:rgba(130,149,255,.3)}
+.music-track.active .track-state{color:#6fe0ed}
+@media(max-width:760px){.youtube-player-container{min-height:200px;max-height:320px;aspect-ratio:16/9}.music-now-playing{padding:11px 3px 3px}}

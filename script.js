@@ -109,38 +109,82 @@ fetch('https://ipapi.co/json/',{headers:{Accept:'application/json'}}).then(r=>{i
 const form=document.getElementById('contact-form'),status=document.getElementById('form-status'),button=form&&form.querySelector('button');
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;button.disabled=true;status.textContent='Sending your message…';try{const response=await fetch('https://formsubmit.co/ajax/md.saif2752@gmail.com',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({...data,_subject:'New portfolio message from '+data.name,_template:'table'})});const result=await response.json();if(!response.ok||result.success===false)throw new Error(result.message||'Message could not be sent');form.reset();status.textContent='Message sent! Thanks for reaching out. I’ll get back to you soon.'}catch(error){status.textContent='Could not send right now. Please email md.saif2752@gmail.com directly.'}finally{button.disabled=false}});
 
-// Simple YouTube Music link library. No embedded video player or audio extraction.
+// Official YouTube IFrame Player API: embedded playback, no audio extraction.
 const musicList=document.getElementById('music-tracklist');
 const musicCount=document.getElementById('music-count');
-const loadMusicLinks=async()=>{
+const musicTitle=document.getElementById('music-current-title');
+const musicStatus=document.getElementById('music-player-status');
+let musicTracks=[];
+let currentTrackIndex=-1;
+let youtubePlayer=null;
+let youtubeApiReady=false;
+const setMusicStatus=message=>{if(musicStatus)musicStatus.textContent=message};
+const markActiveTrack=()=>{
+ if(!musicList)return;
+ [...musicList.querySelectorAll('.music-track')].forEach((item,index)=>{
+  const active=index===currentTrackIndex;
+  item.classList.toggle('active',active);
+  item.setAttribute('aria-current',active?'true':'false');
+ });
+ if(musicTitle)musicTitle.textContent=currentTrackIndex>=0?'Track '+String(currentTrackIndex+1).padStart(2,'0'):'Choose a track';
+};
+const playMusicTrack=index=>{
+ if(!musicTracks.length)return;
+ currentTrackIndex=(index+musicTracks.length)%musicTracks.length;
+ markActiveTrack();
+ if(youtubePlayer&&youtubeApiReady){
+  youtubePlayer.loadVideoById({videoId:musicTracks[currentTrackIndex].id});
+  setMusicStatus('Loading selected track…');
+ }else setMusicStatus('YouTube player is still loading. Try again in a moment.');
+};
+const loadMusicLibrary=async()=>{
  if(!musicList)return;
  try{
   const response=await fetch('music/playlist.json',{cache:'no-store'});
   if(!response.ok)throw new Error('Playlist unavailable');
   const data=await response.json();
-  const tracks=Array.isArray(data.tracks)?data.tracks.filter(track=>track&&typeof track.url==='string'):[];
+  musicTracks=(Array.isArray(data.tracks)?data.tracks.map(track=>{
+   try{const url=new URL(track.url);const id=url.hostname==='youtu.be'?url.pathname.slice(1):url.searchParams.get('v');return id?{id}:null}catch{return null}
+  }).filter(Boolean):[]);
   musicList.innerHTML='';
-  musicCount.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';
-  tracks.forEach((track,index)=>{
-   let id='';
-   try{const u=new URL(track.url);id=u.hostname==='youtu.be'?u.pathname.slice(1):u.searchParams.get('v')||'';}catch{}
-   if(!id)return;
-   const link=document.createElement('a');
-   link.className='music-track';link.href='https://music.youtube.com/watch?v='+encodeURIComponent(id);
-   link.target='_blank';link.rel='noopener noreferrer';
+  musicCount.textContent=String(musicTracks.length).padStart(2,'0')+' TRACKS';
+  musicTracks.forEach((track,index)=>{
+   const button=document.createElement('button');button.type='button';button.className='music-track';button.setAttribute('aria-label','Play track '+(index+1));
    const number=document.createElement('span');number.className='track-index';number.textContent=String(index+1).padStart(2,'0');
    const details=document.createElement('span');details.className='track-details';
    const title=document.createElement('strong');title.textContent='Track '+String(index+1).padStart(2,'0');
-   const artist=document.createElement('small');artist.textContent='Listen on YouTube Music';
-   details.append(title,artist);
-   const action=document.createElement('span');action.className='track-state';action.textContent='↗';
-   link.append(number,details,action);musicList.append(link);
+   const subtitle=document.createElement('small');subtitle.textContent='Play on this page';
+   details.append(title,subtitle);
+   const action=document.createElement('span');action.className='track-state';action.textContent='▶';
+   button.append(number,details,action);button.addEventListener('click',()=>playMusicTrack(index));musicList.append(button);
   });
-  if(!musicList.children.length)throw new Error('No valid tracks in playlist');
- }catch(error){musicCount.textContent='LIBRARY UNAVAILABLE';musicList.textContent='Could not load music/playlist.json';console.error(error);}
+  if(!musicTracks.length)throw new Error('No valid YouTube video IDs in playlist');
+  setMusicStatus('Select a track below to start playback.');
+ }catch(error){musicCount.textContent='LIBRARY UNAVAILABLE';musicList.textContent='Could not load music/playlist.json';setMusicStatus('Music library could not be loaded.');console.error(error)}
 };
-loadMusicLinks();
-
+const createYouTubePlayer=()=>{
+ if(youtubePlayer||!document.getElementById('youtube-player')||!window.YT||!window.YT.Player)return;
+ youtubePlayer=new YT.Player('youtube-player',{
+  width:'100%',height:'100%',videoId:musicTracks[0]?.id||'',
+  playerVars:{enablejsapi:1,playsinline:1,controls:1,rel:0,origin:window.location.origin},
+  events:{
+   onReady:()=>{youtubeApiReady=true;setMusicStatus('Ready. Choose a track to play.')},
+   onStateChange:event=>{
+    if(event.data===YT.PlayerState.PLAYING)setMusicStatus('Playing');
+    else if(event.data===YT.PlayerState.PAUSED)setMusicStatus('Paused');
+    else if(event.data===YT.PlayerState.BUFFERING)setMusicStatus('Buffering…');
+    else if(event.data===YT.PlayerState.ENDED)setMusicStatus('Track finished');
+   },
+   onError:event=>setMusicStatus('This video cannot be embedded (YouTube error '+event.data+'). Choose another track.')
+  }
+ });
+};
+window.onYouTubeIframeAPIReady=createYouTubePlayer;
+loadMusicLibrary();
+const youtubeApiScript=document.createElement('script');
+youtubeApiScript.src='https://www.youtube.com/iframe_api';youtubeApiScript.async=true;
+youtubeApiScript.onerror=()=>setMusicStatus('YouTube player API could not load. Check your connection.');
+document.head.appendChild(youtubeApiScript);
 // Smooth section arrivals without snapping the page or hiding whole sections.
 const revealSections=[...document.querySelectorAll('main>.section-wrap')];
 if('IntersectionObserver'in window){
