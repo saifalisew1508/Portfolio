@@ -380,3 +380,21 @@ body[data-theme="day"] .socials a span{color:#6377db;background:rgba(113,132,255
 .socials a span img{filter:none;}
 .socials a:nth-child(5) span img{filter:invert(1);}
 body[data-theme="day"] .socials a:nth-child(5) span img{filter:none;}
+
+
+/* Professional portrait in the About section. */
+.about-intro-row{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;margin-bottom:8px}
+.about-intro-row h2{flex:1;margin-bottom:28px}
+.about-profile-photo{flex:0 0 clamp(170px,24%,250px);margin:-42px 0 24px;position:relative;padding:9px;border:1px solid rgba(155,174,235,.35);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(113,132,255,.08));box-shadow:0 22px 55px rgba(15,25,55,.18),inset 0 1px rgba(255,255,255,.6);overflow:hidden}
+.about-profile-photo img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 24%;border-radius:15px}
+.about-profile-photo figcaption{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 4px 3px;font:10px var(--mono);letter-spacing:1.4px;color:var(--text)}
+.about-profile-photo figcaption span{font-size:8px;color:var(--muted);letter-spacing:.8px;text-align:right}
+@media(max-width:760px){
+ .about-intro-row{align-items:center;gap:14px}
+ .about-intro-row h2{font-size:clamp(34px,9vw,52px);margin-bottom:20px}
+ .about-profile-photo{flex:0 0 38%;max-width:180px;margin:-18px 0 20px;padding:6px;border-radius:17px}
+ .about-profile-photo img{border-radius:12px}
+ .about-profile-photo figcaption{font-size:8px;letter-spacing:.8px;padding:9px 2px 2px;display:block}
+ .about-profile-photo figcaption span{display:block;text-align:left;font-size:7px;margin-top:4px}
+}
+@media(max-width:360px){.about-intro-row{gap:8px}.about-intro-row h2{font-size:32px}.about-profile-photo{flex-basis:36%}}
