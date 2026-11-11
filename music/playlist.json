@@ -1,29 +1,5 @@
 {
-  "version": 2,
-  "tracks": [
-    {
-      "url": "https://www.youtube.com/watch?v=We9h64kQcE4"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=TW0k-lKT-aE"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=Vv4BFhxgy2g"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=mCFQ5m4hEYo"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=T321Nk2c1sw"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=Y3z_aXwuvmg"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=A-5bx-l3Kn8"
-    },
-    {
-      "url": "https://www.youtube.com/watch?v=ZzDI5IjFh04"
-    }
-  ]
+  "version": 3,
+  "provider": "Spotify",
+  "albumUrl": "https://open.spotify.com/album/0Rkv5iqjF2uenfL0OVB8hg"
 }
