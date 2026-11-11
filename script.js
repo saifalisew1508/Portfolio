@@ -72,7 +72,7 @@ const moveNavIndicator=bar=>{
  indicator.classList.add('is-ready');
 };
 const syncNavIndicators=()=>navBars.forEach(moveNavIndicator);
-const sections=['home','about','resume','projects','contact'].map(id=>document.getElementById(id)).filter(Boolean);
+const sections=['home','about','resume','projects','contact','music'].map(id=>document.getElementById(id)).filter(Boolean);
 nav.forEach(link=>link.addEventListener('click',event=>{
  const target=document.querySelector(link.getAttribute('href'));
  if(!target)return;
