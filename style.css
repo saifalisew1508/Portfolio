@@ -459,3 +459,62 @@ body[data-theme="day"] .socials a:nth-child(5) span img{filter:none;}
  .socials:not(.is-formed) a{opacity:1;filter:none;transform:none;border-radius:999px}
  .socials.is-formed a{transition:none}
 }
+
+
+/* Remove forced snap gaps and keep section transitions under visitor control. */
+html{scroll-snap-type:none!important;scroll-behavior:smooth;scroll-padding-top:82px}
+main>.section-wrap,.site-footer{scroll-snap-align:none!important;scroll-snap-stop:normal!important;scroll-margin-top:0!important}
+@media(max-width:760px){
+ html{scroll-padding-top:70px}
+ main>.section-wrap:not(.hero){padding-top:58px!important;padding-bottom:58px!important}
+ .music-page-section{padding-top:52px!important;padding-bottom:52px!important}
+ .about-section,.resume-section,.projects-section,.contact-section{gap:18px!important}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Content-led reveal: the section stays in place while its contents arrive smoothly. */
+.section-label,.section-content>.section-heading-row,.section-content>h2,
+.section-content>.large-copy,.section-content>.about-intro-row,
+.section-content>.about-grid,.section-content>.skills-line,
+.section-content>.resume-heading,.section-content>.resume-columns,
+.section-content>.resume-skill-cards,.section-content>.project-grid,
+.section-content>.github-note,.section-content>.contact-layout,
+.section-content>.music-section{
+ opacity:0;transform:translate3d(0,26px,0);
+ transition:opacity .72s ease,transform .85s cubic-bezier(.2,.8,.2,1);
+}
+.section-label{transition-delay:0ms}
+.section-content>.section-heading-row,.section-content>.about-intro-row,.section-content>.resume-heading{transition-delay:70ms}
+.section-content>.large-copy,.section-content>.resume-columns,.section-content>.project-grid,.section-content>.music-section,.section-content>.contact-layout{transition-delay:130ms}
+.section-content>.about-grid,.section-content>.resume-skill-cards,.section-content>.skills-line,.section-content>.github-note{transition-delay:190ms}
+.section-wrap.section-arrived .section-label,
+.section-wrap.section-arrived .section-content>.section-heading-row,
+.section-wrap.section-arrived .section-content>h2,
+.section-wrap.section-arrived .section-content>.large-copy,
+.section-wrap.section-arrived .section-content>.about-intro-row,
+.section-wrap.section-arrived .section-content>.about-grid,
+.section-wrap.section-arrived .section-content>.skills-line,
+.section-wrap.section-arrived .section-content>.resume-heading,
+.section-wrap.section-arrived .section-content>.resume-columns,
+.section-wrap.section-arrived .section-content>.resume-skill-cards,
+.section-wrap.section-arrived .section-content>.project-grid,
+.section-wrap.section-arrived .section-content>.github-note,
+.section-wrap.section-arrived .section-content>.contact-layout,
+.section-wrap.section-arrived .section-content>.music-section{
+ opacity:1;transform:translate3d(0,0,0)
+}
+.section-wrap.section-arrived .about-grid>.info-card,
+.section-wrap.section-arrived .project-grid>.project-card,
+.section-wrap.section-arrived .resume-columns>.resume-panel,
+.section-wrap.section-arrived .resume-skill-cards>.resume-skill-card{
+ animation:cardSettle .72s cubic-bezier(.2,.8,.2,1) both;
+}
+.section-wrap.section-arrived .about-grid>.info-card:nth-child(2),
+.section-wrap.section-arrived .project-grid>.project-card:nth-child(2){animation-delay:90ms}
+.section-wrap.section-arrived .about-grid>.info-card:nth-child(3),
+.section-wrap.section-arrived .project-grid>.project-card:nth-child(3){animation-delay:180ms}
+@keyframes cardSettle{from{opacity:.45;transform:translate3d(0,22px,0) scale(.985)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@media(prefers-reduced-motion:reduce){
+ .section-label,.section-content>.section-heading-row,.section-content>h2,.section-content>.large-copy,.section-content>.about-intro-row,.section-content>.about-grid,.section-content>.skills-line,.section-content>.resume-heading,.section-content>.resume-columns,.section-content>.resume-skill-cards,.section-content>.project-grid,.section-content>.github-note,.section-content>.contact-layout,.section-content>.music-section{opacity:1;transform:none;transition:none}
+ .section-wrap.section-arrived .about-grid>.info-card,.section-wrap.section-arrived .project-grid>.project-card,.section-wrap.section-arrived .resume-columns>.resume-panel,.section-wrap.section-arrived .resume-skill-cards>.resume-skill-card{animation:none}
+}
