@@ -358,3 +358,17 @@ body[data-theme="day"] .socials a span{color:#6377db;background:rgba(113,132,255
 }
 .spotify-embed-wrap iframe{display:block;width:100%;height:500px;border:0}
 @media(max-width:760px){.spotify-embed-wrap iframe{height:500px}}
+
+
+/* Music library: clean rows instead of an embedded video player. */
+.music-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:4px 0 18px}
+.music-intro p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.music-open-link{flex:none;font:9px var(--mono);letter-spacing:1px;color:#b9c7ff;border:1px solid rgba(150,170,255,.28);border-radius:30px;padding:11px 14px;background:rgba(113,132,255,.09);transition:.25s}
+.music-open-link:hover{background:rgba(113,132,255,.2);transform:translateY(-2px)}
+.music-section{margin-top:0}
+.music-track{display:flex;text-decoration:none}
+.music-track .track-details{flex:1}
+.music-track .track-details strong{font-size:12px}
+.music-track .track-details small{font-size:10px;color:var(--muted)}
+.music-track .track-state{margin-left:auto}
+@media(max-width:760px){.music-intro{align-items:flex-start;flex-direction:column}.music-open-link{align-self:flex-start}}
