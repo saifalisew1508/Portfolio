@@ -398,3 +398,64 @@ body[data-theme="day"] .socials a:nth-child(5) span img{filter:none;}
  .about-profile-photo figcaption span{display:block;text-align:left;font-size:7px;margin-top:4px}
 }
 @media(max-width:360px){.about-intro-row{gap:8px}.about-intro-row h2{font-size:32px}.about-profile-photo{flex-basis:36%}}
+
+
+/* Smaller footer bubbles with a water-gathering entrance. */
+.socials{gap:13px;margin:30px 0 48px}
+.socials a{
+ min-width:158px;
+ min-height:62px;
+ padding:13px 19px;
+ gap:10px;
+ font-size:13px;
+}
+.socials a span{
+ flex:0 0 28px;
+ width:28px;
+ height:28px;
+ min-width:28px;
+ padding:6px;
+}
+@media(max-width:760px){
+ .socials{gap:10px!important}
+ .socials a{
+  min-height:56px!important;
+  padding:10px 12px!important;
+  gap:8px!important;
+  font-size:11px!important;
+ }
+ .socials a span{flex-basis:25px;width:25px;height:25px;min-width:25px!important;padding:5px}
+}
+@media(max-width:350px){.socials a{min-height:52px!important;padding:9px 8px!important;font-size:10px!important}}
+
+/* Each glass capsule condenses out of scattered droplets when the footer arrives. */
+.socials:not(.is-formed) a{
+ opacity:0;
+ filter:blur(9px);
+ transform:translate3d(var(--drop-x,0),var(--drop-y,34px),0) scale(.42);
+ border-radius:50%;
+}
+.socials.is-formed a{
+ opacity:1;
+ filter:blur(0);
+ transform:translate3d(0,0,0) scale(1);
+ border-radius:999px;
+ transition:
+  opacity .72s ease,
+  filter .85s ease,
+  transform .95s cubic-bezier(.16,1.25,.3,1),
+  border-radius .9s cubic-bezier(.16,1.1,.3,1),
+  border-color .3s,box-shadow .35s,background .35s;
+}
+.socials.is-formed a:nth-child(1){--drop-x:-42px;--drop-y:32px;transition-delay:0ms}
+.socials.is-formed a:nth-child(2){--drop-x:38px;--drop-y:46px;transition-delay:75ms}
+.socials.is-formed a:nth-child(3){--drop-x:-32px;--drop-y:-38px;transition-delay:145ms}
+.socials.is-formed a:nth-child(4){--drop-x:44px;--drop-y:-28px;transition-delay:215ms}
+.socials.is-formed a:nth-child(5){--drop-x:-24px;--drop-y:42px;transition-delay:285ms}
+.socials.is-formed a:nth-child(6){--drop-x:28px;--drop-y:-42px;transition-delay:355ms}
+.socials:not(.is-formed) a:nth-child(odd){--drop-x:-30px}
+.socials:not(.is-formed) a:nth-child(even){--drop-x:30px}
+@media(prefers-reduced-motion:reduce){
+ .socials:not(.is-formed) a{opacity:1;filter:none;transform:none;border-radius:999px}
+ .socials.is-formed a{transition:none}
+}
