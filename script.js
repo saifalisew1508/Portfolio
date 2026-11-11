@@ -141,20 +141,21 @@ const loadMusicLinks=async()=>{
 };
 loadMusicLinks();
 
-// Scroll reveal enters from the direction the visitor is moving.
-const revealTargets=[...document.querySelectorAll('.hero,.about-section,.resume-section,.projects-section,.contact-section,.music-section')];
-revealTargets.forEach(el=>el.classList.add('scroll-reveal'));
-let previousScrollY=window.scrollY;
+// Smooth section arrivals without snapping the page or hiding whole sections.
+const revealSections=[...document.querySelectorAll('main>.section-wrap')];
 if('IntersectionObserver'in window){
- const revealObserver=new IntersectionObserver(entries=>{
-  const movingDown=window.scrollY>=previousScrollY;previousScrollY=window.scrollY;
+ const sectionObserver=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
-   if(entry.isIntersecting){entry.target.classList.remove('reveal-from-up');if(!movingDown)entry.target.classList.add('reveal-from-up');requestAnimationFrame(()=>entry.target.classList.add('is-visible'))}
-   else if(entry.boundingClientRect.top>0||entry.boundingClientRect.bottom<0){entry.target.classList.remove('is-visible')}
+   if(entry.isIntersecting){
+    entry.target.classList.add('section-arrived');
+    sectionObserver.unobserve(entry.target);
+   }
   });
- },{threshold:.08,rootMargin:'0px 0px -5% 0px'});
- revealTargets.forEach(el=>revealObserver.observe(el));
-}else{revealTargets.forEach(el=>el.classList.add('is-visible'))}
+ },{threshold:.08,rootMargin:'0px 0px -10% 0px'});
+ revealSections.forEach(section=>sectionObserver.observe(section));
+}else{
+ revealSections.forEach(section=>section.classList.add('section-arrived'));
+}
 
 // Gather the footer's scattered liquid droplets into glass social capsules on entry.
 const socialCluster=document.querySelector('.socials');
