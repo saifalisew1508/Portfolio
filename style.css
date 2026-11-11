@@ -325,3 +325,36 @@ body[data-theme="day"] .socials a span{color:#6377db;background:rgba(113,132,255
 }
 @media(max-width:380px){.socials a{min-width:100%;justify-content:flex-start}}
 @media(prefers-reduced-motion:reduce){.socials a,.socials a:nth-child(2n),.socials a:nth-child(3n){animation:none;transition:none}}
+
+
+/* Compact social bubbles: two columns on phones, original desktop flow retained. */
+@media(max-width:760px){
+ .socials{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:12px!important;
+  align-items:stretch;
+ }
+ .socials a{
+  width:100%!important;
+  min-width:0!important;
+  min-height:64px!important;
+  padding:12px 14px!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  font-size:clamp(11px,3.2vw,14px)!important;
+  white-space:nowrap;
+ }
+ .socials a span{flex:0 0 27px;min-width:27px!important;height:27px!important}
+}
+@media(max-width:350px){
+ .socials{gap:8px!important}
+ .socials a{padding:10px 9px!important;font-size:11px!important}
+}
+.spotify-embed-wrap{
+ width:100%;overflow:hidden;border:1px solid rgba(190,207,255,.2);
+ border-radius:14px;background:rgba(4,8,18,.35);
+ box-shadow:inset 0 1px rgba(255,255,255,.08),0 15px 38px rgba(0,0,0,.14);
+}
+.spotify-embed-wrap iframe{display:block;width:100%;height:500px;border:0}
+@media(max-width:760px){.spotify-embed-wrap iframe{height:500px}}
