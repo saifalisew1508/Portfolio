@@ -1,78 +1,29 @@
 {
-  "version": 1,
-  "source": "YouTube",
+  "version": 2,
   "tracks": [
     {
-      "id": "2-phut-hon-funk",
-      "videoId": "We9h64kQcE4",
-      "title": "2 Phut Hon Funk",
-      "artist": "MGD",
-      "album": null,
-      "genre": "Funk / Phonk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=We9h64kQcE4"
+      "url": "https://www.youtube.com/watch?v=We9h64kQcE4"
     },
     {
-      "id": "avangard-slowed",
-      "videoId": "TW0k-lKT-aE",
-      "title": "AVANGARD (Slowed)",
-      "artist": "LONOWN",
-      "album": "AVANGARD",
-      "genre": "Electronic / Trance",
-      "youtubeUrl": "https://www.youtube.com/watch?v=TW0k-lKT-aE"
+      "url": "https://www.youtube.com/watch?v=TW0k-lKT-aE"
     },
     {
-      "id": "arrival",
-      "videoId": "Vv4BFhxgy2g",
-      "title": "ARRIVAL",
-      "artist": "Ariis",
-      "album": null,
-      "genre": "Brazilian Phonk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=Vv4BFhxgy2g"
+      "url": "https://www.youtube.com/watch?v=Vv4BFhxgy2g"
     },
     {
-      "id": "funk-infernal",
-      "videoId": "mCFQ5m4hEYo",
-      "title": "FUNK INFERNAL",
-      "artist": "DYGO, Mxng0",
-      "album": "FUNK INFERNAL",
-      "genre": "Brazilian Phonk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=mCFQ5m4hEYo"
+      "url": "https://www.youtube.com/watch?v=mCFQ5m4hEYo"
     },
     {
-      "id": "enough",
-      "videoId": "T321Nk2c1sw",
-      "title": "ENOUGH (PHONK)",
-      "artist": "Eternxlkz",
-      "album": null,
-      "genre": "Phonk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=T321Nk2c1sw"
+      "url": "https://www.youtube.com/watch?v=T321Nk2c1sw"
     },
     {
-      "id": "funk-abnormal",
-      "videoId": "Y3z_aXwuvmg",
-      "title": "FUNK ABNORMAL (Super Slowed)",
-      "artist": "DJ V12",
-      "album": null,
-      "genre": "Brazilian Funk / Phonk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=Y3z_aXwuvmg"
+      "url": "https://www.youtube.com/watch?v=Y3z_aXwuvmg"
     },
     {
-      "id": "voce-na-mira",
-      "videoId": "A-5bx-l3Kn8",
-      "title": "VOCE NA MIRA (Sped Up)",
-      "artist": "Hwungii, DJ VGK1",
-      "album": "VOCE NA MIRA",
-      "genre": "Brazilian Funk",
-      "youtubeUrl": "https://www.youtube.com/watch?v=A-5bx-l3Kn8"
+      "url": "https://www.youtube.com/watch?v=A-5bx-l3Kn8"
     },
     {
-      "id": "farben-orange-sector",
-      "videoId": "ZzDI5IjFh04",
-      "title": "Farben - Orange Sector (Slowed)",
-      "artist": "Orange Sector",
-      "album": null,
-      "genre": "Electronic / Phonk edit",
-      "youtubeUrl": "https://www.youtube.com/watch?v=ZzDI5IjFh04"
+      "url": "https://www.youtube.com/watch?v=ZzDI5IjFh04"
     }
   ]
 }
