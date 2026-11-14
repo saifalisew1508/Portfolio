@@ -216,6 +216,16 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 @media(min-width:761px){.unit-picker-overlay{align-items:center}.unit-picker-sheet{max-height:min(64vh,560px)}}
 .tool-header .local-clock{display:flex!important;flex:0 0 auto}
 @media(max-width:760px){.tool-wrap{width:min(94vw,760px);margin:24px auto 120px}.tool-header{gap:8px}.tool-header .local-clock{min-width:72px;margin-left:auto;margin-right:clamp(4px,2vw,14px)}.tool-header .local-clock small{font-size:7px}.tool-header .header-cta{flex:0 0 auto}}
+
+/* Clinical calculation workspace */
+.lab-calc-select{max-width:620px;margin-bottom:14px}
+.lab-calc-description{max-width:850px;margin:0 0 16px;line-height:1.7}
+.lab-calc-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:900px}
+.lab-calc-fields .field{min-width:0}
+.lab-calc-result{margin-top:22px}
+.lab-calc-disclaimer{font-size:10px;line-height:1.7;color:#8e9bb7;border:1px solid rgba(190,203,255,.12);border-radius:13px;padding:13px 15px;margin-top:14px}
+.lab-mode-pills{align-items:center}
+@media(max-width:580px){.lab-calc-fields{grid-template-columns:minmax(0,1fr)}.lab-calc-select{max-width:none}.lab-calc-description{font-size:11px}.lab-calc-disclaimer{font-size:9px}}
 </style>
 </head>
 <body>
@@ -308,9 +318,11 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <section class="tool-panel glass" id="lab">
 <div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Separate mass concentration and molar concentration conversions with analyte-specific molecular weight support.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
 <div class="category-pills lab-mode-pills" id="lab-pills">
-<button class="category-pill active" type="button" data-lab-kind="mass">Mass concentration</button>
-<button class="category-pill" type="button" data-lab-kind="molar">Molar concentration</button>
+<button class="category-pill active" type="button" data-lab-kind="mass" aria-pressed="true">Mass concentration</button>
+<button class="category-pill" type="button" data-lab-kind="molar" aria-pressed="false">Molar concentration</button>
+<button class="category-pill" type="button" data-lab-kind="calculations" aria-pressed="false">Clinical calculations</button>
 </div>
+<div id="lab-conversion-workspace">
 <div class="convert-grid lab-fields">
 <div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100"></div>
 <div class="field"><label for="lab-test">ANALYTE / TEST NAME</label><input class="glass-input" id="lab-test" list="lab-tests" placeholder="e.g. Glucose" autocomplete="off"><datalist id="lab-tests"><option value="Glucose"><option value="Urea"><option value="Creatinine"><option value="Cholesterol"><option value="Uric acid"><option value="Bilirubin"><option value="Lactate"><option value="Triglycerides"></datalist></div>
@@ -330,6 +342,28 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <div class="unit-picker-header"><button type="button" id="lab-picker-cancel">Cancel</button><h3 id="lab-picker-title">Select unit</h3><span></span></div>
 <div class="unit-picker-list" id="lab-picker-list"></div>
 </div>
+</div>
+</div>
+<div class="lab-calculations hidden" id="lab-calculations-workspace">
+ <div class="field lab-calc-select"><label for="lab-calc-type">SELECT CALCULATION</label>
+  <select class="glass-select" id="lab-calc-type">
+   <option value="homa">HOMA1-IR · Insulin resistance</option>
+   <option value="egfr">eGFR · CKD-EPI 2021</option>
+   <option value="crcl">Creatinine clearance · Cockcroft–Gault</option>
+   <option value="fena">FENa · Fractional excretion of sodium</option>
+   <option value="anion">Anion gap · Albumin corrected</option>
+   <option value="calcium">Corrected calcium · Albumin adjusted</option>
+   <option value="sodium">Corrected sodium · Hyperglycaemia</option>
+   <option value="osmolality">Calculated serum osmolality</option>
+   <option value="ldl">LDL-C · Friedewald</option>
+  </select>
+ </div>
+ <p class="result-meta lab-calc-description" id="lab-calc-description"></p>
+ <div class="lab-calc-fields" id="lab-calc-fields"></div>
+ <div class="tool-actions"><button class="glass-button primary" id="lab-calc-run" type="button">Calculate result ↗</button><button class="glass-button" id="lab-calc-reset" type="button">Reset values</button></div>
+ <div class="convert-result lab-calc-result" aria-live="polite"><div class="result-label">CALCULATION RESULT</div><div class="result-value" id="lab-calc-result">—</div><div class="result-meta" id="lab-calc-formula">Select a calculation and enter the required values.</div></div>
+ <p class="status-line" id="lab-calc-status" aria-live="polite">Calculations run locally in your browser.</p>
+ <p class="lab-calc-disclaimer">Educational and laboratory calculation support only. Verify units, assay standardization, specimen timing and the applicable clinical guideline. Derived values do not establish a diagnosis or replace measured tests and professional interpretation.</p>
 </div>
 </section>
 </main>
