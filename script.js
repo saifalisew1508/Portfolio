@@ -78,7 +78,7 @@ const loadPlaylist=async()=>{
     const url=new URL(track.url);
     if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(url.hostname))return null;
     const id=url.hostname==='youtu.be'?url.pathname.split('/')[1]:(url.searchParams.get('v')||url.pathname.match(/\/embed\/([^/]+)/)?.[1]);
-    return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:''}:null;
+    return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:'',artist:typeof track.artist==='string'?track.artist:'',album:typeof track.album==='string'?track.album:'',genre:Array.isArray(track.genre)?track.genre:[],metadataStatus:track.metadataStatus||''}:null;
    }catch(_){return null;}
   }).filter(Boolean);
   if(!tracks.length)throw new Error('Playlist loaded, but contains no valid YouTube video IDs');
