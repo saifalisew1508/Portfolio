@@ -589,7 +589,7 @@ a,button,input,textarea{-webkit-tap-highlight-color:transparent}
  .footer-bottom{flex-wrap:wrap;line-height:1.6}
 }
 @media(max-width:390px){
- .local-clock{display:none}
+ .local-clock{display:flex;min-width:70px}
  .hero h1{font-size:clamp(45px,13vw,58px)}
  .hero-intro{font-size:13px}
  .about-intro-row{gap:10px}
@@ -818,3 +818,13 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .section-content>.resume-skill-cards,.section-content>.project-grid,
 .section-content>.github-note,.section-content>.contact-layout,
 .section-content>.music-section{opacity:1;transform:none}
+
+/* Keep the live clock visible on narrow phones without squeezing the header. */
+@media(max-width:390px){
+ .site-header{gap:7px;padding-left:5vw;padding-right:5vw}
+ .site-header .wordmark{font-size:24px}
+ .site-header .local-clock{display:flex;min-width:66px;gap:2px}
+ .site-header .local-clock span{font-size:11px}
+ .site-header .local-clock small{font-size:6px;letter-spacing:.2px}
+ .site-header .header-cta{font-size:10px;padding:8px 9px;white-space:nowrap}
+}
