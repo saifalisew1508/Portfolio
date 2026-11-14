@@ -19,10 +19,10 @@ if(!reduced){if(window.WebGLFluid)startFog();else addEventListener('load',startF
 
 // Navigation remains usable as ordinary anchor links if this script fails.
 const links=$$('.mobile-nav > a,.desktop-nav > a'),bars=$$('.mobile-nav,.desktop-nav');
-const sections=['home','about','resume','projects','music','contact'].map(id=>document.getElementById(id)).filter(Boolean);
+const sections=['home','about','resume','contact'].map(id=>document.getElementById(id)).filter(Boolean);
 const indicators=()=>bars.forEach(bar=>{const mark=$('.nav-indicator',bar),active=$('a.active',bar);if(!mark||!active)return;const b=bar.getBoundingClientRect(),a=active.getBoundingClientRect();mark.style.width=a.width+'px';mark.style.height=a.height+'px';mark.style.transform='translate3d('+(a.left-b.left)+'px,'+(a.top-b.top)+'px,0)';mark.classList.add('is-ready');});
 links.forEach(link=>link.addEventListener('click',e=>{const href=link.getAttribute('href');if(!href||href[0]!=='#')return;const target=document.getElementById(href.slice(1));if(!target)return;e.preventDefault();target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});history.replaceState(null,'',href);}));
-let queued=false;const updateNav=()=>{const marker=scrollY+Math.min(innerHeight*.36,260);let current=sections[0];sections.forEach(s=>{if(s.offsetTop<=marker)current=s;});const activeId=(current.id==='projects'||current.id==='music')?'resume':current.id;links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+activeId));indicators();queued=false;};
+let queued=false;const updateNav=()=>{const marker=scrollY+Math.min(innerHeight*.36,260);let current=sections[0];sections.forEach(s=>{if(s.offsetTop<=marker)current=s;});const activeId=current.id;links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+activeId));indicators();queued=false;};
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateNav);}},{passive:true});addEventListener('resize',updateNav,{passive:true});addEventListener('load',updateNav,{once:true});updateNav();
 
 // Accessible More dropdown; closes on outside click, Escape, or navigation.
@@ -44,11 +44,9 @@ if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.rep
  }catch(err){if(status)status.textContent=err.name==='AbortError'?'Request timed out. Please try again or email md.saif2752@gmail.com.':'Could not send right now. Please email md.saif2752@gmail.com directly.';}finally{clearTimeout(timeout);if(submit)submit.disabled=false;}});
 
 // Wait for both the playlist and YouTube API; either may load first.
+const list=$('#music-tracklist');
 if(list){
-
-if(list){
-
-const list=$('#music-tracklist'),count=$('#music-count'),title=$('#music-current-title'),musicStatus=$('#music-player-status');
+const count=$('#music-count'),title=$('#music-current-title'),musicStatus=$('#music-player-status');
 let tracks=[],activeIndex=-1,player=null,apiReady=!!(window.YT&&window.YT.Player),playerReady=false;
 const setMusicStatus=m=>{if(musicStatus)musicStatus.textContent=m;};
 const markTrack=()=>{if(list)$$('.music-track',list).forEach((el,i)=>{const active=i===activeIndex;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'true':'false');});if(title)title.textContent=activeIndex<0?'Choose a track':tracks[activeIndex].title||'Track '+String(activeIndex+1).padStart(2,'0');};
@@ -63,9 +61,6 @@ const renderTracks=()=>{if(!list)return;list.replaceChildren();tracks.forEach((t
 const loadPlaylist=async()=>{if(!list)return;try{const response=await fetch('music/playlist.json',{cache:'no-store'});if(!response.ok)throw new Error('Playlist HTTP '+response.status);const data=await response.json();tracks=(Array.isArray(data.tracks)?data.tracks:[]).map(track=>{try{const url=new URL(track.url);if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(url.hostname))return null;const id=url.hostname==='youtu.be'?url.pathname.split('/')[1]:(url.searchParams.get('v')||url.pathname.match(/\/embed\/([^/]+)/)?.[1]);return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:''}:null;}catch(_){return null;}}).filter(Boolean);if(!tracks.length)throw new Error('No valid YouTube videos');if(count)count.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';renderTracks();setMusicStatus('Select a track below to start playback.');createPlayer();}catch(err){if(count)count.textContent='LIBRARY UNAVAILABLE';list.textContent='Could not load the music library. Please try again later.';setMusicStatus('Music library could not be loaded.');console.warn('Playlist unavailable',err);}};
 loadPlaylist();
 if(!apiReady){const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';api.async=true;api.onerror=()=>setMusicStatus('YouTube player API could not load. Check your connection.');document.head.append(api);}else createPlayer();
-
-}
-
 }
 
 // Progressive reveal only; no content is hidden if IntersectionObserver is unavailable.
