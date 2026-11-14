@@ -1,78 +1,209 @@
 {
-  "version": 5,
+  "version": 6,
   "provider": "YouTube",
   "tracks": [
     {
-      "url": "https://www.youtube.com/watch?v=We9h64kQcE4"
+      "url": "https://www.youtube.com/watch?v=We9h64kQcE4",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=TW0k-lKT-aE"
+      "url": "https://www.youtube.com/watch?v=TW0k-lKT-aE",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=Vv4BFhxgy2g"
+      "url": "https://www.youtube.com/watch?v=Vv4BFhxgy2g",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=mCFQ5m4hEYo"
+      "url": "https://www.youtube.com/watch?v=mCFQ5m4hEYo",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=T321Nk2c1sw"
+      "url": "https://www.youtube.com/watch?v=T321Nk2c1sw",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=Y3z_aXwuvmg"
+      "url": "https://www.youtube.com/watch?v=Y3z_aXwuvmg",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=A-5bx-l3Kn8"
+      "url": "https://www.youtube.com/watch?v=A-5bx-l3Kn8",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "url": "https://www.youtube.com/watch?v=ZzDI5IjFh04"
+      "url": "https://www.youtube.com/watch?v=ZzDI5IjFh04",
+      "title": null,
+      "artist": null,
+      "album": null,
+      "genre": [],
+      "metadataStatus": "credit not present in original playlist; verify before adding"
     },
     {
-      "title": "MURDER IN MY MIND — Kordhell",
-      "url": "https://www.youtube.com/watch?v=w-sQRS-Lc9k"
+      "title": "MURDER IN MY MIND",
+      "url": "https://www.youtube.com/watch?v=w-sQRS-Lc9k",
+      "artist": "Kordhell",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "METAMORPHOSIS — INTERWORLD",
-      "url": "https://www.youtube.com/watch?v=317RHaFF7Xk"
+      "title": "METAMORPHOSIS",
+      "url": "https://www.youtube.com/watch?v=317RHaFF7Xk",
+      "artist": "INTERWORLD",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "Live Another Day — Kordhell",
-      "url": "https://www.youtube.com/watch?v=7pmUQJ5KAlU"
+      "title": "Live Another Day",
+      "url": "https://www.youtube.com/watch?v=7pmUQJ5KAlU",
+      "artist": "Kordhell",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "MIDNIGHT — PLAYAMANE x NATEKI",
-      "url": "https://www.youtube.com/watch?v=mVB9UeHFGl0"
+      "title": "MIDNIGHT",
+      "url": "https://www.youtube.com/watch?v=mVB9UeHFGl0",
+      "artist": "PLAYAMANE x NATEKI",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "vendetta! — Sadfriendd (prod. MUPP)",
-      "url": "https://www.youtube.com/watch?v=Bmc2IKa6XsM"
+      "title": "vendetta!",
+      "url": "https://www.youtube.com/watch?v=Bmc2IKa6XsM",
+      "artist": "Sadfriendd (prod. MUPP)",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Trap"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "SHADOW — ONIMXRU x SMITHMANE",
-      "url": "https://www.youtube.com/watch?v=jqbSVBS1x0w"
+      "title": "SHADOW",
+      "url": "https://www.youtube.com/watch?v=jqbSVBS1x0w",
+      "artist": "ONIMXRU x SMITHMANE",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "SCOPIN — Kordhell",
-      "url": "https://www.youtube.com/watch?v=VXaq77GiyEo"
+      "title": "SCOPIN",
+      "url": "https://www.youtube.com/watch?v=VXaq77GiyEo",
+      "artist": "Kordhell",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "FATALITY — Kordhell",
-      "url": "https://www.youtube.com/watch?v=v4d5uzrxFgs"
+      "title": "FATALITY",
+      "url": "https://www.youtube.com/watch?v=v4d5uzrxFgs",
+      "artist": "Kordhell",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "LAND OF FIRE — Kordhell",
-      "url": "https://www.youtube.com/watch?v=yahUpxNPK98"
+      "title": "LAND OF FIRE",
+      "url": "https://www.youtube.com/watch?v=yahUpxNPK98",
+      "artist": "Kordhell",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "Disaster — KSLV Noh",
-      "url": "https://www.youtube.com/watch?v=Pnq1_3BXIqA"
+      "title": "Disaster",
+      "url": "https://www.youtube.com/watch?v=Pnq1_3BXIqA",
+      "artist": "KSLV Noh",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "Why Not (Slowed + Reverb) — Ghostface Playa",
-      "url": "https://www.youtube.com/watch?v=46Fqf87JPgw"
+      "title": "Why Not (Slowed + Reverb)",
+      "url": "https://www.youtube.com/watch?v=46Fqf87JPgw",
+      "artist": "Ghostface Playa",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Slowed + reverb"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     },
     {
-      "title": "Close Eyes (Slowed + Reverb) — DVRST",
-      "url": "https://www.youtube.com/watch?v=FLfb1Niu5iU"
+      "title": "Close Eyes (Slowed + Reverb)",
+      "url": "https://www.youtube.com/watch?v=FLfb1Niu5iU",
+      "artist": "DVRST",
+      "album": null,
+      "genre": [
+        "Phonk",
+        "Drift phonk",
+        "Slowed + reverb"
+      ],
+      "metadataStatus": "artist/title/genre saved; album not listed in source"
     }
+  ],
+  "metadataFields": [
+    "title",
+    "artist",
+    "album",
+    "genre"
   ]
 }
