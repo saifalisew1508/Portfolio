@@ -48,10 +48,10 @@ data:{bit:1,B:8,KB:8000,MB:8e6,GB:8e9,KiB:8192,MiB:8388608,GiB:8589934592},
 temperature:{C:'temp',F:'temp',K:'temp'}
 };
 var categories={length:'Length',area:'Area',volume:'Volume',mass:'Weight',temperature:'Temperature',speed:'Speed',pressure:'Pressure',power:'Power',numberSystem:'Number System',energy:'Energy',time:'Time',data:'Digital storage'};
-var categoryIcons={length:'↔',area:'▧',volume:'◈',mass:'⚖',temperature:'℃',speed:'➤',pressure:'◉',power:'ϟ',numberSystem:'01',energy:'ϟ',time:'◷',data:'▤'};
+var categoryIcons={length:'i-length',area:'i-area',volume:'i-volume',mass:'i-weight',temperature:'i-temperature',speed:'i-speed',pressure:'i-pressure',power:'i-power',numberSystem:'i-number',energy:'i-energy',time:'i-time',data:'i-data'};
 Object.keys(categories).forEach(function(k){var op=document.createElement('option');op.value=k;op.textContent=categories[k];$('unit-category').appendChild(op)});
 var pills=$('unit-pills');
-Object.keys(categories).forEach(function(k){var b=document.createElement('button');b.type='button';b.className='category-pill'+(k==='length'?' active':'');b.dataset.category=k;b.textContent=categoryIcons[k]+'  '+categories[k];b.addEventListener('click',function(){$('unit-category').value=k;populateUnits();pills.querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===b)})});pills.appendChild(b)});
+Object.keys(categories).forEach(function(k){var b=document.createElement('button');b.type='button';b.className='category-pill'+(k==='length'?' active':'');b.dataset.category=k;b.innerHTML='<svg aria-hidden="true"><use href="#'+categoryIcons[k]+'"></use></svg><span>'+categories[k]+'</span>';b.addEventListener('click',function(){$('unit-category').value=k;populateUnits();pills.querySelectorAll('button').forEach(function(x){x.classList.toggle('active',x===b)})});pills.appendChild(b)});
 function populateUnits(){var cat=$('unit-category').value,number=cat==='numberSystem';$('number-system-fields').classList.toggle('hidden',!number);['unit-from','unit-to'].forEach(function(id){var el=$(id);el.innerHTML='';if(!number){Object.keys(defs[cat]).forEach(function(u){var op=document.createElement('option');op.value=u;op.textContent=u;el.appendChild(op)})}});pills.querySelectorAll('button').forEach(function(b){b.classList.toggle('active',b.dataset.category===cat)})}
 $('unit-category').addEventListener('change',populateUnits);populateUnits();
 function tempConvert(v,from,to){var c=from==='C'?v:from==='F'?(v-32)*5/9:v-273.15;return to==='C'?c:to==='F'?c*9/5+32:c+273.15}
