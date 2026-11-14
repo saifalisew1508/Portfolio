@@ -46,6 +46,8 @@ if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.rep
 // Wait for both the playlist and YouTube API; either may load first.
 if(list){
 
+if(list){
+
 const list=$('#music-tracklist'),count=$('#music-count'),title=$('#music-current-title'),musicStatus=$('#music-player-status');
 let tracks=[],activeIndex=-1,player=null,apiReady=!!(window.YT&&window.YT.Player),playerReady=false;
 const setMusicStatus=m=>{if(musicStatus)musicStatus.textContent=m;};
@@ -61,6 +63,8 @@ const renderTracks=()=>{if(!list)return;list.replaceChildren();tracks.forEach((t
 const loadPlaylist=async()=>{if(!list)return;try{const response=await fetch('music/playlist.json',{cache:'no-store'});if(!response.ok)throw new Error('Playlist HTTP '+response.status);const data=await response.json();tracks=(Array.isArray(data.tracks)?data.tracks:[]).map(track=>{try{const url=new URL(track.url);if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(url.hostname))return null;const id=url.hostname==='youtu.be'?url.pathname.split('/')[1]:(url.searchParams.get('v')||url.pathname.match(/\/embed\/([^/]+)/)?.[1]);return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:''}:null;}catch(_){return null;}}).filter(Boolean);if(!tracks.length)throw new Error('No valid YouTube videos');if(count)count.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';renderTracks();setMusicStatus('Select a track below to start playback.');createPlayer();}catch(err){if(count)count.textContent='LIBRARY UNAVAILABLE';list.textContent='Could not load the music library. Please try again later.';setMusicStatus('Music library could not be loaded.');console.warn('Playlist unavailable',err);}};
 loadPlaylist();
 if(!apiReady){const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';api.async=true;api.onerror=()=>setMusicStatus('YouTube player API could not load. Check your connection.');document.head.append(api);}else createPlayer();
+
+}
 
 }
 
