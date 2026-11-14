@@ -228,7 +228,7 @@ function renderUnitCategories(){
  Object.keys(unitCategoryMeta).forEach(function(key){
   var meta=unitCategoryMeta[key],button=document.createElement('button');button.type='button';button.className='category-pill'+(key===unitCategory?' active':'');button.dataset.category=key;
   button.innerHTML='<svg aria-hidden="true"><use href="#'+meta[1]+'"></use></svg><span>'+meta[0]+'</span>';
-  button.addEventListener('click',function(){if(key==='currency'){activatePanel('currency');return}unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line'});
+  button.addEventListener('click',function(){if(key==='currency'){activatePanel('currency');if(matchMedia('(pointer:coarse)').matches)button.blur();return}unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line';if(matchMedia('(pointer:coarse)').matches)button.blur()});
   root.appendChild(button)
  });
 }
