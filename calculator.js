@@ -7,15 +7,116 @@ function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated')
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
 function activatePanel(id){panels.forEach(function(p){p.classList.toggle('active',p.id===id)});cards.forEach(function(c){var active=c.dataset.panel===id;c.classList.toggle('active',active);c.setAttribute('aria-pressed',String(active))});if(id==='math')$('calc-display').setAttribute('aria-label','Calculator display');}
 cards.forEach(function(c){c.addEventListener('click',function(){activatePanel(c.dataset.panel)})});
-/* Math calculator. A restricted parser is used instead of eval(). */
-var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression');
-var keys=[['AC','clear'],['⌫','back'],['(', '('],[')',')'],['7','7'],['8','8'],['9','9'],['÷','/'],['4','4'],['5','5'],['6','6'],['×','*'],['1','1'],['2','2'],['3','3'],['−','-'],['%','%'],['0','0'],['.','.'],['+','+'],['+/-','sign'],['=','equal']];
+/* Math and scientific calculator. Safe recursive-descent parser; no eval(). */
+var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression'),calcMode='basic',angleMode='deg',inverseMode=false;
+var basicKeys=[
+ ['AC','clear','utility'],['⌫','back','utility'],['%','%','op'],['÷','/','op'],
+ ['7','7'],['8','8'],['9','9'],['×','*','op'],
+ ['4','4'],['5','5'],['6','6'],['−','-','op'],
+ ['1','1'],['2','2'],['3','3'],['+','+','op'],
+ ['+/-','sign','utility'],['0','0'],['.','.'],['=','equal','equal']
+];
+var scientificKeys=[
+ ['sin','sin','utility'],['cos','cos','utility'],['tan','tan','utility'],['rad','rad','utility'],['deg','deg','mode-key'],
+ ['log','log','utility'],['ln','ln','utility'],['(','(','utility'],[')',')','utility'],['inv','inv','utility'],
+ ['!','!','utility'],['AC','clear','utility'],['%','%','utility'],['⌫','back','utility'],['÷','/','op'],
+ ['^','^','utility'],['7','7'],['8','8'],['9','9'],['×','*','op'],
+ ['√','sqrt','utility'],['4','4'],['5','5'],['6','6'],['−','-','op'],
+ ['π','pi','utility'],['1','1'],['2','2'],['3','3'],['+','+','op'],
+ ['e','e','utility'],['00','00'],['0','0'],['.','.'],['=','equal','equal']
+];
 function render(){display.textContent=expr||'0'}
-function tokenize(s){var out=[],re=/\s*([0-9]*\.?[0-9]+|[()+\-*/%])/gy,i=0;while(i<s.length){re.lastIndex=i;var m=re.exec(s);if(!m)throw Error('Invalid expression');out.push(m[1]);i=re.lastIndex}return out}
-function evaluate(s){var t=tokenize(s),i=0;function primary(){var x=t[i++];if(x===undefined)throw Error('Incomplete expression');if(x==='+'||x==='-'){var v=primary();return x==='-'?-v:v}if(x==='('){var v=add();if(t[i++]!==')')throw Error('Missing closing bracket');return v}var n=Number(x);if(!Number.isFinite(n))throw Error('Invalid number');return n}function mul(){var a=primary();while(['*','/','%'].includes(t[i])){var op=t[i++],b=primary();if((op==='/'||op==='%')&&b===0)throw Error('Cannot divide by zero');a=op==='*'?a*b:op==='/'?a/b:a%b}return a}function add(){var a=mul();while(t[i]==='+'||t[i]==='-'){var op=t[i++],b=mul();a=op==='+'?a+b:a-b}return a}var v=add();if(i<t.length)throw Error('Invalid expression');if(!Number.isFinite(v))throw Error('Math error');return v}
-function act(k){if(k==='clear'){expr='';line.textContent='Ready';fresh=true;render();return}if(k==='back'){expr=expr.slice(0,-1);render();return}if(k==='equal'){try{var ans=evaluate(expr);window.lastAnswer=ans;line.textContent=expr+' =';expr=String(Number(ans.toPrecision(12)));fresh=true;render()}catch(e){line.textContent=e.message}return}if(k==='sign'){if(expr)expr='-('+expr+')';render();return}if(fresh&&/^[0-9.]$/.test(k))expr='';fresh=false;expr+=k;render()}
-keys.forEach(function(k){var b=document.createElement('button');b.type='button';b.textContent=k[0];if(['÷','×','−','+','%'].includes(k[0]))b.classList.add('op');if(k[1]==='equal')b.classList.add('equal');if(k[0]==='0')b.classList.add('wide');b.setAttribute('aria-label',k[0]);b.addEventListener('click',function(){act(k[1])});$('calc-keys').appendChild(b)});
-document.addEventListener('keydown',function(e){if(!$('math').classList.contains('active')||e.target.matches('input,select,textarea'))return;if(/^[0-9.+\-*/()%]$/.test(e.key)){e.preventDefault();act(e.key)}else if(e.key==='Enter'){e.preventDefault();act('equal')}else if(e.key==='Backspace'){e.preventDefault();act('back')}});
+function insertToken(token){if(fresh&&/^[0-9.]$/.test(token))expr='';fresh=false;expr+=token;render()}
+function formatResult(value){return String(Number(value.toPrecision(12)))}
+function factorial(n){if(n<0||!Number.isInteger(n)||n>170)throw Error('Factorial needs a whole number from 0 to 170');var out=1;for(var j=2;j<=n;j++)out*=j;return out}
+function tokenize(source){
+ var tokens=[],i=0,number=/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?/i,identifier=/^[a-zπ]+/i;
+ while(i<source.length){if(/\s/.test(source[i])){i++;continue}
+  var rest=source.slice(i),nm=rest.match(number),im=rest.match(identifier);
+  if(nm){tokens.push({type:'number',value:Number(nm[0])});i+=nm[0].length;continue}
+  if(im){var name=im[0].toLowerCase().replace('π','pi');tokens.push({type:'name',value:name});i+=im[0].length;continue}
+  if('+-*/%^!()'.indexOf(source[i])!==-1){tokens.push({type:'op',value:source[i++]});continue}
+  throw Error('Unsupported character: '+source[i]);
+ }
+ return tokens
+}
+function evaluate(source){
+ var t=tokenize(source),i=0;
+ function peek(){return t[i]}
+ function take(value){if(peek()&&peek().value===value){i++;return true}return false}
+ function primary(){
+  var token=peek();if(!token)throw Error('Incomplete expression');
+  if(take('+'))return unary();
+  if(take('-'))return -unary();
+  if(take('(')){var grouped=addition();if(!take(')'))throw Error('Missing closing bracket');return grouped}
+  if(token.type==='number'){i++;return token.value}
+  if(token.type==='name'){
+   i++;var name=token.value;
+   if(name==='pi')return Math.PI;if(name==='e')return Math.E;
+   if(!['sin','cos','tan','asin','acos','atan','sqrt','log','ln','abs'].includes(name))throw Error('Unknown function: '+name);
+   if(!take('('))throw Error('Add ( after '+name);
+   var arg=addition();if(!take(')'))throw Error('Missing ) after '+name);
+   var angle=angleMode==='deg'?Math.PI/180:1,result;
+   if(name==='sin')result=Math.sin(arg*angle);
+   else if(name==='cos')result=Math.cos(arg*angle);
+   else if(name==='tan')result=Math.tan(arg*angle);
+   else if(name==='asin')result=Math.asin(arg)/angle;
+   else if(name==='acos')result=Math.acos(arg)/angle;
+   else if(name==='atan')result=Math.atan(arg)/angle;
+   else if(name==='sqrt'){if(arg<0)throw Error('Square root of a negative number');result=Math.sqrt(arg)}
+   else if(name==='log'){if(arg<=0)throw Error('Log requires a positive number');result=Math.log10(arg)}
+   else if(name==='ln'){if(arg<=0)throw Error('Ln requires a positive number');result=Math.log(arg)}
+   else result=Math.abs(arg);
+   if(!Number.isFinite(result))throw Error('Math error');return result;
+  }
+  throw Error('Unexpected token');
+ }
+ function postfix(){var value=primary();while(peek()&&(peek().value==='!'||peek().value==='%')){var op=t[i++].value;value=op==='!'?factorial(value):value/100}return value}
+ function power(){var value=postfix();if(take('^'))value=Math.pow(value,unary());return value}
+ function unary(){return power()}
+ function multiplication(){var value=unary();while(peek()&&['*','/','%'].includes(peek().value)){var op=t[i++].value,next=unary();if((op==='/'||op==='%')&&next===0)throw Error('Cannot divide by zero');value=op==='*'?value*next:op==='/'?value/next:value%next}return value}
+ function addition(){var value=multiplication();while(peek()&&(peek().value==='+'||peek().value==='-')){var op=t[i++].value,next=multiplication();value=op==='+'?value+next:value-next}return value}
+ var result=addition();if(i<t.length)throw Error('Check your expression');if(!Number.isFinite(result))throw Error('Math error');return result
+}
+function setCalcMode(mode){
+ calcMode=mode;var keypad=$('calc-keys');keypad.innerHTML='';keypad.className='calc-keys '+mode;
+ document.querySelectorAll('[data-calc-mode]').forEach(function(button){var active=button.dataset.calcMode===mode;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active))});
+ (mode==='scientific'?scientificKeys:basicKeys).forEach(function(item,index){
+  var button=document.createElement('button');button.type='button';button.textContent=item[0];button.dataset.action=item[1];button.className=item[2]||'';
+  if(item[1]==='rad'||item[1]==='deg'){button.classList.toggle('selected',item[1]===angleMode);button.classList.add('mode-key')}
+  if(item[1]==='inv')button.classList.toggle('selected',inverseMode);
+  button.style.setProperty('--bubble-index',String(index%5));button.setAttribute('aria-label',item[0]);
+  button.addEventListener('click',function(){act(item[1])});keypad.appendChild(button)
+ });
+}
+function act(key){
+ if(key==='clear'){expr='';line.textContent='Ready';fresh=true;render();return}
+ if(key==='back'){expr=expr.slice(0,-1);fresh=false;render();return}
+ if(key==='equal'){if(!expr)return;try{var original=expr,answer=evaluate(expr);window.lastAnswer=answer;line.textContent=original+' =';expr=formatResult(answer);fresh=true;render()}catch(error){line.textContent=error.message}return}
+ if(key==='rad'||key==='deg'){angleMode=key;setCalcMode(calcMode);line.textContent='Angle mode: '+key.toUpperCase();return}
+ if(key==='inv'){inverseMode=!inverseMode;setCalcMode(calcMode);line.textContent=inverseMode?'Inverse functions enabled':'Standard functions enabled';return}
+ if(key==='sign'){if(expr)expr='-('+expr+')';render();fresh=false;return}
+ if(['sin','cos','tan','log','ln','sqrt'].includes(key)){
+  var fn=(inverseMode&&['sin','cos','tan'].includes(key))?'a'+key:key;
+  expr+=fn+'(';fresh=false;render();return
+ }
+ if(key==='pi'||key==='e'){insertToken(key);return}
+ if(key==='00'){insertToken('00');return}
+ if(key==='!'){if(expr){expr+='!';fresh=false;render()}return}
+ if(key==='%'){if(expr){expr+='%';fresh=false;render()}return}
+ if(key==='('||key===')'){if(fresh&&key==='(')expr='';expr+=key;fresh=false;render();return}
+ if(['/','*','-','+','^'].includes(key)){expr+=key;fresh=false;render();return}
+ if(/^[0-9.]$/.test(key)){insertToken(key);return}
+}
+document.querySelectorAll('[data-calc-mode]').forEach(function(button){button.addEventListener('click',function(){setCalcMode(button.dataset.calcMode)})});
+setCalcMode('basic');render();
+document.addEventListener('keydown',function(e){
+ if(!$('math').classList.contains('active')||e.target.matches('input,select,textarea'))return;
+ if(/^[0-9.+\-*/()%^]$/.test(e.key)){e.preventDefault();act(e.key)}
+ else if(e.key==='Enter'||e.key==='='){e.preventDefault();act('equal')}
+ else if(e.key==='Backspace'){e.preventDefault();act('back')}
+ else if(e.key==='Escape'){e.preventDefault();act('clear')}
+});
 /* Currency converter: Frankfurter API, supported currency list and honest status. */
 var currencyInfo={
 AED:['UAE Dirham','ae'],AUD:['Australian Dollar','au'],BDT:['Bangladeshi Taka','bd'],BRL:['Brazilian Real','br'],CAD:['Canadian Dollar','ca'],CHF:['Swiss Franc','ch'],CNY:['Chinese Yuan','cn'],CZK:['Czech Koruna','cz'],DKK:['Danish Krone','dk'],EGP:['Egyptian Pound','eg'],EUR:['Euro','eu'],GBP:['British Pound','gb'],GHS:['Ghanaian Cedi','gh'],HKD:['Hong Kong Dollar','hk'],HUF:['Hungarian Forint','hu'],IDR:['Indonesian Rupiah','id'],ILS:['Israeli New Shekel','il'],INR:['Indian Rupee','in'],JPY:['Japanese Yen','jp'],KES:['Kenyan Shilling','ke'],KRW:['South Korean Won','kr'],LKR:['Sri Lankan Rupee','lk'],MXN:['Mexican Peso','mx'],MYR:['Malaysian Ringgit','my'],NOK:['Norwegian Krone','no'],NPR:['Nepalese Rupee','np'],NZD:['New Zealand Dollar','nz'],PHP:['Philippine Peso','ph'],PKR:['Pakistani Rupee','pk'],PLN:['Polish Zloty','pl'],SAR:['Saudi Riyal','sa'],SEK:['Swedish Krona','se'],SGD:['Singapore Dollar','sg'],THB:['Thai Baht','th'],TRY:['Turkish Lira','tr'],TWD:['New Taiwan Dollar','tw'],USD:['US Dollar','us'],VND:['Vietnamese Dong','vn'],ZAR:['South African Rand','za']
