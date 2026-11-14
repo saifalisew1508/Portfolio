@@ -1,7 +1,8 @@
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id)};
-var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;\nfunction pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
+var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
 /* Reusable dashboard navigation */
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
 function activatePanel(id){panels.forEach(function(p){p.classList.toggle('active',p.id===id)});cards.forEach(function(c){var active=c.dataset.panel===id;c.classList.toggle('active',active);c.setAttribute('aria-pressed',String(active))});if(id==='math')$('calc-display').setAttribute('aria-label','Calculator display');}
