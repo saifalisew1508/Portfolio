@@ -750,3 +750,44 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
   .global-nav-item svg{width:18px;height:18px}
   .global-nav-more{height:56px}
 }
+
+/* Fine-tune: even slimmer and nearly edge-to-edge navigation capsule */
+.global-glass-nav{
+  left:2px;
+  right:2px;
+  width:auto;
+  height:62px;
+  min-height:0;
+  padding:5px;
+  gap:2px;
+  border-radius:999px;
+}
+.global-nav-item,
+.global-more-toggle{
+  height:50px;
+  padding:4px 1px;
+  gap:3px;
+  font-size:9px;
+  border-radius:999px;
+}
+.global-nav-item svg{width:17px;height:17px}
+.global-nav-more{height:50px}
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+@media(max-width:390px){
+  .global-glass-nav{
+    left:2px;
+    right:2px;
+    height:60px;
+    padding:4px;
+    gap:1px;
+  }
+  .global-nav-item,
+  .global-more-toggle{
+    height:50px;
+    padding:3px 0;
+    gap:3px;
+    font-size:8px;
+  }
+  .global-nav-item svg{width:16px;height:16px}
+  .global-nav-more{height:50px}
+}
