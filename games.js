@@ -12,7 +12,13 @@ function neighbors(r,c){var d=[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]];if(r%2===
 function connected(r,c,color,seen){var k=r+','+c;if(seen[k]||!grid[r]||grid[r][c]!==color)return[];seen[k]=1;var out=[[r,c]];neighbors(r,c).forEach(function(n){out=out.concat(connected(n[0],n[1],color,seen))});return out}
 function dropFloating(){var seen={},stack=[];for(var c=0;c<grid[0].length;c++)if(grid[0][c]>=0)stack.push([0,c]);while(stack.length){var a=stack.pop(),k=a.join(',');if(seen[k]||!grid[a[0]]||grid[a[0]][a[1]]<0)continue;seen[k]=1;neighbors(a[0],a[1]).forEach(function(n){if(grid[n[0]]&&grid[n[0]][n[1]]>=0)stack.push(n)})}var dropped=0;grid.forEach(function(row,r){row.forEach(function(v,c){if(v>=0&&!seen[r+','+c]){grid[r][c]=-1;dropped++}})});score+=dropped*20}
 function shoot(x,y){if(left<=0||$('bubble-status').textContent.indexOf('won')>=0)return;var dx=x-shooter.x,dy=y-shooter.y;if(dy>-25)return;var hit=null;for(var s=1;s<=50;s++){var px=shooter.x+dx*s/50,py=shooter.y+dy*s/50;if(px<R||px>720-R||py<R){hit={x:px,y:py};break}for(var r=0;r<grid.length&&!hit;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);if(Math.hypot(px-p.x,py-p.y)<R*1.85){hit={x:px,y:py};break}}}if(!hit)hit={x:Math.max(R,Math.min(720-R,x)),y:Math.max(R,Math.min(680,y))};var best=null,dist=1e9;for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}if(!best)return;grid[best[0]][best[1]]=current;var group=connected(best[0],best[1],current,{});if(group.length>=3){group.forEach(function(a){grid[a[0]][a[1]]=-1});score+=group.length*10;dropFloating();$('bubble-status').textContent='Nice shot! '+group.length+' bubbles popped.'}else $('bubble-status').textContent='Keep matching colors.';left--;shot++;if(grid.every(function(row){return row.every(function(v){return v<0})}))$('bubble-status').textContent='You won! Board cleared.';else if(left<=0)$('bubble-status').textContent='Out of bubbles. Start a new game.';else if(shot%5===0){var row=[];for(var z=0;z<16;z++)row.push(randColor());grid.unshift(row);grid.pop()}current=next;next=randColor();drawBubble()}
-canvas.addEventListener('pointermove',function(e){var b=canvas.getBoundingClientRect();aim={x:(e.clientX-b.left)*720/b.width,y:(e.clientY-b.top)*760/b.height};if(aim.y<shooter.y-20)drawBubble()});canvas.addEventListener('pointerdown',function(e){var b=canvas.getBoundingClientRect();shoot((e.clientX-b.left)*720/b.width,(e.clientY-b.top)*760/b.height)});$('bubble-new').onclick=resetBubble;resetBubble();
+var aiming=false,activePointer=null;
+function updateAim(e){var b=canvas.getBoundingClientRect();aim={x:(e.clientX-b.left)*720/b.width,y:(e.clientY-b.top)*760/b.height};if(aim.y>=shooter.y-20)aim.y=shooter.y-21;drawBubble()}
+canvas.addEventListener('pointermove',function(e){if(aiming&&activePointer!==e.pointerId)return;updateAim(e)});
+canvas.addEventListener('pointerdown',function(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();aiming=true;activePointer=e.pointerId;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);updateAim(e);$('bubble-status').textContent='Aim your shot, then release to fire.'});
+canvas.addEventListener('pointerup',function(e){if(!aiming||activePointer!==e.pointerId)return;updateAim(e);aiming=false;activePointer=null;shoot(aim.x,aim.y)});
+canvas.addEventListener('pointercancel',function(e){if(activePointer===e.pointerId){aiming=false;activePointer=null;drawBubble()}});
+$('bubble-new').onclick=function(){aiming=false;activePointer=null;resetBubble()};resetBubble();
 /* SUDOKU */
 var puzzle=[],solution=[],board=[],selected=-1,mistakes=0;
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -22,10 +28,96 @@ function renderSudoku(){var root=$('sudoku-board');root.innerHTML='';board.forEa
 function newSudoku(){solution=Array(81).fill(0);solveSudoku(solution);puzzle=solution.slice();var remove=Number($('sudoku-level').value);shuffle(Array.from({length:81},function(_,i){return i})).slice(0,remove).forEach(function(i){puzzle[i]=0});board=puzzle.slice();selected=-1;mistakes=0;$('sudoku-status').textContent='New puzzle ready.';renderSudoku()}
 function setSudoku(n){if(selected<0){$('sudoku-status').textContent='Select an empty cell first.';return}if(puzzle[selected])return;board[selected]=n;if(n&&n!==solution[selected])mistakes++;renderSudoku();$('sudoku-status').textContent=board.every(function(v,i){return v===solution[i]})?'Solved! Perfect work.':n?'Number entered.':'Cell cleared.'}
 for(var n=1;n<=9;n++){(function(v){var b=document.createElement('button');b.className='arcade-btn';b.textContent=v;b.onclick=function(){setSudoku(v)};$('sudoku-pad').appendChild(b)})(n)}var erase=document.createElement('button');erase.className='arcade-btn';erase.textContent='⌫';erase.onclick=function(){setSudoku(0)};$('sudoku-pad').appendChild(erase);$('sudoku-new').onclick=newSudoku;$('sudoku-check').onclick=function(){$('sudoku-status').textContent=board.every(function(v,i){return v===solution[i]})?'Solved! Every row, column and box is correct.':'Not solved yet. Check highlighted mistakes and empty cells.'};$('sudoku-level').onchange=newSudoku;newSudoku();
-/* CHESS: chess.js enforces legal moves and special rules. */
-var chess=new Chess(),selectedSquare=null,legalTargets=[];
+/* CHESS: local legal chess, optional simple computer opponent, friend hot-seat mode. */
+var chess=new Chess(),selectedSquare=null,legalTargets=[],chessMode='computer',aiThinking=false;
 var pieceGlyph={wp:'♙',wn:'♘',wb:'♗',wr:'♖',wq:'♕',wk:'♔',bp:'♟︎',bn:'♞',bb:'♝',br:'♜',bq:'♛',bk:'♚'};
-function renderChess(){var root=$('chess-board');root.innerHTML='';chess.board().forEach(function(row,r){row.forEach(function(p,c){var sq='abcdefgh'[c]+(8-r),el=document.createElement('button');el.className='chess-square '+((r+c)%2?'dark':'light');if(selectedSquare===sq)el.classList.add('selected');if(legalTargets.indexOf(sq)>=0)el.classList.add(p?'capture':'target');el.textContent=p?pieceGlyph[p.color+p.type]:'';el.setAttribute('aria-label',sq+(p?' '+p.color+' '+p.type:' empty'));el.onclick=function(){clickChess(sq)};root.appendChild(el)})});var turn=chess.turn()==='w'?'White':'Black',status=chess.in_checkmate()?'Checkmate. '+(turn==='White'?'Black':'White')+' wins.':chess.in_stalemate()?'Draw by stalemate.':chess.in_draw()?'Draw.':turn+' to move'+(chess.in_check()?' · Check':'');$('chess-status').textContent=status;$('chess-moves').textContent=chess.history().length?chess.history().reduce(function(out,m,i){return out+(i%2===0?Math.floor(i/2+1)+'. ':'')+m+(i%2===1?'\n':' ')},''):'No moves yet.'}
-function clickChess(sq){var piece=chess.get(sq);if(selectedSquare&&legalTargets.indexOf(sq)>=0){var move=chess.move({from:selectedSquare,to:sq,promotion:'q'});if(move){$('chess-feedback').textContent=move.san+(move.flags.indexOf('p')>=0?' (promoted to queen)':'');selectedSquare=null;legalTargets=[];renderChess();return}}if(piece&&piece.color===chess.turn()){selectedSquare=sq;legalTargets=chess.moves({square:sq,verbose:true}).map(function(m){return m.to});$('chess-feedback').textContent=legalTargets.length?'Choose a highlighted destination.':'No legal moves for this piece.'}else{selectedSquare=null;legalTargets=[];$('chess-feedback').textContent='Select one of your pieces.'}renderChess()}
-$('chess-undo').onclick=function(){chess.undo();selectedSquare=null;legalTargets=[];renderChess();$('chess-feedback').textContent='Last move undone.'};$('chess-reset').onclick=function(){chess.reset();selectedSquare=null;legalTargets=[];renderChess();$('chess-feedback').textContent='New chess game.'};renderChess();
+var pieceValues={p:100,n:320,b:330,r:500,q:900,k:20000};
+function chessOver(){return chess.game_over()}
+function renderChess(){
+ var root=$('chess-board');root.innerHTML='';
+ chess.board().forEach(function(row,r){row.forEach(function(p,c){
+  var sq='abcdefgh'[c]+(8-r),el=document.createElement('button');
+  el.className='chess-square '+((r+c)%2?'dark':'light');
+  if(selectedSquare===sq)el.classList.add('selected');
+  if(legalTargets.indexOf(sq)>=0)el.classList.add(p?'capture':'target');
+  el.textContent=p?pieceGlyph[p.color+p.type]:'';
+  el.setAttribute('aria-label',sq+(p?' '+p.color+' '+p.type:' empty'));
+  el.disabled=aiThinking;
+  el.onclick=function(){clickChess(sq)};
+  root.appendChild(el);
+ })});
+ var turn=chess.turn()==='w'?'White':'Black';
+ var status=chess.in_checkmate()?'Checkmate. '+(turn==='White'?'Black':'White')+' wins.':chess.in_stalemate()?'Draw by stalemate.':chess.in_draw()?'Draw.':turn+' to move'+(chess.in_check()?' · Check':'');
+ if(aiThinking)status='Computer is thinking…';
+ $('chess-status').textContent=status;
+ $('chess-moves').textContent=chess.history().length?chess.history().reduce(function(out,m,i){return out+(i%2===0?Math.floor(i/2+1)+'. ':'')+m+(i%2===1?'\n':' ')},''):'No moves yet.';
+}
+function chessFeedback(message){$('chess-feedback').textContent=message}
+function evaluateChess(){
+ var board=chess.board(),score=0;
+ board.forEach(function(row,r){row.forEach(function(p,c){if(!p)return;var value=pieceValues[p.type]||0,center=(3.5-Math.abs(3.5-c))+(3.5-Math.abs(3.5-r));value+=center*(p.type==='n'||p.type==='b'?5:2);score+=(p.color==='b'?value:-value);})});
+ if(chess.in_checkmate())score+=chess.turn()==='w'?100000:-100000;
+ return score;
+}
+function chooseComputerMove(){
+ var moves=chess.moves({verbose:true}),best=null,bestScore=-Infinity;
+ moves.forEach(function(move){
+  chess.move(move);var score;
+  if(chess.game_over())score=evaluateChess();
+  else{
+   score=evaluateChess();
+   var replies=chess.moves({verbose:true}),worst=Infinity;
+   replies.forEach(function(reply){chess.move(reply);worst=Math.min(worst,evaluateChess());chess.undo()});
+   if(replies.length)score=worst;
+  }
+  chess.undo();
+  score+=Math.random()*.01;
+  if(score>bestScore){bestScore=score;best=move}
+ });
+ return best;
+}
+function computerTurn(){
+ if(chessMode!=='computer'||chess.turn()!=='b'||chessOver())return;
+ aiThinking=true;renderChess();chessFeedback('Computer is choosing a move…');
+ window.setTimeout(function(){
+  var move=chooseComputerMove();
+  if(move)chess.move(move);
+  aiThinking=false;selectedSquare=null;legalTargets=[];renderChess();
+  chessFeedback(move?'Computer played '+move.san+'.':'No legal move available.');
+ },220);
+}
+function clickChess(sq){
+ if(aiThinking||chessOver()||(chessMode==='computer'&&chess.turn()==='b'))return;
+ var piece=chess.get(sq);
+ if(selectedSquare&&legalTargets.indexOf(sq)>=0){
+  var move=chess.move({from:selectedSquare,to:sq,promotion:'q'});
+  if(move){
+   selectedSquare=null;legalTargets=[];renderChess();
+   chessFeedback(move.san+(move.flags.indexOf('p')>=0?' (promoted to queen)':''));
+   if(chessMode==='computer'&&chess.turn()==='b')computerTurn();
+   return;
+  }
+ }
+ if(piece&&piece.color===chess.turn()){
+  selectedSquare=sq;legalTargets=chess.moves({square:sq,verbose:true}).map(function(m){return m.to});
+  chessFeedback(legalTargets.length?'Choose a highlighted destination.':'No legal moves for this piece.');
+ }else{selectedSquare=null;legalTargets=[];chessFeedback('Select a piece of the side to move.')}
+ renderChess();
+}
+function setChessMode(mode){
+ chessMode=mode;aiThinking=false;selectedSquare=null;legalTargets=[];chess.reset();
+ document.querySelectorAll('[data-chess-mode]').forEach(function(button){var active=button.dataset.chessMode===mode;button.classList.toggle('primary',active);button.setAttribute('aria-pressed',String(active))});
+ $('chess-mode-note').textContent=mode==='computer'?'You play White. The computer plays Black.':'Two players take turns on this device. Pass the device after each move.';
+ chessFeedback(mode==='computer'?'New game started. Your move as White.':'Friend mode started. White moves first.');
+ renderChess();
+}
+document.querySelectorAll('[data-chess-mode]').forEach(function(button){button.addEventListener('click',function(){setChessMode(button.dataset.chessMode)})});
+$('chess-undo').onclick=function(){
+ if(aiThinking)return;
+ chess.undo();
+ if(chessMode==='computer'&&chess.turn()==='b'&&chess.history().length)chess.undo();
+ selectedSquare=null;legalTargets=[];renderChess();chessFeedback('Last turn undone.');
+};
+$('chess-reset').onclick=function(){setChessMode(chessMode)};
+renderChess();
 })();
