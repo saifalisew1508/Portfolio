@@ -2,6 +2,18 @@
 'use strict';
 var $=function(id){return document.getElementById(id)};
 var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Visitor-local clock, kept visible on compact headers too. */
+(function(){
+ var time=$('visitor-time'),date=$('visitor-date');
+ if(!time)return;
+ var locale=navigator.language||'en-US';
+ function tick(){
+  var now=new Date(),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+  time.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:true}).format(now);
+  if(date)date.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,weekday:'short',day:'2-digit',month:'short'}).format(now);
+ }
+ tick();window.setInterval(tick,30000);
+})();
 function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
 /* Reusable dashboard navigation */
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
