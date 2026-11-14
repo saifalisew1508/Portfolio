@@ -58,7 +58,40 @@ const createPlayer=()=>{const mount=$('#youtube-player');if(!apiReady||player||!
  }});};
 window.onYouTubeIframeAPIReady=()=>{apiReady=true;createPlayer();};
 const renderTracks=()=>{if(!list)return;list.replaceChildren();tracks.forEach((track,i)=>{const b=document.createElement('button');b.type='button';b.className='music-track';b.setAttribute('aria-label','Play track '+(i+1));const n=document.createElement('span');n.className='track-index';n.textContent=String(i+1).padStart(2,'0');const d=document.createElement('span');d.className='track-details';const strong=document.createElement('strong');strong.textContent=track.title||'Track '+String(i+1).padStart(2,'0');const small=document.createElement('small');small.textContent='Play on this page';d.append(strong,small);const action=document.createElement('span');action.className='track-state';action.textContent='▶';b.append(n,d,action);b.addEventListener('click',()=>playTrack(i));list.append(b);});markTrack();};
-const loadPlaylist=async()=>{if(!list)return;try{const response=await fetch('music/playlist.json',{cache:'no-store'});if(!response.ok)throw new Error('Playlist HTTP '+response.status);const data=await response.json();tracks=(Array.isArray(data.tracks)?data.tracks:[]).map(track=>{try{const url=new URL(track.url);if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(url.hostname))return null;const id=url.hostname==='youtu.be'?url.pathname.split('/')[1]:(url.searchParams.get('v')||url.pathname.match(/\/embed\/([^/]+)/)?.[1]);return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:''}:null;}catch(_){return null;}}).filter(Boolean);if(!tracks.length)throw new Error('No valid YouTube videos');if(count)count.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';renderTracks();setMusicStatus('Select a track below to start playback.');createPlayer();}catch(err){if(count)count.textContent='LIBRARY UNAVAILABLE';list.textContent='Could not load the music library. Please try again later.';setMusicStatus('Music library could not be loaded.');console.warn('Playlist unavailable',err);}};
+const loadPlaylist=async()=>{
+ if(!list)return;
+ const sources=[new URL('/music/playlist.json',location.origin).href,'https://raw.githubusercontent.com/saifalisew1508/Portfolio/main/music/playlist.json'];
+ let lastError=null,data=null;
+ for(const source of sources){
+  try{
+   const response=await fetch(source,{cache:'no-store'});
+   if(!response.ok)throw new Error('Playlist request failed ('+response.status+')');
+   const payload=await response.json();
+   if(!payload||!Array.isArray(payload.tracks))throw new Error('Playlist JSON has no tracks array');
+   data=payload;break;
+  }catch(error){lastError=error;console.warn('Playlist source failed:',source,error);}
+ }
+ try{
+  if(!data)throw lastError||new Error('Playlist could not be reached');
+  tracks=data.tracks.map(track=>{
+   try{
+    const url=new URL(track.url);
+    if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be'].includes(url.hostname))return null;
+    const id=url.hostname==='youtu.be'?url.pathname.split('/')[1]:(url.searchParams.get('v')||url.pathname.match(/\/embed\/([^/]+)/)?.[1]);
+    return id&&/^[A-Za-z0-9_-]{11}$/.test(id)?{id,title:typeof track.title==='string'?track.title:''}:null;
+   }catch(_){return null;}
+  }).filter(Boolean);
+  if(!tracks.length)throw new Error('Playlist loaded, but contains no valid YouTube video IDs');
+  if(count)count.textContent=String(tracks.length).padStart(2,'0')+' TRACKS';
+  renderTracks();setMusicStatus('Playlist loaded. Choose a track to play.');
+  createPlayer();
+ }catch(err){
+  if(count)count.textContent='LIBRARY UNAVAILABLE';
+  list.textContent='Could not load the music library. '+(err&&err.message?err.message:'Check your connection and try again.');
+  setMusicStatus('Playlist unavailable. The track list could not be loaded.');
+  console.error('Playlist unavailable',err);
+ }
+};
 loadPlaylist();
 if(!apiReady){const api=document.createElement('script');api.src='https://www.youtube.com/iframe_api';api.async=true;api.onerror=()=>setMusicStatus('YouTube player API could not load. Check your connection.');document.head.append(api);}else createPlayer();
 }
