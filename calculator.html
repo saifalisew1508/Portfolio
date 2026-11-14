@@ -227,6 +227,13 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 .lab-mode-pills{align-items:center}
 @media(max-width:580px){.lab-calc-fields{grid-template-columns:minmax(0,1fr)}.lab-calc-select{max-width:none}.lab-calc-description{font-size:11px}.lab-calc-disclaimer{font-size:9px}}
 </style>
+
+<style>
+/* Calculator tabs remain selected by colour only; press feedback lasts only while held. */
+.nav-card.active{animation:none!important;}
+.nav-card:focus:not(:focus-visible),.calc-keys button:focus:not(:focus-visible){transform:none!important;}
+.nav-card:active,.calc-keys button:active{transform:scale(.97)!important;}
+</style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
