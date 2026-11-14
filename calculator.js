@@ -212,7 +212,7 @@ var unitCatalog={
  ]
 };
 var unitCategoryMeta={
- length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
+ currency:['Currency','i-currency'],length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
  temperature:['Temperature','i-temperature'],speed:['Speed','i-speed'],pressure:['Pressure','i-pressure'],
  power:['Power','i-power'],energy:['Energy','i-energy'],time:['Time','i-time'],numberSystem:['Number system','i-number']
 };
@@ -228,7 +228,7 @@ function renderUnitCategories(){
  Object.keys(unitCategoryMeta).forEach(function(key){
   var meta=unitCategoryMeta[key],button=document.createElement('button');button.type='button';button.className='category-pill'+(key===unitCategory?' active':'');button.dataset.category=key;
   button.innerHTML='<svg aria-hidden="true"><use href="#'+meta[1]+'"></use></svg><span>'+meta[0]+'</span>';
-  button.addEventListener('click',function(){unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line'});
+  button.addEventListener('click',function(){if(key==='currency'){activatePanel('currency');return}unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line'});
   root.appendChild(button)
  });
 }
