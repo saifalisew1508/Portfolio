@@ -218,7 +218,7 @@ var unitCategoryMeta={
 };
 var unitCategory='length',unitSelections={},unitPickerTarget='unit-from',unitSearchValue='';
 var unitDefaults={length:['m','km'],area:['m2','ha'],volume:['l','ml'],mass:['kg','g'],temperature:['C','F'],speed:['m/s','km/h'],pressure:['kPa','mmHg'],power:['W','kW'],energy:['J','kJ'],time:['s','min'],numberSystem:['2','10']};
-function allUnits(category){return unitCatalog[category].reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}})},[])}
+function allUnits(category){return unitCatalog[category].reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}}))},[])}
 function unitInfo(category,value){return allUnits(category).find(function(u){return u.value===value})}
 function setUnitButton(id,category,value){var info=unitInfo(category,value);$(id).innerHTML=(info?info.label:'Select unit')+'<span>⌄</span>'}
 function currentUnitPair(){return unitSelections[unitCategory]||unitDefaults[unitCategory]}
