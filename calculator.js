@@ -217,6 +217,14 @@ var unitCatalog={
    ['Nanosecond (ns)','ns'],['Microsecond (µs)','us'],['Millisecond (ms)','ms'],['Second (s)','s'],['Minute (min)','min'],['Hour (h)','h'],['Day (d)','d'],['Week (wk)','wk'],['Month (30 days)','month'],['Year (365 days)','year']
   ]}
  ],
+ concentration:[
+  {group:'Mass concentration',units:[
+   ['Gram/liter (g/L)','g/L',1],['Gram/deciliter (g/dL)','g/dL',10],['Milligram/milliliter (mg/mL)','mg/mL',1],['Milligram/deciliter (mg/dL)','mg/dL',.01],['Milligram/liter (mg/L)','mg/L',.001],['Microgram/milliliter (µg/mL)','µg/mL',.001],['Microgram/deciliter (µg/dL)','µg/dL',1e-5],['Microgram/liter (µg/L)','µg/L',1e-6],['Nanogram/milliliter (ng/mL)','ng/mL',1e-6],['Nanogram/liter (ng/L)','ng/L',1e-9],['Picogram/milliliter (pg/mL)','pg/mL',1e-9]
+  ]},
+  {group:'Molar concentration',units:[
+   ['Mole/liter (mol/L)','mol/L',1],['Millimole/liter (mmol/L)','mmol/L',1e-3],['Micromole/liter (µmol/L)','µmol/L',1e-6],['Nanomole/liter (nmol/L)','nmol/L',1e-9],['Picomole/liter (pmol/L)','pmol/L',1e-12]
+  ]}
+ ],
  numberSystem:[
   {group:'Number Systems',units:[
    ['Binary BIN','2'],['Octal OCT','8'],['Decimal DEC','10'],['Hexadecimal HEX','16']
@@ -226,10 +234,10 @@ var unitCatalog={
 var unitCategoryMeta={
  currency:['Currency','i-currency'],length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
  temperature:['Temperature','i-temperature'],speed:['Speed','i-speed'],pressure:['Pressure','i-pressure'],
- power:['Power','i-power'],energy:['Energy','i-energy'],time:['Time','i-time'],numberSystem:['Number system','i-number']
+ power:['Power','i-power'],energy:['Energy','i-energy'],time:['Time','i-time'],concentration:['Concentration','i-flask'],numberSystem:['Number system','i-number']
 };
 var unitCategory='length',unitSelections={},unitPickerTarget='unit-from',unitSearchValue='';
-var unitDefaults={length:['m','km'],area:['m2','ha'],volume:['l','ml'],mass:['kg','g'],temperature:['C','F'],speed:['m/s','km/h'],pressure:['kPa','mmHg'],power:['W','kW'],energy:['J','kJ'],time:['s','min'],numberSystem:['2','10']};
+var unitDefaults={length:['m','km'],area:['m2','ha'],volume:['l','ml'],mass:['kg','g'],temperature:['C','F'],speed:['m/s','km/h'],pressure:['kPa','mmHg'],power:['W','kW'],energy:['J','kJ'],time:['s','min'],concentration:['mg/dL','mmol/L'],numberSystem:['2','10']};
 function allUnits(category){return unitCatalog[category].reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}}))},[])}
 function unitInfo(category,value){return allUnits(category).find(function(u){return u.value===value})}
 function setUnitButton(id,category,value){var info=unitInfo(category,value);$(id).innerHTML=(info?info.label:'Select unit')+'<span>⌄</span>'}
@@ -289,6 +297,7 @@ $('unit-convert').addEventListener('click',function(){
  var value=Number(raw);if(!Number.isFinite(value)){unitStatus('Enter a valid number.','error');return}
  var fromInfo=unitInfo(unitCategory,from),toInfo=unitInfo(unitCategory,to);
  if(!fromInfo||!toInfo){unitStatus('Select valid source and target units.','error');return}
+ if(unitCategory==='concentration'&&fromInfo.group!==toInfo.group){unitStatus('Mass ↔ molar conversion needs the analyte molecular weight. Use the Clinical Lab Calculator for this conversion.','error');return}
  if(unitCategory==='temperature')result=cToTemp(tempToC(value,from),to);
  else{
   var factorMap=unitCategory==='speed'?speedFactors:unitCategory==='pressure'?pressureFactors:unitCategory==='power'?powerFactors:unitCategory==='energy'?energyFactors:unitCategory==='time'?timeFactors:null;
@@ -316,7 +325,13 @@ function updateLabButtons(){var pair=labSelections[labKind];setLabTrigger('lab-f
 function openLabPicker(target){unitPickerTarget=target;var groups=labMassGroups.concat(labMolarGroups),list=$('lab-picker-list');list.innerHTML='';$('lab-picker-title').textContent='Select unit';groups.forEach(function(group){var heading=document.createElement('div');heading.className='unit-picker-group';heading.textContent=group.group;list.appendChild(heading);group.units.forEach(function(unit){var button=document.createElement('button');button.type='button';button.className='unit-picker-option'+(labSelections[labKind][target==='lab-from'?0:1]===unit[1]?' selected':'');button.textContent=unit[0];button.addEventListener('click',function(){var pair=labSelections[labKind].slice();pair[target==='lab-from'?0:1]=unit[1];labSelections[labKind]=pair;updateLabButtons();closeLabPicker()});list.appendChild(button)})});$('lab-picker-overlay').classList.remove('hidden');document.body.style.overflow='hidden'}
 function closeLabPicker(){$('lab-picker-overlay').classList.add('hidden');document.body.style.overflow=''}
 function renderLabModes(){document.querySelectorAll('[data-lab-kind]').forEach(function(button){var active=button.dataset.labKind===labKind;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active))})}
-document.querySelectorAll('[data-lab-kind]').forEach(function(button){button.addEventListener('click',function(){labKind=button.dataset.labKind;labSelections[labKind]=labSelections[labKind]|| (labKind==='mass'?['mg/dL','g/L']:['mmol/L','µmol/L']);renderLabModes();updateLabButtons();$('lab-result').textContent='—';$('lab-formula').textContent='';$('lab-status').textContent=labKind==='mass'?'Mass concentration mode selected.':'Molar concentration mode selected.';$('lab-status').className='status-line'})});
+document.querySelectorAll('[data-lab-kind]').forEach(function(button){button.addEventListener('click',function(){
+ labKind=button.dataset.labKind;renderLabModes();
+ var calculations=labKind==='calculations';
+ $('lab-conversion-workspace').classList.toggle('hidden',calculations);
+ $('lab-calculations-workspace').classList.toggle('hidden',!calculations);
+ if(!calculations){labSelections[labKind]=labSelections[labKind]|| (labKind==='mass'?['mg/dL','g/L']:['mmol/L','µmol/L']);updateLabButtons();$('lab-result').textContent='—';$('lab-formula').textContent='';$('lab-status').textContent=labKind==='mass'?'Mass concentration mode selected.':'Molar concentration mode selected.';$('lab-status').className='status-line'}
+ })});
 updateLabButtons();renderLabModes();
 $('lab-from-trigger').addEventListener('click',function(){openLabPicker('lab-from')});
 $('lab-to-trigger').addEventListener('click',function(){openLabPicker('lab-to')});
@@ -342,5 +357,109 @@ $('lab-convert').addEventListener('click',function(){
  $('lab-result').textContent=Number(result.toPrecision(10)).toLocaleString(undefined,{maximumFractionDigits:10})+' '+to;pulse('lab-result');$('lab-formula').textContent=formula;$('lab-status').textContent='Lab conversion complete. Confirm analyte, specimen and method-specific units before clinical use.';$('lab-status').className='status-line success'
 });
 $('lab-swap')&&$('lab-swap').addEventListener('click',function(){var pair=labSelections[labKind].slice();labSelections[labKind]=[pair[1],pair[0]];updateLabButtons()});
+
+/* Derived clinical calculations. HOMA1-IR is a linear approximation, not Oxford HOMA2. */
+var labCalcDefinitions={
+ homa:{title:'HOMA1-IR estimates insulin resistance from fasting glucose and fasting insulin.',formula:'HOMA1-IR = fasting insulin (µIU/mL) × fasting glucose (mg/dL) ÷ 405. For glucose in mmol/L, divide by 22.5.',fields:[['insulin','Fasting insulin (µIU/mL)','number','2'],['glucose','Fasting glucose','number','90'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
+ egfr:{title:'Adult race-free 2021 CKD-EPI creatinine equation. Intended for age 18 years and older.',formula:'eGFR = 142 × min(SCr/κ,1)^α × max(SCr/κ,1)^−1.200 × 0.9938^Age × 1.012 (female). κ = 0.7 female / 0.9 male; α = −0.241 female / −0.302 male.',fields:[['age','Age (years)','number','45'],['sex','Sex used by equation','select','male',[['male','Male'],['female','Female']]],['creatinine','Serum creatinine','number','1.0'],['creatinineUnit','Creatinine unit','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
+ crcl:{title:'Cockcroft–Gault estimates creatinine clearance. This is not the same as indexed eGFR.',formula:'CrCl = [(140 − age) × weight (kg)] ÷ [72 × SCr (mg/dL)]; multiply by 0.85 for female.',fields:[['age','Age (years)','number','45'],['sex','Sex used by equation','select','male',[['male','Male'],['female','Female']]],['weight','Body weight (kg)','number','70'],['creatinine','Serum creatinine','number','1.0'],['creatinineUnit','Creatinine unit','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
+ fena:{title:'FENa uses paired urine and serum sodium and creatinine concentrations. Samples should be collected close together.',formula:'FENa (%) = (urine Na × serum creatinine) ÷ (serum Na × urine creatinine) × 100.',fields:[['urineNa','Urine sodium (mmol/L)','number','20'],['serumNa','Serum sodium (mmol/L)','number','140'],['serumCr','Serum creatinine','number','1.0'],['urineCr','Urine creatinine','number','100'],['creatinineUnit','Creatinine unit for both values','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
+ anion:{title:'Calculates the anion gap without potassium, with optional albumin correction.',formula:'AG = Na − (Cl + HCO₃). Albumin-corrected AG = AG + 2.5 × (4.0 − albumin [g/dL]).',fields:[['sodium','Sodium (mmol/L)','number','140'],['chloride','Chloride (mmol/L)','number','104'],['bicarbonate','Bicarbonate / CO₂ (mmol/L)','number','24'],['albumin','Albumin (optional, g/dL)','number','4']]},
+ calcium:{title:'Albumin-adjusted total calcium. This is an estimate; ionized calcium is preferred when protein binding is abnormal or the patient is critically ill.',formula:'Corrected Ca (mg/dL) = measured Ca + 0.8 × (4.0 − albumin [g/dL]).',fields:[['calcium','Measured total calcium','number','9.0'],['calciumUnit','Calcium unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]],['albumin','Albumin','number','3.5'],['albuminUnit','Albumin unit','select','g/dL',[['g/dL','g/dL'],['g/L','g/L']]]]},
+ sodium:{title:'Reports both the classic Katz (1.6) and Hillier (2.4) glucose correction estimates.',formula:'Corrected Na = measured Na + factor × [(glucose − 100) ÷ 100], with glucose in mg/dL. Factors shown: 1.6 and 2.4.',fields:[['sodium','Measured sodium (mmol/L)','number','130'],['glucose','Blood glucose','number','400'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
+ osmolality:{title:'Calculated serum osmolality from sodium, glucose and blood urea nitrogen (BUN).',formula:'Calculated osmolality = 2 × Na + glucose/18 + BUN/2.8 (glucose and BUN in mg/dL).',fields:[['sodium','Sodium (mmol/L)','number','140'],['glucose','Glucose','number','100'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]],['bun','Blood urea nitrogen (BUN)','number','14'],['bunUnit','BUN unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
+ ldl:{title:'Friedewald calculated LDL cholesterol. Use a consistent unit for all three lipid values.',formula:'LDL-C = total cholesterol − HDL-C − triglycerides/5 (mg/dL), or TG/2.2 (mmol/L). Do not use when TG ≥400 mg/dL (4.52 mmol/L).',fields:[['total','Total cholesterol','number','180'],['hdl','HDL cholesterol','number','45'],['triglycerides','Triglycerides','number','150'],['lipidUnit','Lipid unit for all values','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]}
+};
+function renderLabCalcFields(){
+ var key=$('lab-calc-type').value,def=labCalcDefinitions[key],root=$('lab-calc-fields');root.replaceChildren();$('lab-calc-description').textContent=def.title;
+ def.fields.forEach(function(field){
+  var wrap=document.createElement('div');wrap.className='field';
+  var label=document.createElement('label');label.htmlFor='lab-calc-'+field[0];label.textContent=field[1];wrap.appendChild(label);
+  var input;
+  if(field[2]==='select'){
+   input=document.createElement('select');input.className='glass-select';
+   field[4].forEach(function(option){var opt=document.createElement('option');opt.value=option[0];opt.textContent=option[1];input.appendChild(opt)});
+  }else{input=document.createElement('input');input.className='glass-input';input.type='number';input.step='any';input.inputMode='decimal';input.min='0';}
+  input.id='lab-calc-'+field[0];input.dataset.calcField=field[0];input.value=field[3];wrap.appendChild(input);root.appendChild(wrap);
+ });
+}
+function calcNumber(key){var el=$('lab-calc-'+key);if(!el||el.value.trim()==='')return NaN;return Number(el.value)}
+function calcUnit(key){var el=$('lab-calc-'+key);return el?el.value:''}
+function calcFail(message){$('lab-calc-result').textContent='—';$('lab-calc-formula').textContent='';$('lab-calc-status').textContent=message;$('lab-calc-status').className='status-line error'}
+function calcSuccess(result,formula,note){$('lab-calc-result').textContent=result;pulse('lab-calc-result');$('lab-calc-formula').textContent=formula;$('lab-calc-status').textContent=note;$('lab-calc-status').className='status-line success'}
+function positiveFields(keys){for(var i=0;i<keys.length;i++){var v=calcNumber(keys[i]);if(!Number.isFinite(v)||v<=0)return false}return true}
+function runLabCalc(){
+ var key=$('lab-calc-type').value,age,sex,scr,glucose,albumin,unit,mg,mmol,result,formula,note;
+ if(key==='homa'){
+  if(!positiveFields(['insulin','glucose']))return calcFail('Enter positive fasting insulin and fasting glucose values.');
+  glucose=calcNumber('glucose');mmol=calcUnit('glucoseUnit')==='mmol/L'?glucose:glucose/18.0182;
+  result=calcNumber('insulin')*mmol/22.5;
+  return calcSuccess(result.toFixed(2),'HOMA1-IR = insulin × glucose (mmol/L) ÷ 22.5. Equivalent mg/dL divisor: 405.','HOMA1-IR is an approximate index. There is no universal diagnostic cut-off; do not label this as HOMA2.');
+ }
+ if(key==='egfr'||key==='crcl'){
+  age=calcNumber('age');sex=calcUnit('sex');scr=calcNumber('creatinine');
+  if(!Number.isFinite(age)||age<18||age>120||!Number.isFinite(scr)||scr<=0)return calcFail('Enter age 18–120 years and a positive serum creatinine.');
+  if(calcUnit('creatinineUnit')==='µmol/L')scr/=88.4;
+  if(key==='egfr'){
+   var female=sex==='female',k=female?.7:.9,alpha=female?-.241:-.302,ratio=scr/k;
+   result=142*Math.pow(Math.min(ratio,1),alpha)*Math.pow(Math.max(ratio,1),-1.2)*Math.pow(.9938,age)*(female?1.012:1);
+   return calcSuccess(result.toFixed(1)+' mL/min/1.73 m²','2021 CKD-EPI creatinine equation (race-free). SCr converted to mg/dL using 88.4 µmol/L per mg/dL.','Adult estimate only. Not validated here for pregnancy, children, rapidly changing creatinine or extremes of muscle mass. A single eGFR does not diagnose chronic kidney disease.');
+  }
+  var weight=calcNumber('weight');if(!Number.isFinite(weight)||weight<=0)return calcFail('Enter a positive body weight in kilograms.');
+  result=((140-age)*weight)/(72*scr)*(sex==='female'?.85:1);
+  return calcSuccess(result.toFixed(1)+' mL/min','Cockcroft–Gault estimate. Creatinine converted to mg/dL before calculation.','Creatinine clearance estimate, not indexed eGFR. Drug dosing decisions require the applicable product and clinical guidance.');
+ }
+ if(key==='fena'){
+  if(!positiveFields(['urineNa','serumNa','serumCr','urineCr']))return calcFail('Enter positive paired urine/serum sodium and creatinine values.');
+  result=(calcNumber('urineNa')*calcNumber('serumCr'))/(calcNumber('serumNa')*calcNumber('urineCr'))*100;
+  return calcSuccess(result.toFixed(2)+'%','FENa = (urine Na × serum creatinine) ÷ (serum Na × urine creatinine) × 100.','Interpret cautiously: diuretics, CKD, sepsis and several renal conditions reduce diagnostic reliability. Urine and serum samples should be paired.');
+ }
+ if(key==='anion'){
+  if(!positiveFields(['sodium','chloride','bicarbonate']))return calcFail('Enter positive sodium, chloride and bicarbonate values.');
+  var ag=calcNumber('sodium')-calcNumber('chloride')-calcNumber('bicarbonate');
+  albumin=calcNumber('albumin');
+  if($('lab-calc-albumin')&&$('lab-calc-albumin').value.trim()!==''&&Number.isFinite(albumin)&&albumin>0){
+   var corrected=ag+2.5*(4-albumin);
+   return calcSuccess('AG '+ag.toFixed(1)+' · Albumin-corrected '+corrected.toFixed(1)+' mmol/L','AG = Na − (Cl + HCO₃). Corrected AG = AG + 2.5 × (4 − albumin [g/dL]).','Albumin correction is an estimate; interpret with laboratory method, clinical context and acid–base assessment.');
+  }
+  return calcSuccess(ag.toFixed(1)+' mmol/L','AG = Na − (Cl + HCO₃), without potassium.','Albumin was not entered, so no albumin correction was applied.');
+ }
+ if(key==='calcium'){
+  if(!positiveFields(['calcium','albumin']))return calcFail('Enter positive total calcium and albumin values.');
+  var ca=calcNumber('calcium'),alb=calcNumber('albumin');
+  if(calcUnit('albuminUnit')==='g/L')alb/=10;
+  if(calcUnit('calciumUnit')==='mmol/L')ca*=4.008;
+  var correctedCa=ca+.8*(4-alb);
+  var out=calcUnit('calciumUnit')==='mmol/L'?(correctedCa/4.008).toFixed(2)+' mmol/L':correctedCa.toFixed(2)+' mg/dL';
+  return calcSuccess(out,'Corrected Ca = measured Ca + 0.8 × (4.0 − albumin [g/dL]).','Rough estimate only. Albumin-correction equations can be inaccurate in critical illness or abnormal protein binding; consider measured ionized calcium.');
+ }
+ if(key==='sodium'){
+  if(!positiveFields(['sodium','glucose']))return calcFail('Enter positive sodium and glucose values.');
+  glucose=calcNumber('glucose');mg=calcUnit('glucoseUnit')==='mmol/L'?glucose*18.0182:glucose;
+  var corrected16=calcNumber('sodium')+1.6*(mg-100)/100,corrected24=calcNumber('sodium')+2.4*(mg-100)/100;
+  return calcSuccess('Katz: '+corrected16.toFixed(1)+' · Hillier: '+corrected24.toFixed(1)+' mmol/L','Corrected Na = measured Na + factor × [(glucose mg/dL − 100) ÷ 100].','Both commonly used correction factors are shown because the estimate varies with the formula and clinical setting.');
+ }
+ if(key==='osmolality'){
+  if(!positiveFields(['sodium','glucose','bun']))return calcFail('Enter positive sodium, glucose and BUN values.');
+  glucose=calcNumber('glucose');mg=calcUnit('glucoseUnit')==='mmol/L'?glucose*18.0182:glucose;
+  var bun=calcNumber('bun');if(calcUnit('bunUnit')==='mmol/L')bun*=2.8;
+  result=2*calcNumber('sodium')+mg/18+bun/2.8;
+  return calcSuccess(result.toFixed(1)+' mOsm/kg','Calculated osmolality = 2 × Na + glucose/18 + BUN/2.8 (glucose and BUN in mg/dL).','This uses BUN, not total serum urea. If your report gives urea, convert to BUN first (BUN ≈ urea ÷ 2.14 when both are mg/dL).');
+ }
+ if(key==='ldl'){
+  if(!positiveFields(['total','hdl','triglycerides']))return calcFail('Enter positive total cholesterol, HDL and triglycerides.');
+  var tc=calcNumber('total'),hdl=calcNumber('hdl'),tg=calcNumber('triglycerides'),si=calcUnit('lipidUnit')==='mmol/L';
+  var tgMg=si?tg*88.57:tg;
+  if(tgMg>=400)return calcFail('Friedewald LDL is not valid when triglycerides are ≥400 mg/dL (4.52 mmol/L). Use a validated alternative or direct LDL measurement.');
+  result=si?tc-hdl-tg/2.2:tc-hdl-tg/5;
+  if(result<0)return calcFail('Calculated LDL is negative. Check the input units and values; do not report this result.');
+  return calcSuccess(result.toFixed(2)+(si?' mmol/L':' mg/dL'),'Friedewald: LDL-C = total cholesterol − HDL-C − TG/5 (mg/dL), or TG/2.2 (mmol/L).','Friedewald estimate. It may be inaccurate with non-fasting samples, high triglycerides or altered lipoprotein composition.');
+ }
+}
+$('lab-calc-type').addEventListener('change',function(){renderLabCalcFields();$('lab-calc-result').textContent='—';$('lab-calc-formula').textContent='Select a calculation and enter the required values.';$('lab-calc-status').textContent='Ready to calculate.';$('lab-calc-status').className='status-line'});
+$('lab-calc-run').addEventListener('click',runLabCalc);
+$('lab-calc-reset').addEventListener('click',function(){renderLabCalcFields();$('lab-calc-result').textContent='—';$('lab-calc-formula').textContent='Select a calculation and enter the required values.';$('lab-calc-status').textContent='Values reset.';$('lab-calc-status').className='status-line'});
+renderLabCalcFields();
+
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('unit-picker-overlay').classList.contains('hidden'))closeUnitPicker();if(!$('lab-picker-overlay').classList.contains('hidden'))closeLabPicker()}});
 })();
