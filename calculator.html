@@ -141,6 +141,28 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 }
 @media(max-width:360px){.unit-category-grid{gap:6px}.unit-category-grid .category-pill{min-height:86px;font-size:9px}.unit-pair-grid{grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:4px}.unit-swap-round{width:30px;height:30px}}
 
+
+/* Compact unit-category tiles and reliable touch feedback */
+.unit-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:18px}
+.unit-category-grid .category-pill{min-height:72px;height:72px;padding:8px 5px;border-radius:15px;gap:5px;font-size:10px;line-height:1.2;justify-content:center;align-items:center;transform:none!important;transition:background .18s,border-color .18s,box-shadow .18s,filter .18s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.unit-category-grid .category-pill svg{width:22px;height:22px}
+.unit-category-grid .category-pill.active{transform:none!important;filter:none}
+.unit-category-grid .category-pill:active{transform:scale(.95)!important;filter:brightness(1.12)}
+.unit-category-grid .category-pill:focus:not(:focus-visible){outline:none}
+.unit-category-grid .category-pill:focus-visible{outline:2px solid #a99aff;outline-offset:2px}
+.unit-pair-grid{grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr);align-items:center;gap:9px}
+.unit-swap-round{width:32px;height:32px;min-width:32px;padding:0;display:grid;place-items:center;align-self:center;margin-top:17px;transform:translateY(-5px);border-radius:50%;font-size:17px;line-height:1;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.unit-swap-round:active{transform:translateY(-5px) scale(.9);filter:brightness(1.15)}
+.unit-swap-round:focus:not(:focus-visible){outline:none}
+@media(max-width:580px){
+ .unit-category-grid{gap:7px}
+ .unit-category-grid .category-pill{height:68px;min-height:68px;padding:7px 3px;border-radius:13px;font-size:9px;gap:4px}
+ .unit-category-grid .category-pill svg{width:20px;height:20px}
+ .unit-pair-grid{grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:5px}
+ .unit-swap-round{width:29px;height:29px;min-width:29px;margin-top:16px;transform:translateY(-6px);font-size:16px}
+ .unit-swap-round:active{transform:translateY(-6px) scale(.9)}
+}
+
 </style>
 </head>
 <body>
