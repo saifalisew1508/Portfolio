@@ -10,11 +10,12 @@ cards.forEach(function(c){c.addEventListener('click',function(){activatePanel(c.
 /* Math and scientific calculator. Safe recursive-descent parser; no eval(). */
 var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression'),calcMode='basic',angleMode='deg',inverseMode=false;
 var basicKeys=[
- ['AC','clear','utility'],['⌫','back','utility'],['%','%','op'],['÷','/','op'],
- ['7','7'],['8','8'],['9','9'],['×','*','op'],
- ['4','4'],['5','5'],['6','6'],['−','-','op'],
- ['1','1'],['2','2'],['3','3'],['+','+','op'],
- ['+/-','sign','utility'],['0','0'],['.','.'],['=','equal','equal']
+ ['AC','clear','utility'],['⌫','back','utility'],['(','(','utility'],[')',')','utility'],
+ ['7','7'],['8','8'],['9','9'],['÷','/','op'],
+ ['4','4'],['5','5'],['6','6'],['×','*','op'],
+ ['1','1'],['2','2'],['3','3'],['−','-','op'],
+ ['%','%','utility'],['0','0'],['.','.'],['+','+','op'],
+ ['+/-','sign','utility'],['00','00','utility'],['.','.'],['=','equal','equal']
 ];
 var scientificKeys=[
  ['sin','sin','utility'],['cos','cos','utility'],['tan','tan','utility'],['rad','rad','utility'],['deg','deg','mode-key'],
