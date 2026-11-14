@@ -92,6 +92,53 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 @media(max-width:360px){.calc-keys,.calc-keys.scientific{gap:6px}.math-layout{padding:11px 8px}.calc-mode{padding:9px 10px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){.calc-keys button{animation:none!important;transition:none!important}}
 
+
+/* Focused unit and laboratory conversion workspace */
+.unit-category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 22px}
+.unit-category-grid .category-pill{min-height:112px;border-radius:20px;display:flex;flex-direction:column;justify-content:center;gap:11px;font-size:12px;background:linear-gradient(145deg,rgba(61,66,80,.55),rgba(25,29,38,.76));border-color:rgba(210,218,240,.1);box-shadow:inset 0 1px 0 #ffffff12,0 8px 20px #0002}
+.unit-category-grid .category-pill svg{width:29px;height:29px}
+.unit-category-grid .category-pill.active{background:linear-gradient(145deg,rgba(108,88,214,.42),rgba(42,70,124,.48));border-color:rgba(166,151,255,.62);box-shadow:inset 0 1px 0 #ffffff28,0 0 22px #7868ff22}
+.unit-convert-card{max-width:850px;margin:0 auto;padding:20px;border:1px solid rgba(184,197,255,.14);border-radius:23px;background:rgba(5,10,23,.34)}
+.unit-pair-grid{display:grid;grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr);align-items:end;gap:12px;margin-top:16px}
+.unit-picker-trigger{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid rgba(180,194,245,.2);border-radius:15px;background:rgba(7,12,26,.58);color:#f3f5ff;text-align:left;font-size:12px;cursor:pointer}
+.unit-picker-trigger span{color:#a99aff;font-size:19px;flex:none}
+.unit-swap-round{width:42px;height:42px;border:1px solid rgba(166,151,255,.38);border-radius:50%;background:linear-gradient(145deg,#6254c866,#3477c866);color:#fff;font-size:22px;cursor:pointer;box-shadow:inset 0 1px 0 #ffffff30,0 0 17px #7666ff20}
+.number-base-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.unit-picker-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.unit-picker-sheet{width:min(760px,100%);max-height:min(88svh,900px);display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(190,203,255,.13);border-bottom:0;border-radius:28px 28px 0 0;background:#1e1e1f;box-shadow:0 -18px 65px #0008;padding-bottom:env(safe-area-inset-bottom)}
+.unit-picker-header{height:72px;flex:none;display:grid;grid-template-columns:88px 1fr 88px;align-items:center;padding:0 18px;border-bottom:1px solid #ffffff08}
+.unit-picker-header h3{margin:0;text-align:center;font-size:17px;font-weight:600;color:#f4f4f4}
+.unit-picker-header button{border:0;background:transparent;color:#ff9b43;font-size:14px;text-align:left;cursor:pointer}
+.unit-picker-search-wrap{padding:12px 18px 5px;flex:none}
+.unit-picker-search-wrap input{width:100%;height:42px;border:1px solid #ffffff16;border-radius:12px;padding:0 13px;background:#29292b;color:#fff;outline:none}
+.unit-picker-search-wrap input::placeholder{color:#8d8d91}
+.unit-picker-list{overflow:auto;overscroll-behavior:contain;padding:0 18px 18px}
+.unit-picker-group{padding:18px 8px 9px;color:#85858a;font-size:11px}
+.unit-picker-option{width:100%;min-height:54px;display:flex;align-items:center;padding:12px 8px;border:0;border-bottom:1px solid rgba(255,255,255,.11);background:transparent;color:#eee;text-align:left;font-size:14px;cursor:pointer}
+.unit-picker-option:hover,.unit-picker-option:focus-visible{background:#ffffff0b}
+.unit-picker-option.selected{color:#ffad64}
+.lab-mode-pills{margin:0 0 20px}
+.lab-mode-pills .category-pill{min-height:42px;padding:10px 17px;border-radius:24px}
+.lab-fields{margin-bottom:16px}
+#lab-mw-options{margin-top:12px}
+@media(max-width:580px){
+ .unit-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .unit-category-grid .category-pill{min-height:94px;padding:10px 5px;font-size:10px;border-radius:16px}
+ .unit-category-grid .category-pill svg{width:25px;height:25px}
+ .unit-convert-card{padding:13px;border-radius:20px}
+ .unit-pair-grid{grid-template-columns:minmax(0,1fr) 34px minmax(0,1fr);gap:6px}
+ .unit-picker-trigger{min-height:50px;padding:10px 8px;font-size:10px}
+ .unit-swap-round{width:34px;height:34px;font-size:18px}
+ .unit-picker-sheet{max-height:90svh;border-radius:24px 24px 0 0}
+ .unit-picker-header{height:64px;padding:0 13px;grid-template-columns:70px 1fr 70px}
+ .unit-picker-header h3{font-size:15px}
+ .unit-picker-list{padding:0 14px 16px}
+ .unit-picker-option{min-height:49px;font-size:13px}
+ .lab-mode-pills{display:grid;grid-template-columns:1fr 1fr}
+ .lab-mode-pills .category-pill{padding:10px 7px;font-size:10px}
+}
+@media(max-width:360px){.unit-category-grid{gap:6px}.unit-category-grid .category-pill{min-height:86px;font-size:9px}.unit-pair-grid{grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);gap:4px}.unit-swap-round{width:30px;height:30px}}
+
 </style>
 </head>
 <body>
@@ -131,10 +178,6 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <button class="nav-card glass" data-panel="currency" aria-pressed="false"><svg><use href="#i-currency"/></svg><span>Currency</span></button>
 <button class="nav-card glass" data-panel="units" aria-pressed="false"><svg><use href="#i-cube"/></svg><span>Unit Converter</span></button>
 <button class="nav-card glass" data-panel="lab" aria-pressed="false"><svg><use href="#i-flask"/></svg><span>Lab Calculator</span></button>
-<a class="nav-card glass" href="games.html"><svg><use href="#i-game"/></svg><span>Games</span></a>
-<button class="nav-card glass" data-panel="tools" aria-pressed="false"><svg><use href="#i-tools"/></svg><span>Tools</span></button>
-<button class="nav-card glass" data-panel="education" aria-pressed="false"><svg><use href="#i-education"/></svg><span>Education</span></button>
-<button class="nav-card glass" data-panel="more" aria-pressed="false"><svg><use href="#i-more"/></svg><span>More</span></button>
 </nav>
 <section class="tool-panel glass glass-card active" id="math">
 <div class="panel-heading"><div><h2>Math calculator</h2><p>Switch between a clean everyday keypad and a full scientific calculator.</p></div><span class="panel-tag">01 / MATHEMATICS</span></div>
@@ -165,33 +208,57 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 </div>
 </section>
 <section class="tool-panel glass" id="units">
-<div class="panel-heading"><div><h2>Unit converter</h2><p>Choose a category, enter a value and convert between compatible units. Clinical conversions live in the separate Lab Calculator.</p></div><span class="panel-tag">03 / ENGINEERING</span></div>
-<div class="category-pills" id="unit-pills" aria-label="Unit categories"></div>
-<div class="convert-grid"><div class="field"><label for="unit-category">CATEGORY</label><select class="glass-select" id="unit-category"></select></div><div class="field"><label for="unit-value">VALUE</label><input class="glass-input" id="unit-value" type="number" step="any" value="1"></div><div class="field"><label for="unit-from">FROM UNIT</label><select class="glass-select" id="unit-from"></select></div><div class="field"><label for="unit-to">TO UNIT</label><select class="glass-select" id="unit-to"></select></div></div>
-<div id="number-system-fields" class="convert-grid hidden" style="margin-top:15px"><div class="field"><label for="number-from-base">FROM BASE</label><select class="glass-select" id="number-from-base"><option value="2">Binary · 2</option><option value="8">Octal · 8</option><option value="10" selected>Decimal · 10</option><option value="16">Hexadecimal · 16</option></select></div><div class="field"><label for="number-to-base">TO BASE</label><select class="glass-select" id="number-to-base"><option value="2" selected>Binary · 2</option><option value="8">Octal · 8</option><option value="10">Decimal · 10</option><option value="16">Hexadecimal · 16</option></select></div></div>
-<div class="tool-actions"><button class="glass-button primary" id="unit-convert" type="button">Convert units ↗</button><button class="glass-button" id="unit-swap" type="button">Swap units</button></div>
-<div class="convert-result"><div class="result-label">CONVERSION RESULT</div><div class="result-value" id="unit-result">—</div><div class="result-meta" id="unit-formula"></div></div><p class="status-line" id="unit-status" aria-live="polite">Select a category to begin.</p>
+<div class="panel-heading"><div><h2>Unit converter</h2><p>Choose a category, enter a value and select units from the grouped unit library.</p></div><span class="panel-tag">03 / CONVERSIONS</span></div>
+<div class="category-pills unit-category-grid" id="unit-pills" aria-label="Unit categories"></div>
+<div class="unit-convert-card">
+<div class="field"><label for="unit-value">VALUE</label><input class="glass-input" id="unit-value" type="text" inputmode="decimal" value="1" autocomplete="off"></div>
+<div class="unit-pair-grid">
+<div class="field"><label>FROM UNIT</label><button class="unit-picker-trigger" id="unit-from-trigger" type="button" aria-haspopup="dialog">Meter (m)<span>⌄</span></button></div>
+<button class="unit-swap-round" id="unit-swap" type="button" aria-label="Swap units">⇄</button>
+<div class="field"><label>TO UNIT</label><button class="unit-picker-trigger" id="unit-to-trigger" type="button" aria-haspopup="dialog">Kilometer (km)<span>⌄</span></button></div>
+</div>
+<div id="number-system-fields" class="number-base-row hidden">
+<div class="field"><label for="number-from-base">FROM BASE</label><select class="glass-select" id="number-from-base"><option value="2">Binary · BIN</option><option value="8">Octal · OCT</option><option value="10">Decimal · DEC</option><option value="16">Hexadecimal · HEX</option></select></div>
+<div class="field"><label for="number-to-base">TO BASE</label><select class="glass-select" id="number-to-base"><option value="2">Binary · BIN</option><option value="8">Octal · OCT</option><option value="10" selected>Decimal · DEC</option><option value="16">Hexadecimal · HEX</option></select></div>
+</div>
+<div class="tool-actions"><button class="glass-button primary" id="unit-convert" type="button">Convert units ↗</button></div>
+<div class="convert-result"><div class="result-label">CONVERSION RESULT</div><div class="result-value" id="unit-result">—</div><div class="result-meta" id="unit-formula"></div></div>
+<p class="status-line" id="unit-status" aria-live="polite">Select a category to begin.</p>
+</div>
+<div class="unit-picker-overlay hidden" id="unit-picker-overlay">
+<div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="unit-picker-title">
+<div class="unit-picker-header"><button type="button" id="unit-picker-cancel">Cancel</button><h3 id="unit-picker-title">Select unit</h3><span></span></div>
+<div class="unit-picker-search-wrap"><input id="unit-picker-search" type="search" placeholder="Search units…" aria-label="Search units"></div>
+<div class="unit-picker-list" id="unit-picker-list"></div>
+</div>
+</div>
 </section>
 <section class="tool-panel glass" id="lab">
-<div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Analyte-aware conversions for concentration and enzyme activity. Mass-to-molar conversions require the correct molecular weight.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
-<div class="category-pills" id="lab-pills"><button class="category-pill active" data-lab-kind="concentration">Concentration</button><button class="category-pill" data-lab-kind="enzyme">Enzyme activity</button></div>
-<div class="convert-grid"><div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100"></div><div class="field"><label for="lab-test">SEARCH OR SELECT TEST NAME</label><input class="glass-input" id="lab-test" list="lab-tests" placeholder="e.g. Glucose" autocomplete="off"><datalist id="lab-tests"><option value="Glucose"><option value="Urea"><option value="Creatinine"><option value="Cholesterol"><option value="Uric acid"><option value="Bilirubin"><option value="Lactate"><option value="Triglycerides"></datalist></div><div class="field"><label for="lab-from">FROM UNIT</label><select class="glass-select" id="lab-from"></select></div><div class="field"><label for="lab-to">TO UNIT</label><select class="glass-select" id="lab-to"></select></div></div>
-<div class="analyte-field" id="lab-mw-options"><div class="field"><label for="lab-mw-mode">MOLECULAR WEIGHT METHOD</label><select class="glass-select" id="lab-mw-mode"><option value="test">Use selected test molecular weight</option><option value="manual">Enter molecular weight manually</option></select></div><div class="field hidden" id="lab-mw-manual-wrap"><label for="lab-mw">MOLECULAR WEIGHT (g/mol)</label><input class="glass-input" id="lab-mw" type="number" min="0" step="any" placeholder="Enter g/mol"></div></div>
-<p class="result-meta" id="lab-analyte-note">Select an analyte when converting between mass and molar concentration. Same-dimension conversions do not need molecular weight.</p>
-<div class="tool-actions"><button class="glass-button primary" id="lab-convert" type="button">Calculate conversion ↗</button><button class="glass-button" id="lab-swap" type="button">Swap units</button></div>
-<div class="convert-result"><div class="result-label">LAB CONVERSION RESULT</div><div class="result-value" id="lab-result">—</div><div class="result-meta" id="lab-formula">No result calculated yet.</div></div><p class="status-line" id="lab-status" aria-live="polite">Use the analyte-specific molecular weight for mass ↔ molar conversions.</p>
-</section>
-<section class="tool-panel glass" id="tools">
-<div class="panel-heading"><div><h2>Tools</h2><p>Extra quick converters preserved from the original toolkit.</p></div><span class="panel-tag">05 / UTILITIES</span></div>
-<div class="tools-grid"><article class="info-glass"><h3>Energy converter</h3><p>Joule, kilojoule, calorie, kilocalorie, watt-hour, kilowatt-hour and electronvolt conversions are available under Unit Converter → Energy.</p></article><article class="info-glass"><h3>Time converter</h3><p>Seconds, minutes, hours, days and weeks are available under Unit Converter → Time.</p></article><article class="info-glass"><h3>Digital storage</h3><p>Bit, byte, decimal KB/MB/GB and binary KiB/MiB/GiB conversions are available under Unit Converter → Digital storage.</p></article><article class="info-glass"><h3>Games</h3><p>Open Bubble Shooter, Sudoku and Chess in the arcade. <a href="games.html" style="color:#c0b5ff">Visit Games ↗</a></p></article></div>
-</section>
-<section class="tool-panel glass" id="education">
-<div class="panel-heading"><div><h2>Conversion notes</h2><p>A compact reference for understanding what the calculator is doing. Numbers are useful; knowing what they mean is better.</p></div><span class="panel-tag">06 / LEARN</span></div>
-<div class="education-grid"><article class="info-glass"><h3>Mass concentration ↔ molar concentration</h3><p>Convert mass concentration to g/L, divide by molecular weight (g/mol) to obtain mol/L, then scale to mmol/L, µmol/L or pmol/L. Reverse the steps for the opposite direction.</p></article><article class="info-glass"><h3>Enzyme activity</h3><p>1 U/L = 1,000 mU/L. 1 µkat/L = 60 U/L. Enzyme activity units are not mass or molar concentration units.</p></article><article class="info-glass"><h3>Temperature</h3><p>Temperature conversion uses offsets as well as scale factors. Celsius, Fahrenheit and Kelvin cannot be converted using a simple ratio.</p></article><article class="info-glass"><h3>Reference values</h3><p>Always verify the analyte, specimen, method, unit and molecular weight. This calculator is a conversion aid, not a diagnostic interpretation or replacement for your laboratory's validated procedure.</p></article></div>
-</section>
-<section class="tool-panel glass" id="more">
-<div class="panel-heading"><div><h2>More from Saif</h2><p>Quick access to the rest of the site.</p></div><span class="panel-tag">07 / EXPLORE</span></div>
-<div class="education-grid"><a class="info-glass" href="games.html"><h3>Games arcade ↗</h3><p>Bubble Shooter, Sudoku and Chess.</p></a><a class="info-glass" href="index.html#music"><h3>Music ↗</h3><p>Open the music player and playlist.</p></a><a class="info-glass" href="index.html#projects"><h3>Projects ↗</h3><p>Explore projects and experiments.</p></a><a class="info-glass" href="index.html#contact"><h3>Contact ↗</h3><p>Get in touch.</p></a></div>
+<div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Separate mass concentration and molar concentration conversions with analyte-specific molecular weight support.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
+<div class="category-pills lab-mode-pills" id="lab-pills">
+<button class="category-pill active" type="button" data-lab-kind="mass">Mass concentration</button>
+<button class="category-pill" type="button" data-lab-kind="molar">Molar concentration</button>
+</div>
+<div class="convert-grid lab-fields">
+<div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100"></div>
+<div class="field"><label for="lab-test">ANALYTE / TEST NAME</label><input class="glass-input" id="lab-test" list="lab-tests" placeholder="e.g. Glucose" autocomplete="off"><datalist id="lab-tests"><option value="Glucose"><option value="Urea"><option value="Creatinine"><option value="Cholesterol"><option value="Uric acid"><option value="Bilirubin"><option value="Lactate"><option value="Triglycerides"></datalist></div>
+<div class="field"><label>FROM UNIT</label><button class="unit-picker-trigger" id="lab-from-trigger" type="button" aria-haspopup="dialog">Milligram/deciliter (mg/dL)<span>⌄</span></button></div>
+<div class="field"><label>TO UNIT</label><button class="unit-picker-trigger" id="lab-to-trigger" type="button" aria-haspopup="dialog">Millimole/liter (mmol/L)<span>⌄</span></button></div>
+</div>
+<div class="analyte-field" id="lab-mw-options">
+<div class="field"><label for="lab-mw-mode">MOLECULAR WEIGHT METHOD</label><select class="glass-select" id="lab-mw-mode"><option value="test">Use selected analyte molecular weight</option><option value="manual">Enter molecular weight manually</option></select></div>
+<div class="field hidden" id="lab-mw-manual-wrap"><label for="lab-mw">MOLECULAR WEIGHT (g/mol)</label><input class="glass-input" id="lab-mw" type="number" min="0" step="any" placeholder="Enter g/mol"></div>
+</div>
+<p class="result-meta" id="lab-analyte-note">Choose an analyte for its preset molecular weight. Manual molecular weight is also supported.</p>
+<div class="tool-actions"><button class="glass-button primary" id="lab-convert" type="button">Calculate conversion ↗</button></div>
+<div class="convert-result"><div class="result-label">LAB CONVERSION RESULT</div><div class="result-value" id="lab-result">—</div><div class="result-meta" id="lab-formula">No result calculated yet.</div></div>
+<p class="status-line" id="lab-status" aria-live="polite">Select mass or molar concentration to begin.</p>
+<div class="unit-picker-overlay hidden" id="lab-picker-overlay">
+<div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="lab-picker-title">
+<div class="unit-picker-header"><button type="button" id="lab-picker-cancel">Cancel</button><h3 id="lab-picker-title">Select unit</h3><span></span></div>
+<div class="unit-picker-list" id="lab-picker-list"></div>
+</div>
+</div>
 </section>
 </main>
 
