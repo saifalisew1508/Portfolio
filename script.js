@@ -6,7 +6,7 @@ const coarse=matchMedia('(pointer: coarse)').matches;
 const saveData=!!(navigator.connection&&navigator.connection.saveData);
 const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear());
 
-if(!reduced&&window.VanillaTilt){try{VanillaTilt.init($('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
+if(!reduced&&window.VanillaTilt){try{VanillaTilt.init($$('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
 // Animated WebGL fog on desktop and mobile, with a lower simulation cost on phones.
 const fog=$('#fog-canvas');
