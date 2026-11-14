@@ -828,3 +828,9 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
  .site-header .local-clock small{font-size:6px;letter-spacing:.2px}
  .site-header .header-cta{font-size:10px;padding:8px 9px;white-space:nowrap}
 }
+
+/* Shared responsive header and page-width calibration. */
+.site-header .local-clock{display:flex!important;flex:0 0 auto}
+@media(min-width:1200px){.section-wrap{width:min(1120px,86vw)}.site-header{padding-left:max(6vw,calc((100vw - 1280px)/2));padding-right:max(6vw,calc((100vw - 1280px)/2))}}
+@media(max-width:760px){.site-header{display:flex;align-items:center;gap:clamp(7px,2vw,14px);padding-left:5vw;padding-right:5vw}.site-header .wordmark{flex:0 0 auto}.site-header .local-clock{display:flex!important;min-width:70px;margin-left:auto;margin-right:clamp(3px,1.5vw,12px);gap:2px}.site-header .local-clock span{font-size:11px}.site-header .local-clock small{font-size:7px}.site-header .header-cta{flex:0 0 auto;white-space:nowrap;padding:9px 11px}.section-wrap{width:min(92vw,680px)}}
+@media(max-width:390px){.site-header{gap:6px}.site-header .wordmark{font-size:23px}.site-header .local-clock{min-width:62px;margin-right:3px}.site-header .local-clock span{font-size:10px}.site-header .local-clock small{font-size:6px;letter-spacing:0}.site-header .header-cta{font-size:9px;padding:8px 8px}.section-wrap{width:92vw}}
