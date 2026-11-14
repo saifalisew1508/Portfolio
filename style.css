@@ -706,3 +706,47 @@ body{padding-bottom:calc(124px + env(safe-area-inset-bottom))}
   }
   .global-nav-item svg{width:19px;height:19px}
 }
+
+/* Correction: prioritize horizontal length, keep the capsule slim */
+.global-glass-nav{
+  left:4px;
+  right:4px;
+  width:auto;
+  max-width:none;
+  min-height:0;
+  height:72px;
+  padding:6px;
+  gap:3px;
+  transform:none;
+  border-radius:999px;
+}
+.global-nav-item,
+.global-more-toggle{
+  height:58px;
+  padding:6px 2px;
+  gap:5px;
+  border-radius:999px;
+  font-size:10px;
+}
+.global-nav-item svg{width:19px;height:19px}
+.global-nav-more{height:58px}
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+@media(max-width:390px){
+  .global-glass-nav{
+    left:4px;
+    right:4px;
+    height:68px;
+    min-height:0;
+    padding:5px;
+    gap:2px;
+  }
+  .global-nav-item,
+  .global-more-toggle{
+    height:56px;
+    padding:5px 1px;
+    gap:4px;
+    font-size:9px;
+  }
+  .global-nav-item svg{width:18px;height:18px}
+  .global-nav-more{height:56px}
+}
