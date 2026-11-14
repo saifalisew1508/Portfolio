@@ -209,6 +209,7 @@ var unitCatalog={
   {group:'Number Systems',units:[
    ['Binary BIN','2'],['Octal OCT','8'],['Decimal DEC','10'],['Hexadecimal HEX','16']
   ]}
+ ]
 };
 var unitCategoryMeta={
  length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
