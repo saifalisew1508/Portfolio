@@ -1,6 +1,18 @@
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id)};
+/* Visitor-local clock for the arcade header. */
+(function(){
+ var time=$('visitor-time'),date=$('visitor-date');
+ if(!time)return;
+ var locale=navigator.language||'en-US';
+ function tick(){
+  var now=new Date(),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+  time.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:true}).format(now);
+  if(date)date.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,weekday:'short',day:'2-digit',month:'short'}).format(now);
+ }
+ tick();window.setInterval(tick,30000);
+})();
 /* BUBBLE SHOOTER */
 var canvas=$('bubble-canvas'),ctx=canvas.getContext('2d'),cols=['#ff6488','#55d6ef','#a78bfa','#f8c65b','#62dc9b'],R=21,grid=[],score=0,left=30,shot=0,aim={x:360,y:160},shooter={x:360,y:710},current=0,next=1;
 function randColor(){return Math.floor(Math.random()*cols.length)}
