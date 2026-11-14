@@ -14,8 +14,8 @@ var basicKeys=[
  ['7','7'],['8','8'],['9','9'],['÷','/','op'],
  ['4','4'],['5','5'],['6','6'],['×','*','op'],
  ['1','1'],['2','2'],['3','3'],['−','-','op'],
- ['%','%','utility'],['0','0'],['.','.'],['+','+','op'],
- ['+/-','sign','utility'],['00','00','utility'],['.','.'],['=','equal','equal']
+ ['+/-','sign','utility'],['0','0'],['.','.'],['+','+','op'],
+ ['√','sqrt','utility'],['00','00','utility'],['%','%','utility'],['=','equal','equal']
 ];
 var scientificKeys=[
  ['sin','sin','utility'],['cos','cos','utility'],['tan','tan','utility'],['rad','rad','utility'],['deg','deg','mode-key'],
