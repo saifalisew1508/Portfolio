@@ -237,7 +237,7 @@ var unitCategoryMeta={
  power:['Power','i-power'],energy:['Energy','i-energy'],time:['Time','i-time'],concentration:['Concentration','i-flask'],numberSystem:['Number system','i-number']
 };
 var unitCategory='length',unitSelections={},unitPickerTarget='unit-from',unitSearchValue='';
-var unitDefaults={length:['m','km'],area:['m2','ha'],volume:['l','ml'],mass:['kg','g'],temperature:['C','F'],speed:['m/s','km/h'],pressure:['kPa','mmHg'],power:['W','kW'],energy:['J','kJ'],time:['s','min'],concentration:['mg/dL','mmol/L'],numberSystem:['2','10']};
+var unitDefaults={length:['m','km'],area:['m2','ha'],volume:['l','ml'],mass:['kg','g'],temperature:['C','F'],speed:['m/s','km/h'],pressure:['kPa','mmHg'],power:['W','kW'],energy:['J','kJ'],time:['s','min'],concentration:['mg/dL','mg/L'],numberSystem:['2','10']};
 function allUnits(category){return unitCatalog[category].reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}}))},[])}
 function unitInfo(category,value){return allUnits(category).find(function(u){return u.value===value})}
 function setUnitButton(id,category,value){var info=unitInfo(category,value);$(id).innerHTML=(info?info.label:'Select unit')+'<span>⌄</span>'}
@@ -367,7 +367,7 @@ var labCalcDefinitions={
  anion:{title:'Calculates the anion gap without potassium, with optional albumin correction.',formula:'AG = Na − (Cl + HCO₃). Albumin-corrected AG = AG + 2.5 × (4.0 − albumin [g/dL]).',fields:[['sodium','Sodium (mmol/L)','number','140'],['chloride','Chloride (mmol/L)','number','104'],['bicarbonate','Bicarbonate / CO₂ (mmol/L)','number','24'],['albumin','Albumin (optional, g/dL)','number','4']]},
  calcium:{title:'Albumin-adjusted total calcium. This is an estimate; ionized calcium is preferred when protein binding is abnormal or the patient is critically ill.',formula:'Corrected Ca (mg/dL) = measured Ca + 0.8 × (4.0 − albumin [g/dL]).',fields:[['calcium','Measured total calcium','number','9.0'],['calciumUnit','Calcium unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]],['albumin','Albumin','number','3.5'],['albuminUnit','Albumin unit','select','g/dL',[['g/dL','g/dL'],['g/L','g/L']]]]},
  sodium:{title:'Reports both the classic Katz (1.6) and Hillier (2.4) glucose correction estimates.',formula:'Corrected Na = measured Na + factor × [(glucose − 100) ÷ 100], with glucose in mg/dL. Factors shown: 1.6 and 2.4.',fields:[['sodium','Measured sodium (mmol/L)','number','130'],['glucose','Blood glucose','number','400'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
- osmolality:{title:'Calculated serum osmolality from sodium, glucose and blood urea nitrogen (BUN).',formula:'Calculated osmolality = 2 × Na + glucose/18 + BUN/2.8 (glucose and BUN in mg/dL).',fields:[['sodium','Sodium (mmol/L)','number','140'],['glucose','Glucose','number','100'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]],['bun','Blood urea nitrogen (BUN)','number','14'],['bunUnit','BUN unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
+ osmolality:{title:'Calculated serum osmolality from sodium, glucose and serum urea.',formula:'Calculated osmolality = 2 × Na + glucose (mmol/L) + urea (mmol/L). If glucose is mg/dL, divide by 18; if urea is mg/dL, divide by 6.006.',fields:[['sodium','Sodium (mmol/L)','number','140'],['glucose','Glucose','number','100'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]],['urea','Serum urea','number','30'],['ureaUnit','Urea unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
  ldl:{title:'Friedewald calculated LDL cholesterol. Use a consistent unit for all three lipid values.',formula:'LDL-C = total cholesterol − HDL-C − triglycerides/5 (mg/dL), or TG/2.2 (mmol/L). Do not use when TG ≥400 mg/dL (4.52 mmol/L).',fields:[['total','Total cholesterol','number','180'],['hdl','HDL cholesterol','number','45'],['triglycerides','Triglycerides','number','150'],['lipidUnit','Lipid unit for all values','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]}
 };
 function renderLabCalcFields(){
@@ -403,7 +403,7 @@ function runLabCalc(){
   if(key==='egfr'){
    var female=sex==='female',k=female?.7:.9,alpha=female?-.241:-.302,ratio=scr/k;
    result=142*Math.pow(Math.min(ratio,1),alpha)*Math.pow(Math.max(ratio,1),-1.2)*Math.pow(.9938,age)*(female?1.012:1);
-   return calcSuccess(result.toFixed(1)+' mL/min/1.73 m²','2021 CKD-EPI creatinine equation (race-free). SCr converted to mg/dL using 88.4 µmol/L per mg/dL.','Adult estimate only. Not validated here for pregnancy, children, rapidly changing creatinine or extremes of muscle mass. A single eGFR does not diagnose chronic kidney disease.');
+   return calcSuccess(result.toFixed(1)+' mL/min/1.73 m²','2021 CKD-EPI creatinine equation (race-free). SCr converted to mg/dL using 88.4 µmol/L per mg/dL.','Adult estimate only; intended for standardized IDMS-traceable creatinine. Not validated here for pregnancy, children, rapidly changing creatinine or extremes of muscle mass. A single eGFR does not diagnose chronic kidney disease.');
   }
   var weight=calcNumber('weight');if(!Number.isFinite(weight)||weight<=0)return calcFail('Enter a positive body weight in kilograms.');
   result=((140-age)*weight)/(72*scr)*(sex==='female'?.85:1);
@@ -440,11 +440,11 @@ function runLabCalc(){
   return calcSuccess('Katz: '+corrected16.toFixed(1)+' · Hillier: '+corrected24.toFixed(1)+' mmol/L','Corrected Na = measured Na + factor × [(glucose mg/dL − 100) ÷ 100].','Both commonly used correction factors are shown because the estimate varies with the formula and clinical setting.');
  }
  if(key==='osmolality'){
-  if(!positiveFields(['sodium','glucose','bun']))return calcFail('Enter positive sodium, glucose and BUN values.');
-  glucose=calcNumber('glucose');mg=calcUnit('glucoseUnit')==='mmol/L'?glucose*18.0182:glucose;
-  var bun=calcNumber('bun');if(calcUnit('bunUnit')==='mmol/L')bun*=2.8;
-  result=2*calcNumber('sodium')+mg/18+bun/2.8;
-  return calcSuccess(result.toFixed(1)+' mOsm/kg','Calculated osmolality = 2 × Na + glucose/18 + BUN/2.8 (glucose and BUN in mg/dL).','This uses BUN, not total serum urea. If your report gives urea, convert to BUN first (BUN ≈ urea ÷ 2.14 when both are mg/dL).');
+  if(!positiveFields(['sodium','glucose','urea']))return calcFail('Enter positive sodium, glucose and serum urea values.');
+  glucose=calcNumber('glucose');var glucoseMmol=calcUnit('glucoseUnit')==='mmol/L'?glucose:glucose/18.0182;
+  var urea=calcNumber('urea'),ureaMmol=calcUnit('ureaUnit')==='mmol/L'?urea:urea/6.006;
+  result=2*calcNumber('sodium')+glucoseMmol+ureaMmol;
+  return calcSuccess(result.toFixed(1)+' mOsm/kg','Calculated osmolality = 2 × Na + glucose (mmol/L) + urea (mmol/L). Glucose mg/dL ÷ 18.018; urea mg/dL ÷ 6.006.','Uses total serum urea, not BUN. Use values from the same sample; measured osmolality is required to calculate an osmolal gap.');
  }
  if(key==='ldl'){
   if(!positiveFields(['total','hdl','triglycerides']))return calcFail('Enter positive total cholesterol, HDL and triglycerides.');
