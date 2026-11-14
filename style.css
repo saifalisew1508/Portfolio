@@ -663,3 +663,46 @@ body{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
 @keyframes globalMoreIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:390px){.global-glass-nav{width:calc(100vw - 18px);gap:3px;padding:7px}.global-nav-item{height:55px;font-size:8px;border-radius:19px}.global-nav-item svg{width:17px;height:17px}}
 @media(prefers-reduced-motion:reduce){.global-nav-item,.global-nav-item:before{transition:none}.global-nav-more.open .global-more-menu{animation:none}}
+
+/* Longer edge-to-edge Liquid Glass capsule navigation */
+.global-glass-nav{
+  width:calc(100vw - 16px);
+  max-width:720px;
+  min-height:98px;
+  padding:9px;
+  gap:4px;
+  border-radius:999px;
+  bottom:calc(10px + env(safe-area-inset-bottom));
+}
+.global-nav-item{
+  height:78px;
+  padding:9px 3px;
+  gap:7px;
+  border-radius:999px;
+  font-size:11px;
+}
+.global-nav-item:before{
+  border-radius:999px;
+  background:linear-gradient(135deg,rgba(125,91,255,.68),rgba(54,139,224,.42));
+  border:1px solid rgba(197,185,255,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 22px rgba(130,105,255,.3);
+}
+.global-nav-item svg{width:21px;height:21px}
+.global-nav-more{height:100%}
+.global-more-toggle{height:78px}
+body{padding-bottom:calc(124px + env(safe-area-inset-bottom))}
+@media(max-width:390px){
+  .global-glass-nav{
+    width:calc(100vw - 12px);
+    min-height:90px;
+    padding:7px;
+    gap:2px;
+  }
+  .global-nav-item,.global-more-toggle{
+    height:74px;
+    font-size:9px;
+    padding:8px 1px;
+    gap:6px;
+  }
+  .global-nav-item svg{width:19px;height:19px}
+}
