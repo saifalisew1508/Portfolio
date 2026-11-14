@@ -644,3 +644,22 @@ body,.site-header,.contact-card,.info-card,.project-card,.resume-panel,.mobile-n
 .mobile-nav .more-menu a{flex:none;text-align:left;padding:11px 14px;font-size:12px}
 @media(max-width:760px){.desktop-nav{display:none}.mobile-nav .nav-more{flex:1}.mobile-nav>a{flex:1;min-width:0}}
 @media(prefers-reduced-motion:reduce){.nav-more.open .more-menu{animation:none}}
+
+
+/* Shared, persistent Liquid Glass navigation used on every site route. */
+body{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+.global-glass-nav{position:fixed;z-index:100;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(540px,calc(100vw - 28px));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;align-items:stretch;padding:8px;border:1px solid rgba(190,203,255,.22);border-radius:30px;background:linear-gradient(145deg,rgba(17,24,44,.88),rgba(8,13,27,.82));box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 15px 45px rgba(0,0,0,.48),0 0 25px rgba(111,100,229,.13);backdrop-filter:blur(26px) saturate(155%);-webkit-backdrop-filter:blur(26px) saturate(155%)}
+.global-nav-item{position:relative;isolation:isolate;display:flex;width:100%;min-width:0;height:58px;padding:7px 2px 6px;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:22px;background:transparent;color:#9daac7;text-decoration:none;font:700 9px/1.1 var(--sans,Manrope,sans-serif);white-space:nowrap;cursor:pointer;transition:color .22s,transform .22s}
+.global-nav-item:before{content:"";position:absolute;z-index:-1;inset:0;border-radius:inherit;background:linear-gradient(140deg,rgba(124,101,235,.5),rgba(54,127,210,.4));border:1px solid rgba(183,169,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 0 17px rgba(129,112,255,.2);opacity:0;transform:scale(.94);transition:opacity .22s,transform .22s}
+.global-nav-item.active{color:#fff}.global-nav-item.active:before{opacity:1;transform:scale(1)}
+.global-nav-item svg{display:block;width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.global-nav-item span{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.global-nav-item:focus-visible{outline:2px solid #a99aff;outline-offset:2px}.global-nav-item:active{transform:scale(.96)}
+.global-nav-more{position:relative;min-width:0;width:100%}.global-more-toggle{appearance:none}
+.global-more-menu{display:none;position:absolute;right:0;bottom:calc(100% + 13px);width:174px;padding:8px;border:1px solid rgba(184,197,255,.25);border-radius:17px;background:rgba(11,17,34,.96);box-shadow:0 12px 35px rgba(0,0,0,.58);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.global-nav-more.open .global-more-menu{display:grid;animation:globalMoreIn .18s ease both}
+.global-more-menu a{display:block;padding:11px 12px;border-radius:10px;color:#cbd3e4;font-size:12px;line-height:1.3;text-decoration:none;white-space:nowrap}
+.global-more-menu a:hover,.global-more-menu a:focus-visible{background:rgba(80,101,157,.35);color:white}
+@keyframes globalMoreIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:390px){.global-glass-nav{width:calc(100vw - 18px);gap:3px;padding:7px}.global-nav-item{height:55px;font-size:8px;border-radius:19px}.global-nav-item svg{width:17px;height:17px}}
+@media(prefers-reduced-motion:reduce){.global-nav-item,.global-nav-item:before{transition:none}.global-nav-more.open .global-more-menu{animation:none}}
