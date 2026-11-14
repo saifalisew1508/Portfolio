@@ -225,7 +225,7 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <div class="unit-picker-overlay hidden" id="unit-picker-overlay">
 <div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="unit-picker-title">
 <div class="unit-picker-header"><button type="button" id="unit-picker-cancel">Cancel</button><h3 id="unit-picker-title">Select unit</h3><span></span></div>
-<div class="unit-picker-search-wrap"><input id="unit-picker-search" type="search" placeholder="Search units…" aria-label="Search units"></div>
+<div class="unit-picker-search-wrap" id="unit-picker-search-wrap"><input id="unit-picker-search" type="search" placeholder="Search units…" aria-label="Search units"></div>
 <div class="unit-picker-list" id="unit-picker-list"></div>
 </div>
 </div>
@@ -247,7 +247,7 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <div class="field hidden" id="lab-mw-manual-wrap"><label for="lab-mw">MOLECULAR WEIGHT (g/mol)</label><input class="glass-input" id="lab-mw" type="number" min="0" step="any" placeholder="Enter g/mol"></div>
 </div>
 <p class="result-meta" id="lab-analyte-note">Choose an analyte for its preset molecular weight. Manual molecular weight is also supported.</p>
-<div class="tool-actions"><button class="glass-button primary" id="lab-convert" type="button">Calculate conversion ↗</button></div>
+<div class="tool-actions"><button class="glass-button primary" id="lab-convert" type="button">Calculate conversion ↗</button><button class="glass-button" id="lab-swap" type="button">Swap units</button></div>
 <div class="convert-result"><div class="result-label">LAB CONVERSION RESULT</div><div class="result-value" id="lab-result">—</div><div class="result-meta" id="lab-formula">No result calculated yet.</div></div>
 <p class="status-line" id="lab-status" aria-live="polite">Select mass or molar concentration to begin.</p>
 <div class="unit-picker-overlay hidden" id="lab-picker-overlay">
