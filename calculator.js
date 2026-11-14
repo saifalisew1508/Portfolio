@@ -297,7 +297,7 @@ var labMassGroups=[
 var labMolarGroups=[
  {group:'Molar concentration units',units:[['Mole/liter (mol/L)','mol/L',1],['Millimole/liter (mmol/L)','mmol/L',1e-3],['Micromole/liter (µmol/L)','µmol/L',1e-6],['Nanomole/liter (nmol/L)','nmol/L',1e-9],['Picomole/liter (pmol/L)','pmol/L',1e-12]]}
 ];
-function allLabUnits(){return labMassGroups.concat(labMolarGroups).reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}})},[])}
+function allLabUnits(){return labMassGroups.concat(labMolarGroups).reduce(function(all,group){return all.concat(group.units.map(function(u){return {label:u[0],value:u[1],factor:u[2],group:group.group}}))},[])}
 function labUnitInfo(value){return allLabUnits().find(function(u){return u.value===value})}
 function setLabTrigger(id,value){var info=labUnitInfo(value);$(id).innerHTML=(info?info.label:'Select unit')+'<span>⌄</span>'}
 function updateLabButtons(){var pair=labSelections[labKind];setLabTrigger('lab-from-trigger',pair[0]);setLabTrigger('lab-to-trigger',pair[1])}
