@@ -1,6 +1,6 @@
 {
-  "version": 4,
-  "provider": "YouTube Music",
+  "version": 5,
+  "provider": "YouTube",
   "tracks": [
     {
       "url": "https://www.youtube.com/watch?v=We9h64kQcE4"
@@ -25,6 +25,54 @@
     },
     {
       "url": "https://www.youtube.com/watch?v=ZzDI5IjFh04"
+    },
+    {
+      "title": "MURDER IN MY MIND — Kordhell",
+      "url": "https://www.youtube.com/watch?v=w-sQRS-Lc9k"
+    },
+    {
+      "title": "METAMORPHOSIS — INTERWORLD",
+      "url": "https://www.youtube.com/watch?v=317RHaFF7Xk"
+    },
+    {
+      "title": "Live Another Day — Kordhell",
+      "url": "https://www.youtube.com/watch?v=7pmUQJ5KAlU"
+    },
+    {
+      "title": "MIDNIGHT — PLAYAMANE x NATEKI",
+      "url": "https://www.youtube.com/watch?v=mVB9UeHFGl0"
+    },
+    {
+      "title": "vendetta! — Sadfriendd (prod. MUPP)",
+      "url": "https://www.youtube.com/watch?v=Bmc2IKa6XsM"
+    },
+    {
+      "title": "SHADOW — ONIMXRU x SMITHMANE",
+      "url": "https://www.youtube.com/watch?v=jqbSVBS1x0w"
+    },
+    {
+      "title": "SCOPIN — Kordhell",
+      "url": "https://www.youtube.com/watch?v=VXaq77GiyEo"
+    },
+    {
+      "title": "FATALITY — Kordhell",
+      "url": "https://www.youtube.com/watch?v=v4d5uzrxFgs"
+    },
+    {
+      "title": "LAND OF FIRE — Kordhell",
+      "url": "https://www.youtube.com/watch?v=yahUpxNPK98"
+    },
+    {
+      "title": "Disaster — KSLV Noh",
+      "url": "https://www.youtube.com/watch?v=Pnq1_3BXIqA"
+    },
+    {
+      "title": "Why Not (Slowed + Reverb) — Ghostface Playa",
+      "url": "https://www.youtube.com/watch?v=46Fqf87JPgw"
+    },
+    {
+      "title": "Close Eyes (Slowed + Reverb) — DVRST",
+      "url": "https://www.youtube.com/watch?v=FLfb1Niu5iU"
     }
   ]
 }
