@@ -627,3 +627,20 @@ body,.site-header,.contact-card,.info-card,.project-card,.resume-panel,.mobile-n
  .section-content>.github-note,.section-content>.contact-layout,
  .section-content>.music-section{transition-duration:.62s}
 }
+
+
+/* Compact More dropdown shared by desktop and mobile navigation. */
+.nav-more{position:relative;display:flex;align-items:center;color:#a6adbd}
+.more-toggle{display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;color:inherit;font:inherit;font-size:13px;cursor:pointer;padding:10px 2px}
+.more-toggle:hover,.nav-more.open .more-toggle{color:#fff}
+.more-menu{display:none;position:absolute;right:0;top:calc(100% + 13px);min-width:170px;padding:8px;background:#111a2b;border:1px solid var(--line);border-radius:13px;box-shadow:0 15px 45px #0008;z-index:40}
+.nav-more.open .more-menu{display:grid;animation:moreIn .18s ease both}
+.more-menu a{padding:11px 12px;border-radius:8px;color:#cbd3e4;font-size:12px;white-space:nowrap}
+.more-menu a:hover{background:#263654;color:white}
+@keyframes moreIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.mobile-nav .nav-more{display:flex;align-items:center;justify-content:center;flex:1;min-width:0}
+.mobile-nav .more-toggle{font-size:10px;padding:12px 5px;white-space:nowrap}
+.mobile-nav .more-menu{top:auto;bottom:calc(100% + 12px);right:0}
+.mobile-nav .more-menu a{flex:none;text-align:left;padding:11px 14px;font-size:12px}
+@media(max-width:760px){.desktop-nav{display:none}.mobile-nav .nav-more{flex:1}.mobile-nav>a{flex:1;min-width:0}}
+@media(prefers-reduced-motion:reduce){.nav-more.open .more-menu{animation:none}}
