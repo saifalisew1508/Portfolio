@@ -28,7 +28,7 @@ energy:{J:1,kJ:1000,cal:4.184,kcal:4184,Wh:3600,kWh:3600000,eV:1.602176634e-19},
 time:{s:1,min:60,h:3600,day:86400,week:604800},
 data:{bit:1,B:8,KB:8000,MB:8e6,GB:8e9,KiB:8192,MiB:8388608,GiB:8589934592},
 temperature:{C:'temp',F:'temp',K:'temp'},
-labConcentration:{'g/L':1,'mg/dL':.01,'mg/L':.001,'µg/dL':.00001,'ng/dL':1e-8,'µg/mL':.001,'ng/mL':1e-6,'pg/mL':1e-9,'mol/L':1,'mmol/L':1e-3,'µmol/L':1e-6,'nmol/L':1e-9,'pmol/L':1e-12},
+labConcentration:{'g/L':1,'g/dL':10,'mg/dL':.01,'mg/L':.001,'µg/dL':.00001,'µg/L':1e-6,'ng/dL':1e-8,'µg/mL':.001,'ng/mL':1e-6,'pg/mL':1e-9,'mol/L':1,'mmol/L':1e-3,'µmol/L':1e-6,'nmol/L':1e-9,'pmol/L':1e-12},
 enzyme:{'U/L':1,'U/dL':10,'mU/L':.001,'ukat/L':60}
 };
 var categories={length:'Length',area:'Area',volume:'Volume',mass:'Mass',temperature:'Temperature',speed:'Speed',power:'Power',pressure:'Pressure',energy:'Energy',time:'Time',data:'Digital storage',labConcentration:'Lab · concentration',enzyme:'Lab · enzyme activity'};
