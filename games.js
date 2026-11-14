@@ -24,13 +24,13 @@ function neighbors(r,c){var d=[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]];if(r%2===
 function connected(r,c,color,seen){var k=r+','+c;if(seen[k]||!grid[r]||grid[r][c]!==color)return[];seen[k]=1;var out=[[r,c]];neighbors(r,c).forEach(function(n){out=out.concat(connected(n[0],n[1],color,seen))});return out}
 function dropFloating(){var seen={},stack=[];for(var c=0;c<grid[0].length;c++)if(grid[0][c]>=0)stack.push([0,c]);while(stack.length){var a=stack.pop(),k=a.join(',');if(seen[k]||!grid[a[0]]||grid[a[0]][a[1]]<0)continue;seen[k]=1;neighbors(a[0],a[1]).forEach(function(n){if(grid[n[0]]&&grid[n[0]][n[1]]>=0)stack.push(n)})}var dropped=0;grid.forEach(function(row,r){row.forEach(function(v,c){if(v>=0&&!seen[r+','+c]){grid[r][c]=-1;dropped++}})});score+=dropped*20}
 function shoot(x,y){if(left<=0||$('bubble-status').textContent.indexOf('won')>=0)return;var dx=x-shooter.x,dy=y-shooter.y;if(dy>-25)return;var hit=null;for(var s=1;s<=50;s++){var px=shooter.x+dx*s/50,py=shooter.y+dy*s/50;if(px<R||px>720-R||py<R){hit={x:px,y:py};break}for(var r=0;r<grid.length&&!hit;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);if(Math.hypot(px-p.x,py-p.y)<R*1.85){hit={x:px,y:py};break}}}if(!hit)hit={x:Math.max(R,Math.min(720-R,x)),y:Math.max(R,Math.min(680,y))};var best=null,dist=1e9;for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}if(!best)return;grid[best[0]][best[1]]=current;var group=connected(best[0],best[1],current,{});if(group.length>=3){group.forEach(function(a){grid[a[0]][a[1]]=-1});score+=group.length*10;dropFloating();$('bubble-status').textContent='Nice shot! '+group.length+' bubbles popped.'}else $('bubble-status').textContent='Keep matching colors.';left--;shot++;if(grid.every(function(row){return row.every(function(v){return v<0})}))$('bubble-status').textContent='You won! Board cleared.';else if(left<=0)$('bubble-status').textContent='Out of bubbles. Start a new game.';else if(shot%5===0){var row=[];for(var z=0;z<16;z++)row.push(randColor());grid.unshift(row);grid.pop()}current=next;next=randColor();drawBubble()}
-var aiming=false,activePointer=null;
-function updateAim(e){var b=canvas.getBoundingClientRect();aim={x:(e.clientX-b.left)*720/b.width,y:(e.clientY-b.top)*760/b.height};if(aim.y>=shooter.y-20)aim.y=shooter.y-21;drawBubble()}
+var aiming=false,activePointer=null,aimOrigin=null,aimStartedAt=0,aimMoved=false;
+function updateAim(e){var b=canvas.getBoundingClientRect();aim={x:(e.clientX-b.left)*720/b.width,y:(e.clientY-b.top)*760/b.height};if(aimOrigin&&Math.hypot(e.clientX-aimOrigin.x,e.clientY-aimOrigin.y)>7)aimMoved=true;if(aim.y>=shooter.y-20)aim.y=shooter.y-21;drawBubble()}
 canvas.addEventListener('pointermove',function(e){if(aiming&&activePointer!==e.pointerId)return;updateAim(e)});
-canvas.addEventListener('pointerdown',function(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();aiming=true;activePointer=e.pointerId;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);updateAim(e);$('bubble-status').textContent='Aim your shot, then release to fire.'});
-canvas.addEventListener('pointerup',function(e){if(!aiming||activePointer!==e.pointerId)return;updateAim(e);aiming=false;activePointer=null;shoot(aim.x,aim.y)});
-canvas.addEventListener('pointercancel',function(e){if(activePointer===e.pointerId){aiming=false;activePointer=null;drawBubble()}});
-$('bubble-new').onclick=function(){aiming=false;activePointer=null;resetBubble()};resetBubble();
+canvas.addEventListener('pointerdown',function(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();aiming=true;activePointer=e.pointerId;aimOrigin={x:e.clientX,y:e.clientY};aimStartedAt=performance.now();aimMoved=false;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);updateAim(e);$('bubble-status').textContent='Hold and drag to aim, then release to shoot.'});
+canvas.addEventListener('pointerup',function(e){if(!aiming||activePointer!==e.pointerId)return;updateAim(e);var deliberate=e.pointerType==='mouse'||aimMoved||(performance.now()-aimStartedAt)>=220;aiming=false;activePointer=null;aimOrigin=null;if(deliberate)shoot(aim.x,aim.y);else{$('bubble-status').textContent='Hold a little longer or drag to aim, then release.';drawBubble()}});
+canvas.addEventListener('pointercancel',function(e){if(activePointer===e.pointerId){aiming=false;activePointer=null;aimOrigin=null;drawBubble()}});
+$('bubble-new').onclick=function(){aiming=false;activePointer=null;aimOrigin=null;resetBubble()};resetBubble();
 /* SUDOKU */
 var puzzle=[],solution=[],board=[],selected=-1,mistakes=0;
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -124,6 +124,16 @@ function setChessMode(mode){
  renderChess();
 }
 document.querySelectorAll('[data-chess-mode]').forEach(function(button){button.addEventListener('click',function(){setChessMode(button.dataset.chessMode)})});
+var friendNameInput=$('chess-friend-username'),friendChallengeButton=$('chess-challenge-friend');
+if(friendNameInput&&friendChallengeButton){
+ friendChallengeButton.addEventListener('click',function(){
+  var username=friendNameInput.value.trim();
+  if(!/^[A-Za-z0-9_-]{3,25}$/.test(username)){chessFeedback('Enter a valid Chess.com username (3–25 letters, numbers, _ or -).');friendNameInput.focus();return}
+  window.open('https://www.chess.com/play/'+encodeURIComponent(username),'_blank','noopener,noreferrer');
+  chessFeedback('Opening the Chess.com challenge page for '+username+'.');
+ });
+ friendNameInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();friendChallengeButton.click()}});
+}
 $('chess-undo').onclick=function(){
  if(aiThinking)return;
  chess.undo();
