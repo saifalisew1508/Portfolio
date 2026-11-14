@@ -26,7 +26,7 @@ let queued=false;const updateNav=()=>{const marker=scrollY+Math.min(innerHeight*
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateNav);}},{passive:true});addEventListener('resize',updateNav,{passive:true});addEventListener('load',updateNav,{once:true});updateNav();
 
 // Accessible More dropdown; closes on outside click, Escape, or navigation.
-$$('.more-toggle').forEach(button=>button.addEventListener('click',()=>{const parent=button.closest('.nav-more'),open=!parent.classList.contains('open');$$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});if(open){parent.classList.add('open');button.setAttribute('aria-expanded','true');}}));
+$$('.more-toggle').forEach(button=>button.addEventListener('click',()=>{const parent=button.closest('.nav-more'),open=!parent.classList.contains('open');$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});if(open){parent.classList.add('open');button.setAttribute('aria-expanded','true');}}));
 document.addEventListener('click',event=>{if(!event.target.closest('.nav-more'))$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 
