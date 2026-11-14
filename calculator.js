@@ -7,10 +7,6 @@ function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated')
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
 function activatePanel(id){panels.forEach(function(p){p.classList.toggle('active',p.id===id)});cards.forEach(function(c){var active=c.dataset.panel===id;c.classList.toggle('active',active);c.setAttribute('aria-pressed',String(active))});if(id==='math')$('calc-display').setAttribute('aria-label','Calculator display');}
 cards.forEach(function(c){c.addEventListener('click',function(){activatePanel(c.dataset.panel)})});
-var moreToggle=$('bottom-more-toggle'),moreWrap=document.querySelector('.bottom-more');
-moreToggle.addEventListener('click',function(){var open=!moreWrap.classList.contains('open');moreWrap.classList.toggle('open',open);moreToggle.setAttribute('aria-expanded',String(open))});
-document.addEventListener('click',function(e){if(!e.target.closest('.bottom-more')){moreWrap.classList.remove('open');moreToggle.setAttribute('aria-expanded','false')}});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){moreWrap.classList.remove('open');moreToggle.setAttribute('aria-expanded','false')}});
 /* Math calculator. A restricted parser is used instead of eval(). */
 var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression');
 var keys=[['AC','clear'],['⌫','back'],['(', '('],[')',')'],['7','7'],['8','8'],['9','9'],['÷','/'],['4','4'],['5','5'],['6','6'],['×','*'],['1','1'],['2','2'],['3','3'],['−','-'],['%','%'],['0','0'],['.','.'],['+','+'],['+/-','sign'],['=','equal']];
