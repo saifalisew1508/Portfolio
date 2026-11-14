@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div><canvas id="fog-canvas" aria-hidden="true"></canvas>
-<header class="site-header"><a class="wordmark" href="index.html#home">saif<span>.</span></a><nav class="desktop-nav" aria-label="Main navigation"><a href="index.html#home">Home</a><a href="index.html#about">About</a><a href="index.html#resume">Resume</a><a href="index.html#contact">Contact</a><div class="nav-more"><button class="more-toggle" aria-expanded="false">More⌄</button><div class="more-menu"><a href="games.html">🎮 Games</a><a href="calculator.html">🧮 Calculator</a><a href="index.html#music">🎵 Music</a></div></div></nav><a class="header-cta" href="index.html#contact">Let's talk <span>↗</span></a></header>
+<header class="site-header"><a class="wordmark" href="index.html#home">saif<span>.</span></a><a class="header-cta" href="index.html#contact">Let's talk <span>↗</span></a></header>
 <main class="arcade-wrap">
 <div class="arcade-head"><div><span class="arcade-kicker">SAIF'S DIGITAL ARCADE</span><h1>Play. Think. Repeat<span class="accent-dot">.</span></h1><p>Three games, one place. Pop colorful bubbles, solve a fresh Sudoku or challenge yourself at chess. Works with mouse and touch.</p></div><div class="more-links"><a href="calculator.html">Open all-in-one calculator ↗</a></div></div>
 <div class="game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab active" data-game="bubble" role="tab" aria-selected="true">🫧 Bubble Shooter</button><button class="game-tab" data-game="sudoku" role="tab" aria-selected="false">▦ Sudoku</button><button class="game-tab" data-game="chess" role="tab" aria-selected="false">♟ Chess</button></div>
@@ -28,10 +28,9 @@
 <section class="game-panel" id="chess-panel"><div class="panel-head"><div><h2>Chess</h2><p>Full legal move rules, castling, en passant, promotion and checkmate detection.</p></div><div class="game-actions"><button class="arcade-btn" id="chess-undo">Undo</button><button class="arcade-btn" id="chess-reset">Restart</button></div></div>
 <div class="chess-layout"><div class="chess-board" id="chess-board" aria-label="Chess board"></div><aside class="chess-side"><p class="stat-label">GAME STATUS</p><p class="stat-value" id="chess-status" style="font-size:18px">White to move</p><p class="stat-label">MOVE HISTORY</p><div class="move-list" id="chess-moves">No moves yet.</div><p class="hint">Tap a piece to see legal destinations, then tap a highlighted square. Pawn promotion defaults to a queen.</p><p class="game-status" id="chess-feedback">White begins.</p></aside></div></section>
 </main>
-<nav class="mobile-nav" aria-label="Mobile navigation"><a href="index.html#home">Home</a><a href="index.html#about">About</a><a href="index.html#resume">Resume</a><a href="index.html#contact">Contact</a><div class="nav-more"><button class="more-toggle" aria-expanded="false">More⌄</button><div class="more-menu"><a href="games.html">🎮 Games</a><a href="calculator.html">🧮 Calculator</a><a href="index.html#music">🎵 Music</a></div></div></nav>
+
 <script>
-document.querySelectorAll('.more-toggle').forEach(function(b){b.addEventListener('click',function(){var p=b.closest('.nav-more');var open=!p.classList.contains('open');document.querySelectorAll('.nav-more').forEach(function(n){n.classList.remove('open');n.querySelector('.more-toggle').setAttribute('aria-expanded','false')});if(open){p.classList.add('open');b.setAttribute('aria-expanded','true')}})});
-document.addEventListener('click',function(e){if(!e.target.closest('.nav-more'))document.querySelectorAll('.nav-more').forEach(function(n){n.classList.remove('open');n.querySelector('.more-toggle').setAttribute('aria-expanded','false')})});
 document.querySelectorAll('.game-tab').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.game-tab').forEach(function(t){t.classList.toggle('active',t===b);t.setAttribute('aria-selected',String(t===b))});document.querySelectorAll('.game-panel').forEach(function(p){p.classList.toggle('active',p.id===b.dataset.game+'-panel')})})});
 </script>
+<script src="navigation.js" defer></script>
 </body></html>
