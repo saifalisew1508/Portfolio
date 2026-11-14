@@ -3,17 +3,19 @@
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
-const saveData=!!(navigator.connection&&navigator.connection.saveData);
 const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear());
 
-if(!reduced&&!coarse&&window.VanillaTilt){try{VanillaTilt.init($$('.info-card,.resume-panel,.project-card,.contact-card'),{max:5,speed:550,scale:1.01,gyroscope:false});}catch(e){console.warn('Tilt unavailable',e);}}
+if(!reduced&&window.VanillaTilt){try{VanillaTilt.init($$('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
+// Animated WebGL fog on desktop and mobile, with a lower simulation cost on phones.
 const fog=$('#fog-canvas');
-const startFog=()=>{if(!fog||reduced||coarse||saveData||typeof window.WebGLFluid!=='function')return;try{
- window.WebGLFluid(fog,{TRIGGER:'hover',IMMEDIATE:false,AUTO:true,INTERVAL:4200,SIM_RESOLUTION:96,DYE_RESOLUTION:512,DENSITY_DISSIPATION:.975,VELOCITY_DISSIPATION:.5,PRESSURE:.8,PRESSURE_ITERATIONS:16,CURL:24,SPLAT_RADIUS:.22,SPLAT_FORCE:3600,SPLAT_COUNT:1,SPLAT_COLOR:{r:.22,g:.31,b:.82},COLORFUL:false,SHADING:true,COLOR_UPDATE_SPEED:0,TRANSPARENT:true,BACK_COLOR:{r:0,g:0,b:0},BLOOM:false,SUNRAYS:false});
- let last={x:-1,y:-1};document.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;const{x,y}= {x:e.clientX,y:e.clientY};if(Math.abs(x-last.x)+Math.abs(y-last.y)<2)return;last={x,y};fog.dispatchEvent(new MouseEvent('mousemove',{clientX:x,clientY:y,bubbles:true,view:window}));},{passive:true});
+const startFog=()=>{if(!fog||reduced||typeof window.WebGLFluid!=='function')return;try{
+ const mobile=matchMedia('(max-width:760px)').matches||coarse;
+ window.WebGLFluid(fog,{TRIGGER:'hover',IMMEDIATE:true,AUTO:true,INTERVAL:mobile?4200:3200,SIM_RESOLUTION:mobile?64:128,DYE_RESOLUTION:mobile?384:768,DENSITY_DISSIPATION:.97,VELOCITY_DISSIPATION:.42,PRESSURE:.82,PRESSURE_ITERATIONS:18,CURL:32,SPLAT_RADIUS:.28,SPLAT_FORCE:mobile?3600:5200,SPLAT_COUNT:mobile?1:2,SPLAT_COLOR:{r:.22,g:.31,b:.82},COLORFUL:false,SHADING:true,COLOR_UPDATE_SPEED:0,TRANSPARENT:true,BACK_COLOR:{r:0,g:0,b:0},BLOOM:!mobile,BLOOM_ITERATIONS:6,BLOOM_RESOLUTION:mobile?128:256,BLOOM_INTENSITY:.48,BLOOM_THRESHOLD:.18,BLOOM_SOFT_KNEE:.7,SUNRAYS:false});
+ let inside=false,lastX=-1,lastY=-1;const forwardPointer=e=>{const x=e.clientX,y=e.clientY;if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||y<0||x>innerWidth||y>innerHeight)return;if(!inside){inside=true;fog.dispatchEvent(new MouseEvent('mouseenter',{clientX:x,clientY:y,bubbles:false}));}if(Math.abs(x-lastX)+Math.abs(y-lastY)<1.5)return;lastX=x;lastY=y;fog.dispatchEvent(new MouseEvent('mousemove',{clientX:x,clientY:y,bubbles:true,view:window}));};
+ document.addEventListener('pointermove',forwardPointer,{passive:true});addEventListener('blur',()=>{inside=false;lastX=lastY=-1;});document.documentElement.classList.add('fluid-fog-ready');
  }catch(e){console.warn('WebGL background unavailable',e);}};
-if(!reduced&&!coarse&&!saveData){if(window.WebGLFluid)startFog();else addEventListener('load',startFog,{once:true});}
+if(!reduced){if(window.WebGLFluid)startFog();else addEventListener('load',startFog,{once:true});}
 
 // Navigation remains usable as ordinary anchor links if this script fails.
 const links=$$('.mobile-nav a,.desktop-nav a'),bars=$$('.mobile-nav,.desktop-nav');
@@ -23,9 +25,10 @@ links.forEach(link=>link.addEventListener('click',e=>{const href=link.getAttribu
 let queued=false;const updateNav=()=>{const marker=scrollY+Math.min(innerHeight*.36,260);let current=sections[0];sections.forEach(s=>{if(s.offsetTop<=marker)current=s;});links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current.id));indicators();queued=false;};
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateNav);}},{passive:true});addEventListener('resize',updateNav,{passive:true});addEventListener('load',updateNav,{once:true});updateNav();
 
-// Local clock: use the device timezone instead of making an unnecessary IP lookup.
-const time=$('#visitor-time'),date=$('#visitor-date'),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC',locale=navigator.language||'en-IN';
-const renderClock=()=>{const now=new Date(),hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:zone,hour:'2-digit',hourCycle:'h23'}).format(now));if(time)time.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now);if(date)date.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,weekday:'short',day:'2-digit',month:'short',year:'numeric'}).format(now);document.body.dataset.theme=hour>=7&&hour<19?'day':'night';};
+// Visitor-local clock and automatic theme. The browser's IANA timezone follows the visitor's device settings; no IP lookup or fixed country timezone.
+const time=$('#visitor-time'),date=$('#visitor-date'),locale=navigator.language||'en-US';
+let visitorZone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
+const renderClock=()=>{const now=new Date();visitorZone=Intl.DateTimeFormat().resolvedOptions().timeZone||visitorZone||'UTC';const hour=Number(new Intl.DateTimeFormat('en-GB',{timeZone:visitorZone,hour:'2-digit',hourCycle:'h23'}).format(now));if(time)time.textContent=new Intl.DateTimeFormat(locale,{timeZone:visitorZone,hour:'2-digit',minute:'2-digit',second:'2-digit'}).format(now);if(date)date.textContent=new Intl.DateTimeFormat(locale,{timeZone:visitorZone,weekday:'short',day:'2-digit',month:'short',year:'numeric',timeZoneName:'short'}).format(now);document.body.dataset.theme=hour>=7&&hour<19?'day':'night';};
 renderClock();setInterval(renderClock,1000);
 
 // Contact form: timeout and JSON error handling prevent a stuck submit state.
