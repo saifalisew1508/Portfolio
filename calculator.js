@@ -1,0 +1,42 @@
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+/* Scientific calculator: restricted expression parser, no eval(). */
+var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression');
+var keys=[['AC','clear'],['⌫','back'],['(','('],[')',' )'],['sin','sin('],['cos','cos('],['tan','tan('],['÷','/'],['ln','ln('],['log','log('],['√','sqrt('],['×','*'],['π','pi'],['e','e'],['x²','^2'],['−','-'],['7','7'],['8','8'],['9','9'],['+','+'],['4','4'],['5','5'],['6','6'],['%','%'],['1','1'],['2','2'],['3','3'],['=','equal'],['0','0'],['.','.'],['Ans','ans'],['+/-','sign']];
+function render(){display.textContent=expr||'0'}
+function tokenize(s){var out=[],re=/\s*([0-9]*\.?[0-9]+|pi|ans|sqrt|sin|cos|tan|ln|log|e|[()+\-*/%^])/gy,i=0;while(i<s.length){re.lastIndex=i;var m=re.exec(s);if(!m)throw Error('Invalid expression');out.push(m[1]);i=re.lastIndex}return out}
+function evaluate(s){var t=tokenize(s),i=0;function primary(){var x=t[i++];if(x===undefined)throw Error('Incomplete');if(x==='+'||x==='-'){var v=primary();return x==='-'?-v:v}if(x==='('){var v=add();if(t[i++]!==')')throw Error('Missing )');return v}if(x==='pi')return Math.PI;if(x==='e')return Math.E;if(x==='ans')return Number(window.lastAnswer||0);if(['sin','cos','tan','ln','log','sqrt'].includes(x)){var a=primary();if(x==='sin')return Math.sin(a*Math.PI/180);if(x==='cos')return Math.cos(a*Math.PI/180);if(x==='tan')return Math.tan(a*Math.PI/180);if(x==='ln')return Math.log(a);if(x==='log')return Math.log10(a);if(a<0)throw Error('Invalid root');return Math.sqrt(a)}var n=Number(x);if(!Number.isFinite(n))throw Error('Invalid number');return n}function power(){var a=primary();if(t[i]==='^'){i++;a=Math.pow(a,power())}return a}function mul(){var a=power();while(['*','/','%'].includes(t[i])){var op=t[i++],b=power();if((op==='/'||op==='%')&&b===0)throw Error('Divide by zero');a=op==='*'?a*b:op==='/'?a/b:a%b}return a}function add(){var a=mul();while(t[i]==='+'||t[i]==='-'){var op=t[i++],b=mul();a=op==='+'?a+b:a-b}return a}var v=add();if(i<t.length)throw Error('Invalid sequence');if(!Number.isFinite(v))throw Error('Math error');return v}
+function act(k){if(k==='clear'){expr='';line.textContent='Ready';fresh=true;render();return}if(k==='back'){expr=expr.slice(0,-1);render();return}if(k==='equal'){try{var ans=evaluate(expr);window.lastAnswer=ans;line.textContent=expr+' =';expr=String(Number(ans.toPrecision(12)));fresh=true;render()}catch(e){line.textContent=e.message}return}if(k==='sign'){if(expr)expr='-('+expr+')';render();return}if(fresh&&/^[0-9.]$/.test(k))expr='';fresh=false;expr+=k;render()}
+keys.forEach(function(k){var b=document.createElement('button');b.textContent=k[0];if(['÷','×','−','+','%','^2','='].includes(k[0]))b.classList.add('op');if(k[1]==='equal')b.classList.add('equal');if(k[0]==='0')b.classList.add('wide');b.onclick=function(){if(k[1]===' )')act(')');else if(k[1]==='^2')act('^2');else act(k[1])};$('calc-keys').appendChild(b)});
+document.addEventListener('keydown',function(e){if(!$('scientific').classList.contains('active'))return;if(/^[0-9.+\-*/()%]$/.test(e.key)){e.preventDefault();act(e.key)}else if(e.key==='Enter'){e.preventDefault();act('equal')}else if(e.key==='Backspace')act('back')});
+/* Currency rates */
+var currencies=['INR','USD','EUR','GBP','AED','AUD','CAD','CHF','CNY','JPY','SGD','NZD','SAR','PKR','BDT','NPR','LKR','ZAR','BRL','MXN','HKD','KRW','THB','IDR','MYR','TRY'];
+['currency-from','currency-to'].forEach(function(id){currencies.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;if((id==='currency-from'&&c==='USD')||(id==='currency-to'&&c==='INR'))o.selected=true;$(id).appendChild(o)})});
+$('currency-convert').onclick=async function(){var amount=Number($('currency-amount').value),from=$('currency-from').value,to=$('currency-to').value,status=$('currency-status');if(!Number.isFinite(amount)||amount<0){status.textContent='Enter a valid non-negative amount.';return}status.textContent='Fetching latest available rate…';try{var res=await fetch('https://api.frankfurter.app/latest?from='+encodeURIComponent(from)+'&to='+encodeURIComponent(to));if(!res.ok)throw Error('Rate service unavailable');var data=await res.json(),rate=from===to?1:data.rates[to];if(!Number.isFinite(rate))throw Error('Rate not returned');$('currency-result').textContent=(amount*rate).toLocaleString(undefined,{maximumFractionDigits:6})+' '+to;$('currency-meta').textContent='1 '+from+' = '+rate+' '+to+' · Rate date: '+data.date;status.textContent='Latest available reference rate loaded.'}catch(e){status.textContent='Could not fetch rates. Check your connection and try again.'}};
+$('currency-swap').onclick=function(){var a=$('currency-from').value;$('currency-from').value=$('currency-to').value;$('currency-to').value=a};
+/* SI conversion factors. */
+var defs={
+length:{m:1,km:1000,cm:.01,mm:.001,um:1e-6,nm:1e-9,mi:1609.344,yd:.9144,ft:.3048,in:.0254},
+area:{'m²':1,'km²':1e6,'cm²':1e-4,'mm²':1e-6,ha:10000,acre:4046.8564224,'ft²':.09290304},
+volume:{L:.001,mL:1e-6,uL:1e-9,'m³':1,'cm³':1e-6,'ft³':.0283168466,gal:.0037854118},
+mass:{kg:1,g:.001,mg:1e-6,ug:1e-9,ng:1e-12,lb:.45359237,oz:.0283495231},
+speed:{'m/s':1,'km/h':1/3.6,mph:.44704,knot:.514444},
+power:{W:1,kW:1000,MW:1e6,hp:745.699872},
+pressure:{Pa:1,kPa:1000,MPa:1e6,bar:100000,mbar:100,atm:101325,mmHg:133.322368,torr:133.322368,psi:6894.757},
+energy:{J:1,kJ:1000,cal:4.184,kcal:4184,Wh:3600,kWh:3600000,eV:1.602176634e-19},
+time:{s:1,min:60,h:3600,day:86400,week:604800},
+data:{bit:1,B:8,KB:8000,MB:8e6,GB:8e9,KiB:8192,MiB:8388608,GiB:8589934592},
+temperature:{C:'temp',F:'temp',K:'temp'},
+labMass:{'g/L':1,'mg/dL':10,'mg/L':.001,'ug/dL':.00001,'ng/dL':1e-8,'ug/mL':.001,'ng/mL':1e-6,'pg/mL':1e-9},
+labMolar:{'mol/L':1,'mmol/L':1e-3,'umol/L':1e-6,'nmol/L':1e-9,'pmol/L':1e-12},
+enzyme:{'U/L':1,'U/dL':10,'mU/L':.001,'ukat/L':60}
+};
+var categories={length:'Length',area:'Area',volume:'Volume',mass:'Mass',temperature:'Temperature',speed:'Speed',power:'Power',pressure:'Pressure',energy:'Energy',time:'Time',data:'Digital storage',labMass:'Lab · mass concentration',labMolar:'Lab · molar concentration',enzyme:'Lab · enzyme activity'};
+Object.keys(categories).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=categories[k];$('unit-category').appendChild(o)});
+function populateUnits(){var cat=$('unit-category').value,units=Object.keys(defs[cat]);['unit-from','unit-to'].forEach(function(id){var el=$(id),old=el.value;el.innerHTML='';units.forEach(function(u){var o=document.createElement('option');o.value=u;o.textContent=u;el.appendChild(o)});if(units.includes(old))el.value=old});$('mw-wrap').classList.toggle('hidden',!(cat==='labMass'||cat==='labMolar'))}
+$('unit-category').onchange=populateUnits;populateUnits();
+function convertTemp(v,from,to){var c=from==='C'?v:from==='F'?(v-32)*5/9:v-273.15;return to==='C'?c:to==='F'?c*9/5+32:c+273.15}
+$('unit-convert').onclick=function(){var cat=$('unit-category').value,v=Number($('unit-value').value),from=$('unit-from').value,to=$('unit-to').value,result,formula='';if(!Number.isFinite(v)){$('unit-status').textContent='Enter a valid number.';return}if(cat==='temperature')result=convertTemp(v,from,to);else if(cat==='labMass'||cat==='labMolar'){var mw=Number($('molecular-weight').value);if(!(mw>0)){$('unit-status').textContent='Enter molecular weight in g/mol.';return}if(cat==='labMass'&&defs.labMolar[to]){var gL=v*defs.labMass[from];result=(gL/(mw/1000))/defs.labMolar[to];formula='Mass concentration → molar concentration using MW '+mw+' g/mol.'}else if(cat==='labMolar'&&defs.labMass[to]){var mol=v*defs.labMolar[from];result=(mol*mw/1000)/defs.labMass[to];formula='Molar concentration → mass concentration using MW '+mw+' g/mol.'}else if(cat==='labMass')result=v*defs.labMass[from]/defs.labMass[to];else result=v*defs.labMolar[from]/defs.labMolar[to]}else result=v*defs[cat][from]/defs[cat][to];if(!Number.isFinite(result)){$('unit-status').textContent='Conversion unavailable for these units.';return}$('unit-result').textContent=Number(result.toPrecision(10)).toLocaleString(undefined,{maximumFractionDigits:10})+' '+to;$('unit-formula').textContent=formula||('Converted from '+from+' to '+to+'.');$('unit-status').textContent='Conversion complete.'};
+$('unit-swap').onclick=function(){var a=$('unit-from').value;$('unit-from').value=$('unit-to').value;$('unit-to').value=a;$('unit-convert').click()};
+})();
