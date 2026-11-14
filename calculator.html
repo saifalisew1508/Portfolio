@@ -56,6 +56,42 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 @media(max-width:360px){.nav-card span{font-size:8px}.nav-card{min-height:82px}.currency-pair{grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr)}.currency-swap{width:30px;height:30px}}
 @media(prefers-reduced-motion:reduce){.nav-card.active{animation:none}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){.glass,.bottom-glass-nav{background:rgba(16,23,43,.96)}}
+
+/* Math + Scientific calculator: circular glass bubble keypad */
+.calc-mode-switch{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:-4px auto 20px}
+.calc-mode{border:1px solid rgba(184,195,255,.2);border-radius:999px;padding:11px 18px;background:rgba(255,255,255,.045);color:#9eabc8;font:700 11px var(--sans);cursor:pointer;transition:background .22s,color .22s,border-color .22s,box-shadow .22s}
+.calc-mode.active{color:#fff;border-color:rgba(162,146,255,.68);background:linear-gradient(120deg,rgba(117,83,226,.48),rgba(53,126,209,.38));box-shadow:inset 0 1px 0 #ffffff2b,0 0 20px rgba(111,96,255,.2)}
+.math-layout{max-width:690px;padding:18px 16px 14px;border-radius:28px;background:rgba(6,9,16,.42);border-color:rgba(190,202,235,.12)}
+.calc-display{min-height:82px;padding:18px 12px 5px;font-size:clamp(30px,6vw,48px)}
+.calc-expression{min-height:22px;margin:0 4px 19px}
+.calc-keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.calc-keys.scientific{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.calc-keys button{position:relative;isolation:isolate;aspect-ratio:1/1;min-width:0;min-height:0;width:100%;padding:4px;border-radius:50%;border:1px solid rgba(220,228,255,.19);background:radial-gradient(ellipse at 32% 22%,rgba(255,255,255,.2),transparent 43%),linear-gradient(145deg,rgba(102,108,122,.58),rgba(36,40,49,.92));color:#e8ebf4;font:500 clamp(16px,3.2vw,27px) var(--sans);cursor:pointer;box-shadow:inset 0 2px 3px rgba(255,255,255,.22),inset 0 -4px 9px rgba(0,0,0,.28),0 7px 17px rgba(0,0,0,.34);transition:transform .2s,filter .2s,box-shadow .2s,border-color .2s;animation:calcBubbleFloat 6.5s ease-in-out infinite;animation-delay:calc(var(--bubble-index,0)*-170ms)}
+.calc-keys button:nth-child(5n+2){--bubble-index:2}.calc-keys button:nth-child(5n+3){--bubble-index:4}.calc-keys button:nth-child(5n+4){--bubble-index:1}.calc-keys button:nth-child(5n){--bubble-index:3}
+.calc-keys button:hover{filter:brightness(1.18);border-color:rgba(219,225,255,.38);box-shadow:inset 0 2px 4px #ffffff35,0 10px 23px #0007,0 0 16px #8b83ff22;transform:translateY(-3px) scale(1.025)}
+.calc-keys button:active{transform:scale(.93);filter:brightness(1.25)}
+.calc-keys button.op{color:#f3f4fa;background:radial-gradient(ellipse at 30% 20%,#ffffff30,transparent 44%),linear-gradient(145deg,#555965,#242832)}
+.calc-keys button.equal{color:#fff;border-color:#ffbd83;background:radial-gradient(ellipse at 30% 20%,#ffffff66,transparent 46%),linear-gradient(145deg,#ffbd79,#f28a31);box-shadow:inset 0 2px 4px #ffffff66,0 8px 22px #f28a3144}
+.calc-keys button.utility{color:#b8c0d1;font-size:clamp(13px,2.3vw,22px)}
+.calc-keys button.mode-key{color:#ff9a43}
+.calc-keys button.mode-key.selected{background:radial-gradient(ellipse at 30% 20%,#ffffff36,transparent 45%),linear-gradient(145deg,#7b4d2e,#33251f);border-color:#ff9a43;color:#ffad64}
+.calc-keys.basic button{aspect-ratio:1.18/1;border-radius:24px;font-size:clamp(19px,3.5vw,28px);animation-duration:7s}
+.calc-keys.basic button.equal{background:linear-gradient(120deg,#ffb66f,#f28a31)}
+.calc-hint{text-align:center;color:#77839b;font:9px var(--mono);letter-spacing:.35px;margin-top:16px}
+@keyframes calcBubbleFloat{0%,100%{translate:0 0}50%{translate:0 -2.5px}}
+@media(max-width:580px){
+ .math-layout{padding:13px 10px 12px;border-radius:23px}
+ .calc-mode-switch{gap:6px;margin-bottom:16px}
+ .calc-mode{padding:10px 13px;font-size:10px}
+ .calc-keys,.calc-keys.scientific{gap:8px}
+ .calc-keys button{font-size:clamp(15px,4.1vw,23px);box-shadow:inset 0 2px 3px #ffffff28,inset 0 -4px 8px #0005,0 5px 12px #0006}
+ .calc-keys.basic button{border-radius:20px;font-size:clamp(18px,5vw,25px)}
+ .calc-display{min-height:72px;padding:13px 8px 4px}
+ .calc-expression{margin-bottom:15px}
+}
+@media(max-width:360px){.calc-keys,.calc-keys.scientific{gap:6px}.math-layout{padding:11px 8px}.calc-mode{padding:9px 10px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.calc-keys button{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -101,8 +137,17 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <button class="nav-card glass" data-panel="more" aria-pressed="false"><svg><use href="#i-more"/></svg><span>More</span></button>
 </nav>
 <section class="tool-panel glass glass-card active" id="math">
-<div class="panel-heading"><div><h2>Math calculator</h2><p>Clean everyday arithmetic with brackets, percentages, memory answer and keyboard support.</p></div><span class="panel-tag">01 / MATHEMATICS</span></div>
-<div class="math-layout"><div class="calc-display" id="calc-display" aria-live="polite">0</div><div class="calc-expression" id="calc-expression">Ready</div><div class="calc-keys" id="calc-keys"></div></div>
+<div class="panel-heading"><div><h2>Math calculator</h2><p>Switch between a clean everyday keypad and a full scientific calculator.</p></div><span class="panel-tag">01 / MATHEMATICS</span></div>
+<div class="calc-mode-switch" role="tablist" aria-label="Calculator mode">
+<button class="calc-mode active" type="button" data-calc-mode="basic" role="tab" aria-selected="true">Math Calculator</button>
+<button class="calc-mode" type="button" data-calc-mode="scientific" role="tab" aria-selected="false">Scientific Calculator</button>
+</div>
+<div class="math-layout" id="math-layout">
+<div class="calc-display" id="calc-display" aria-live="polite">0</div>
+<div class="calc-expression" id="calc-expression">Ready</div>
+<div class="calc-keys basic" id="calc-keys" aria-label="Calculator keypad"></div>
+<div class="calc-hint" id="calc-hint">Keyboard supported · Enter to calculate · Esc to clear</div>
+</div>
 </section>
 <section class="tool-panel glass" id="currency">
 <div class="panel-heading"><div><h2>Currency converter</h2><p>Convert using the latest available Frankfurter reference rates. These are published reference rates, not live trading quotes.</p></div><span class="panel-tag">02 / EXCHANGE</span></div>
