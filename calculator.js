@@ -246,7 +246,7 @@ function renderUnitCategories(){
 }
 function openUnitPicker(target){
  unitPickerTarget=target;unitSearchValue='';$('unit-picker-search').value='';$('unit-picker-search-wrap').classList.toggle('hidden',unitCategory==='numberSystem');
- $('unit-picker-title').textContent='Select unit';renderUnitPicker();$('unit-picker-overlay').classList.remove('hidden');document.body.style.overflow='hidden';
+ $('unit-picker-title').textContent='Select unit';renderUnitPicker();$('unit-picker-overlay').classList.remove('hidden');$('unit-picker-overlay').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
  if(unitCategory!=='numberSystem')$('unit-picker-search').focus();
 }
 function renderUnitPicker(){
@@ -262,7 +262,7 @@ function renderUnitPicker(){
  });
  if(!list.children.length){var empty=document.createElement('div');empty.className='unit-picker-group';empty.textContent='No matching units';list.appendChild(empty)}
 }
-function closeUnitPicker(){$('unit-picker-overlay').classList.add('hidden');document.body.style.overflow=''}
+function closeUnitPicker(){$('unit-picker-overlay').classList.add('hidden');$('unit-picker-overlay').setAttribute('aria-hidden','true');document.body.style.overflow='';var trigger=$(unitPickerTarget==='unit-from'?'unit-from-trigger':'unit-to-trigger');if(trigger)trigger.focus({preventScroll:true})}
 renderUnitCategories();unitSelections.length=unitDefaults.length.slice();updateUnitButtons();
 $('unit-from-trigger').addEventListener('click',function(){openUnitPicker('unit-from')});
 $('unit-to-trigger').addEventListener('click',function(){openUnitPicker('unit-to')});
