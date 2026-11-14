@@ -18,7 +18,7 @@ const startFog=()=>{if(!fog||reduced||typeof window.WebGLFluid!=='function')retu
 if(!reduced){if(window.WebGLFluid)startFog();else addEventListener('load',startFog,{once:true});}
 
 // Navigation remains usable as ordinary anchor links if this script fails.
-const links=$('.mobile-nav > a,.desktop-nav > a'),bars=$('.mobile-nav,.desktop-nav');
+const links=$$('.mobile-nav > a,.desktop-nav > a'),bars=$$('.mobile-nav,.desktop-nav');
 const sections=['home','about','resume','projects','music','contact'].map(id=>document.getElementById(id)).filter(Boolean);
 const indicators=()=>bars.forEach(bar=>{const mark=$('.nav-indicator',bar),active=$('a.active',bar);if(!mark||!active)return;const b=bar.getBoundingClientRect(),a=active.getBoundingClientRect();mark.style.width=a.width+'px';mark.style.height=a.height+'px';mark.style.transform='translate3d('+(a.left-b.left)+'px,'+(a.top-b.top)+'px,0)';mark.classList.add('is-ready');});
 links.forEach(link=>link.addEventListener('click',e=>{const href=link.getAttribute('href');if(!href||href[0]!=='#')return;const target=document.getElementById(href.slice(1));if(!target)return;e.preventDefault();target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});history.replaceState(null,'',href);}));
@@ -26,7 +26,7 @@ let queued=false;const updateNav=()=>{const marker=scrollY+Math.min(innerHeight*
 addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateNav);}},{passive:true});addEventListener('resize',updateNav,{passive:true});addEventListener('load',updateNav,{once:true});updateNav();
 
 // Accessible More dropdown; closes on outside click, Escape, or navigation.
-$('.more-toggle').forEach(button=>button.addEventListener('click',()=>{const parent=button.closest('.nav-more'),open=!parent.classList.contains('open');$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});if(open){parent.classList.add('open');button.setAttribute('aria-expanded','true');}}));
+$$('.more-toggle').forEach(button=>button.addEventListener('click',()=>{const parent=button.closest('.nav-more'),open=!parent.classList.contains('open');$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});if(open){parent.classList.add('open');button.setAttribute('aria-expanded','true');}}));
 document.addEventListener('click',event=>{if(!event.target.closest('.nav-more'))$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 
