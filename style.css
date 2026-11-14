@@ -834,3 +834,25 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 @media(min-width:1200px){.section-wrap{width:min(1120px,86vw)}.site-header{padding-left:max(6vw,calc((100vw - 1280px)/2));padding-right:max(6vw,calc((100vw - 1280px)/2))}}
 @media(max-width:760px){.site-header{display:flex;align-items:center;gap:clamp(7px,2vw,14px);padding-left:5vw;padding-right:5vw}.site-header .wordmark{flex:0 0 auto}.site-header .local-clock{display:flex!important;min-width:70px;margin-left:auto;margin-right:clamp(3px,1.5vw,12px);gap:2px}.site-header .local-clock span{font-size:11px}.site-header .local-clock small{font-size:7px}.site-header .header-cta{flex:0 0 auto;white-space:nowrap;padding:9px 11px}.section-wrap{width:min(92vw,680px)}}
 @media(max-width:390px){.site-header{gap:6px}.site-header .wordmark{font-size:23px}.site-header .local-clock{min-width:62px;margin-right:3px}.site-header .local-clock span{font-size:10px}.site-header .local-clock small{font-size:6px;letter-spacing:0}.site-header .header-cta{font-size:9px;padding:8px 8px}.section-wrap{width:92vw}}
+
+
+/* Global liquid-glass press feedback: enlarge only while the pointer is held. */
+:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item){-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item){transition:transform .16s ease,box-shadow .22s ease,border-color .22s ease,background-color .22s ease;}
+@media(hover:hover){:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item):hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.16);}}
+:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item):active{transform:scale(.97) translateY(0);filter:brightness(1.12);}
+:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item):focus:not(:focus-visible){outline:none;}
+:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item):focus-visible{outline:2px solid rgba(169,154,255,.9);outline-offset:3px;}
+/* Selected calculator tabs stay selected without a permanent floating transform. */
+.nav-card.active{animation:none!important;}
+.nav-card:focus:not(:focus-visible){transform:none;}
+.calc-keys button:focus:not(:focus-visible){transform:none;}
+/* Keep track metadata readable inside the glass playlist. */
+.music-current-meta{display:block;margin-top:6px;color:var(--muted);font-size:10px;line-height:1.6;overflow-wrap:anywhere;}
+.interests-line{display:flex;gap:30px;align-items:flex-start;border-top:1px solid var(--line);padding-top:22px;margin-top:24px;}
+.interests-line>span{flex:0 0 auto;font:10px var(--mono);letter-spacing:1.4px;color:var(--blue);}
+.interest-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.interest-tags span{font-size:11px;color:#cbd5eb;background:rgba(113,132,255,.09);border:1px solid rgba(140,157,230,.18);padding:8px 11px;border-radius:999px;}
+body[data-theme="day"] .interest-tags span{color:#33415c;background:rgba(111,139,205,.1);border-color:rgba(75,99,155,.16);}
+@media(max-width:760px){.interests-line{display:block}.interest-tags{margin-top:12px;}}
+@media(prefers-reduced-motion:reduce){:where(button,[role="button"],.button,.submit-button,.header-cta,.round-link,.text-link,.project-card,.socials a,.music-track,.global-nav-item){transition:none!important;}}
