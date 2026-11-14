@@ -809,3 +809,12 @@ body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
 .music-page-section{display:grid;grid-template-columns:190px 1fr;gap:30px;padding:55px 0 110px;border-top:1px solid var(--line)}
 .music-page-section .music-section{margin-top:0}
 @media(max-width:760px){.page-intro{grid-template-columns:1fr;gap:14px;padding:55px 0 35px}.page-title{font-size:clamp(46px,13vw,70px)}.projects-section{padding-top:38px}.music-page-section{grid-template-columns:1fr;gap:18px;padding:38px 0 90px}}
+
+/* Progressive enhancement: sections remain readable even if animation JS fails. */
+.section-label,.section-content>.section-heading-row,.section-content>h2,
+.section-content>.large-copy,.section-content>.about-intro-row,
+.section-content>.about-grid,.section-content>.skills-line,
+.section-content>.resume-heading,.section-content>.resume-columns,
+.section-content>.resume-skill-cards,.section-content>.project-grid,
+.section-content>.github-note,.section-content>.contact-layout,
+.section-content>.music-section{opacity:1;transform:none}
