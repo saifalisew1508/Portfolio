@@ -6,13 +6,12 @@ var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduc
 (function(){
  var time=$('visitor-time'),date=$('visitor-date');
  if(!time)return;
- var locale=navigator.language||'en-US';
  function tick(){
   var now=new Date(),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
-  time.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:true}).format(now);
-  if(date)date.textContent=new Intl.DateTimeFormat(locale,{timeZone:zone,weekday:'short',day:'2-digit',month:'short'}).format(now);
+  time.textContent=new Intl.DateTimeFormat('en-US',{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now).toUpperCase();
+  if(date){var day=new Intl.DateTimeFormat('en-US',{timeZone:zone,weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(now);var offset=Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'longOffset'}).formatToParts(now).find(function(part){return part.type==='timeZoneName'});date.textContent=day+', '+(offset?offset.value:'GMT').replace(/^GMT([+-])0(\\d)/,'GMT$1$2');}
  }
- tick();window.setInterval(tick,30000);
+ tick();window.setInterval(tick,1000);
 })();
 function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
 /* Reusable dashboard navigation */
