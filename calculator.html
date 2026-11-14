@@ -197,6 +197,25 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
  .tool-header .local-clock small{font-size:6px}
  .tool-header .header-cta{font-size:10px;padding:8px 9px;white-space:nowrap}
 }
+
+/* Final responsive sizing for unit categories and the unit picker. */
+.unit-category-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:16px}
+.unit-category-grid .category-pill{height:62px;min-height:62px;padding:6px 5px;gap:4px;border-radius:14px;font-size:9px;line-height:1.15}
+.unit-category-grid .category-pill svg{width:18px;height:18px}
+.unit-picker-overlay{align-items:flex-end;padding:12px}
+.unit-picker-sheet{width:min(560px,calc(100vw - 24px));max-height:min(56dvh,500px);min-height:0;border-radius:22px;border:1px solid rgba(190,203,255,.22);padding-bottom:max(8px,env(safe-area-inset-bottom))}
+.unit-picker-header{height:52px;min-height:52px;grid-template-columns:38px 1fr 38px;padding:0 12px;flex:none}
+.unit-picker-header .unit-picker-close{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:16px;cursor:pointer}
+.unit-picker-search-wrap{padding:8px 12px 5px;flex:none}
+.unit-picker-search-wrap input{height:38px}
+.unit-picker-list{min-height:0;flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:0 12px 10px}
+.unit-picker-group{padding:8px 7px 4px}
+.unit-picker-option{min-height:36px;padding:7px;font-size:12px}
+@media(max-width:760px){.unit-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.unit-category-grid .category-pill{height:49px;min-height:49px;padding:5px 3px;font-size:8px;gap:3px}.unit-category-grid .category-pill svg{width:16px;height:16px}.unit-picker-overlay{align-items:flex-end;padding:8px}.unit-picker-sheet{width:100%;max-height:min(48dvh,410px);border-radius:20px}.unit-picker-header{height:48px;min-height:48px}.unit-picker-search-wrap{padding:7px 10px 4px}.unit-picker-search-wrap input{height:36px}.unit-picker-option{min-height:34px;font-size:12px}}
+@media(max-width:380px){.unit-category-grid{gap:5px}.unit-category-grid .category-pill{height:46px;min-height:46px;font-size:7.5px}.unit-category-grid .category-pill svg{width:15px;height:15px}.unit-picker-sheet{max-height:min(46dvh,370px)}}
+@media(min-width:761px){.unit-picker-overlay{align-items:center}.unit-picker-sheet{max-height:min(64vh,560px)}}
+.tool-header .local-clock{display:flex!important;flex:0 0 auto}
+@media(max-width:760px){.tool-wrap{width:min(94vw,760px);margin:24px auto 120px}.tool-header{gap:8px}.tool-header .local-clock{min-width:72px;margin-left:auto;margin-right:clamp(4px,2vw,14px)}.tool-header .local-clock small{font-size:7px}.tool-header .header-cta{flex:0 0 auto}}
 </style>
 </head>
 <body>
@@ -278,7 +297,7 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 <div class="convert-result"><div class="result-label">CONVERSION RESULT</div><div class="result-value" id="unit-result">—</div><div class="result-meta" id="unit-formula"></div></div>
 <p class="status-line" id="unit-status" aria-live="polite">Select a category to begin.</p>
 </div>
-<div class="unit-picker-overlay hidden" id="unit-picker-overlay">
+<div class="unit-picker-overlay hidden" id="unit-picker-overlay" aria-hidden="true">
 <div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="unit-picker-title">
 <div class="unit-picker-header"><span></span><h3 id="unit-picker-title">Select unit</h3><button type="button" class="unit-picker-close" id="unit-picker-cancel" aria-label="Close unit picker">✕</button></div>
 <div class="unit-picker-search-wrap" id="unit-picker-search-wrap"><input id="unit-picker-search" type="search" placeholder="Search units…" aria-label="Search units"></div>
