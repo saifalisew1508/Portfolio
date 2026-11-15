@@ -16,8 +16,8 @@ var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduc
 function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
 /* Reusable dashboard navigation */
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
-function activatePanel(id){panels.forEach(function(p){p.classList.toggle('active',p.id===id)});cards.forEach(function(c){var active=c.dataset.panel===id;c.classList.toggle('active',active);c.setAttribute('aria-pressed',String(active))});if(id==='math')$('calc-display').setAttribute('aria-label','Calculator display');}
-cards.forEach(function(c){c.addEventListener('click',function(){activatePanel(c.dataset.panel)})});
+function activatePanel(id){var panelId=id==='scientific'?'math':id;panels.forEach(function(p){p.classList.toggle('active',p.id===panelId)});cards.forEach(function(c){var active=c.dataset.panel===id;c.classList.toggle('active',active);c.setAttribute('aria-pressed',String(active))});if(panelId==='math')$('calc-display').setAttribute('aria-label','Calculator display');}
+cards.forEach(function(c){c.addEventListener('click',function(){var id=c.dataset.panel;if(id==='scientific')setCalcMode('scientific');else if(id==='math')setCalcMode('basic');activatePanel(id)})});
 /* Math and scientific calculator. Safe recursive-descent parser; no eval(). */
 var expr='',fresh=true,display=$('calc-display'),line=$('calc-expression'),calcMode='basic',angleMode='deg',inverseMode=false;
 var basicKeys=[
@@ -231,7 +231,7 @@ var unitCatalog={
  ]
 };
 var unitCategoryMeta={
- currency:['Currency','i-currency'],length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
+ length:['Length','i-length'],area:['Area','i-area'],volume:['Volume','i-volume'],mass:['Weight','i-weight'],
  temperature:['Temperature','i-temperature'],speed:['Speed','i-speed'],pressure:['Pressure','i-pressure'],
  power:['Power','i-power'],energy:['Energy','i-energy'],time:['Time','i-time'],concentration:['Concentration','i-flask'],numberSystem:['Number system','i-number']
 };
@@ -247,13 +247,13 @@ function renderUnitCategories(){
  Object.keys(unitCategoryMeta).forEach(function(key){
   var meta=unitCategoryMeta[key],button=document.createElement('button');button.type='button';button.className='category-pill'+(key===unitCategory?' active':'');button.dataset.category=key;
   button.innerHTML='<svg aria-hidden="true"><use href="#'+meta[1]+'"></use></svg><span>'+meta[0]+'</span>';
-  button.addEventListener('click',function(){if(key==='currency'){activatePanel('currency');if(matchMedia('(pointer:coarse)').matches)button.blur();return}unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line';if(matchMedia('(pointer:coarse)').matches)button.blur()});
+  button.addEventListener('click',function(){unitCategory=key;unitSelections[key]=unitDefaults[key].slice();renderUnitCategories();updateUnitButtons();$('unit-result').textContent='—';$('unit-formula').textContent='';$('unit-status').textContent=meta[0]+' selected.';$('unit-status').className='status-line';if(matchMedia('(pointer:coarse)').matches)button.blur()});
   root.appendChild(button)
  });
 }
 function openUnitPicker(target){
  unitPickerTarget=target;unitSearchValue='';$('unit-picker-search').value='';$('unit-picker-search-wrap').classList.toggle('hidden',unitCategory==='numberSystem');
- $('unit-picker-title').textContent='Select unit';renderUnitPicker();$('unit-picker-overlay').classList.remove('hidden');$('unit-picker-overlay').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+ $('unit-picker-title').textContent='Select unit';renderUnitPicker();$('unit-picker-overlay').classList.remove('hidden');$('unit-picker-overlay').setAttribute('aria-hidden','false');document.body.style.overflow='';
  if(unitCategory!=='numberSystem')$('unit-picker-search').focus();
 }
 function renderUnitPicker(){
@@ -379,7 +379,7 @@ function renderLabCalcFields(){
    input=document.createElement('select');input.className='glass-select';
    field[4].forEach(function(option){var opt=document.createElement('option');opt.value=option[0];opt.textContent=option[1];input.appendChild(opt)});
   }else{input=document.createElement('input');input.className='glass-input';input.type='number';input.step='any';input.inputMode='decimal';input.min='0';}
-  input.id='lab-calc-'+field[0];input.dataset.calcField=field[0];input.value=field[3];wrap.appendChild(input);root.appendChild(wrap);
+  input.id='lab-calc-'+field[0];input.dataset.calcField=field[0];if(field[2]!=='select'){input.dataset.virtualKeyboard='true';input.inputMode='none';}input.value=field[3];wrap.appendChild(input);root.appendChild(wrap);
  });
 }
 function calcNumber(key){var el=$('lab-calc-'+key);if(!el||el.value.trim()==='')return NaN;return Number(el.value)}
@@ -468,4 +468,27 @@ window.addEventListener('pointerup',clearCalcKeyPress,{passive:true});
 window.addEventListener('pointercancel',clearCalcKeyPress,{passive:true});
 window.addEventListener('blur',clearCalcKeyPress);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('unit-picker-overlay').classList.contains('hidden'))closeUnitPicker();if(!$('lab-picker-overlay').classList.contains('hidden'))closeLabPicker()}});
+
+/* Shared touch-friendly numeric keypad for every numeric converter and clinical field. */
+(function(){
+ var pad=$('virtual-keypad'),target=null,coarse=window.matchMedia('(pointer:coarse)').matches;
+ if(!pad)return;
+ function eligible(el){return el&&el.matches('input')&&(el.dataset.virtualKeyboard==='true'||el.type==='number'||el.inputMode==='decimal')&&!el.readOnly&&!el.disabled;}
+ function open(el){if(!coarse||!eligible(el))return;target=el;pad.classList.remove('hidden');}
+ function close(blur){pad.classList.add('hidden');var old=target;target=null;if(blur&&old)old.blur();}
+ document.addEventListener('focusin',function(e){if(eligible(e.target))open(e.target);else if(!e.target.closest('#virtual-keypad'))close(false);});
+ document.addEventListener('click',function(e){var el=e.target.closest('input');if(el&&eligible(el))open(el);});
+ function update(value){if(!target)return;var input=target,current=input.value||'';
+ if(value==='clear')current='';
+ else if(value==='back')current=current.slice(0,-1);
+ else if(value==='done'){close(true);return;}
+ else if(value==='-'){current=current.startsWith('-')?current.slice(1):'-'+current;}
+ else if(value==='.' ){if(current.includes('.'))return;current=current?current+'.':'0.';}
+ else current+=value;
+ input.value=current;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));
+ }
+ pad.addEventListener('pointerdown',function(e){if(e.target.closest('button'))e.preventDefault()});
+ pad.addEventListener('click',function(e){var b=e.target.closest('[data-vk]');if(b)update(b.dataset.vk)});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pad.classList.contains('hidden'))close(false)});
+})();
 })();
