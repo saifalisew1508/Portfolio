@@ -22,6 +22,24 @@
 .arcade-wrap{width:min(1120px,calc(100% - 48px))}.bubble-layout{grid-template-columns:minmax(0,1fr) minmax(150px,180px)}.bubble-stage canvas{width:100%;height:auto;touch-action:none}.chess-board{width:100%;max-width:520px;margin-inline:auto}.sudoku-board{width:100%;max-width:480px;margin-inline:auto}
 @media(max-width:760px){.arcade-wrap{width:calc(100% - 28px);margin:24px auto 112px}.game-panel{padding:clamp(12px,3vw,18px)}.bubble-layout,.sudoku-layout,.chess-layout{grid-template-columns:minmax(0,1fr);gap:13px}.bubble-stage{width:100%;max-width:560px;margin-inline:auto}.game-side,.sudoku-side,.chess-side{width:100%}.chess-online-row{flex-wrap:wrap}.chess-online-row input{flex-basis:100%;min-height:44px}.chess-online-row button{width:100%;justify-content:center}.chess-modes>*{flex:1 1 145px}.game-tabs{gap:7px}.game-tab{flex:1 1 130px}}
 @media(min-width:761px){.arcade-wrap{margin-top:48px}.game-panel{padding:clamp(20px,2.6vw,30px)}.bubble-stage{max-width:720px}}
+
+/* Arcade follows the same shared automatic and forced appearance modes. */
+body[data-theme="day"] .arcade-wrap{color:#172033}
+body[data-theme="day"] .arcade-head p,body[data-theme="day"] .panel-head p,body[data-theme="day"] .hint,body[data-theme="day"] .chess-mode-note{color:#62718a}
+body[data-theme="day"] .arcade-kicker,body[data-theme="day"] .game-status{color:#5369bd}
+body[data-theme="day"] .game-tab,body[data-theme="day"] .arcade-btn{background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(220,231,248,.78));border-color:rgba(85,107,163,.22);color:#263653;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 5px 14px rgba(55,76,125,.08)}
+body[data-theme="day"] .game-tab.active,body[data-theme="day"] .arcade-btn.primary{background:linear-gradient(110deg,#737de0,#528fc5);border-color:transparent;color:#fff}
+body[data-theme="day"] .game-panel,body[data-theme="day"] .game-side,body[data-theme="day"] .sudoku-side,body[data-theme="day"] .chess-side{background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(222,232,248,.72));border-color:rgba(85,107,163,.2);box-shadow:0 16px 44px rgba(55,76,125,.1);color:#243451}
+body[data-theme="day"] .panel-head h2,body[data-theme="day"] .stat-value,body[data-theme="day"] .stat-label,body[data-theme="day"] .move-list{color:#263653}
+body[data-theme="day"] .sudoku-cell{background:#f7f9fe;color:#293957;border-color:#c4cee2}
+body[data-theme="day"] .sudoku-cell.fixed{background:#e6ecf8;color:#293957}
+body[data-theme="day"] .sudoku-cell.selected{background:#cbd6fb;color:#17294d}
+body[data-theme="day"] .sudoku-cell.peer{background:#edf1fb}
+body[data-theme="day"] .sudoku-cell.same{background:#dce6ff}
+body[data-theme="day"] .sudoku-cell.wrong{background:#ffe0e4;color:#9c2738}
+body[data-theme="day"] .chess-online-row input{background:rgba(255,255,255,.86);border-color:rgba(85,107,163,.22);color:#263653}
+body[data-theme="day"] .chess-online-row input::placeholder{color:#8290a8}
+body[data-theme="day"] .more-links a{color:#5369bd}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js" defer></script>
 <script defer src="games.js"></script>
