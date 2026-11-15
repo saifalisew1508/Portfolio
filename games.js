@@ -227,7 +227,7 @@ async function chessCreateOrJoin(action){
   if(action==='create'){await chessRoom.update(chessRoomSnapshot());chessRoomStatus('Room created. Share '+data.roomId+' with your friend. You are White.');}
   else if(data.room.state){applyChessRoomState(data.room.state);chessRoomStatus('Joined room '+data.roomId+'. You are '+(chessSeat===0?'White':'Black')+'.');}
   else chessRoomStatus('Joined room '+data.roomId+'. Waiting for the room owner to start.');
-  $('chess-mic').disabled=false;$('chess-speaker').disabled=false;
+  $('chess-mic').disabled=false;$('chess-speaker').disabled=false;$('chess-leave-room').hidden=false;document.querySelectorAll('[data-chess-mode]').forEach(function(button){button.disabled=true;});
  }catch(error){chessRoomStatus(error.message);}
 }
 $('chess-create-room').addEventListener('click',function(){chessCreateOrJoin('create')});
@@ -248,4 +248,6 @@ $('chess-reset').onclick=function(){if(chessRoom){chessFeedback('Leave the onlin
 $('chess-mic').onclick=async function(){if(!chessRoom)return;try{if(!chessRoom.micOn){await chessRoom.enableMic();this.textContent='🎙 Mute microphone';}else{chessRoom.setMic(false);this.textContent='🎙 Enable microphone';}}catch(error){chessRoomStatus(error.message);}};
 $('chess-speaker').onclick=function(){if(!chessRoom)return;chessRoom.setSpeaker(!chessRoom.speakerOn);this.textContent=chessRoom.speakerOn?'🔊 Speaker on':'🔇 Speaker off';};
 
+
+$('chess-leave-room').onclick=function(){if(chessRoom)chessRoom.close();chessRoom=null;$('chess-room-info').hidden=true;$('chess-leave-room').hidden=true;$('chess-mic').disabled=true;$('chess-speaker').disabled=true;$('chess-mic').textContent='🎙 Enable microphone';$('chess-speaker').textContent='🔊 Speaker on';document.querySelectorAll('[data-chess-mode]').forEach(function(button){button.disabled=false;});setChessMode('computer');chessRoomStatus('Left online room.');};
 })();
