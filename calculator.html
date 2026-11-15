@@ -278,6 +278,23 @@ body[data-theme="day"] .virtual-keypad{background:linear-gradient(145deg,rgba(25
 body[data-theme="day"] .virtual-keypad-head,body[data-theme="day"] .virtual-keypad-head button{color:#435575}
 body[data-theme="day"] .virtual-keypad-grid button{background:linear-gradient(145deg,#fff,#dce6f7);color:#263653;border-color:rgba(85,108,165,.2)}
 body[data-theme="day"] .virtual-keypad-grid .vk-done{background:linear-gradient(110deg,#6c78db,#4f8ec6);color:#fff}
+
+/* Compact calculator shortcuts. Math + Scientific remain one tool with the in-panel mode switch. */
+@media(max-width:760px){
+ .glass-navigation{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .glass-navigation .nav-card{min-height:66px;padding:8px 4px;border-radius:15px;gap:5px}
+ .glass-navigation .nav-card svg{width:21px;height:21px}
+ .glass-navigation .nav-card span{font-size:8px;line-height:1.25;text-align:center}
+}
+@media(max-width:390px){.glass-navigation{gap:5px}.glass-navigation .nav-card{min-height:61px;padding:7px 3px}.glass-navigation .nav-card svg{width:19px;height:19px}.glass-navigation .nav-card span{font-size:7.5px}}
+/* Spring motion for every segmented/capsule selection in the calculator UI. */
+.calc-mode,.category-pill,.unit-swap-round,.currency-swap,.glass-navigation .nav-card{
+ transition:transform .58s cubic-bezier(.18,.92,.22,1.22),background .3s,border-color .3s,box-shadow .3s,color .25s!important;
+}
+.calc-mode.active,.category-pill.active,.glass-navigation .nav-card.active{animation:capsuleSpring .58s cubic-bezier(.18,.92,.22,1.22) both}
+@keyframes capsuleSpring{0%{transform:scale(.94)}58%{transform:scale(1.055)}78%{transform:scale(.985)}100%{transform:scale(1)}}
+.calc-mode:active,.category-pill:active,.glass-navigation .nav-card:active{transform:scale(.94)!important}
+@media(prefers-reduced-motion:reduce){.calc-mode,.category-pill,.glass-navigation .nav-card{transition:none!important}.calc-mode.active,.category-pill.active,.glass-navigation .nav-card.active{animation:none!important}}
 </style>
 
 <style>
@@ -357,8 +374,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <main class="tool-wrap">
 <section class="tool-hero"><span class="tool-kicker">✦ PRECISION TOOLKIT / 2026</span><h1>Your tools,<br><span>beautifully calculated.</span></h1><p>A premium workspace for everyday mathematics, currency exchange, engineering conversions and clinical laboratory calculations.</p></section>
 <nav class="glass-navigation" aria-label="Calculator tools">
-<button class="nav-card glass glass-card active" data-panel="math" aria-pressed="true"><svg><use href="#i-math"/></svg><span>Math Calculator</span></button>
-<button class="nav-card glass" data-panel="scientific" aria-pressed="false"><svg><use href="#i-math"/></svg><span>Scientific Calculator</span></button>
+<button class="nav-card glass glass-card active" data-panel="math" aria-pressed="true"><svg><use href="#i-math"/></svg><span>Math &amp; Scientific Calculator</span></button>
 <button class="nav-card glass" data-panel="currency" aria-pressed="false"><svg><use href="#i-currency"/></svg><span>Currency Converter</span></button>
 <button class="nav-card glass" data-panel="units" aria-pressed="false"><svg><use href="#i-cube"/></svg><span>Unit Converter</span></button>
 <button class="nav-card glass" data-panel="lab" aria-pressed="false"><svg><use href="#i-flask"/></svg><span>Lab Calculator</span></button>
