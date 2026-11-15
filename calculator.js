@@ -460,5 +460,12 @@ $('lab-calc-run').addEventListener('click',runLabCalc);
 $('lab-calc-reset').addEventListener('click',function(){renderLabCalcFields();$('lab-calc-result').textContent='—';$('lab-calc-formula').textContent='Select a calculation and enter the required values.';$('lab-calc-status').textContent='Values reset.';$('lab-calc-status').className='status-line'});
 renderLabCalcFields();
 
+/* Pointer-driven key feedback: release, cancel or leaving the app clears enlargement. */
+var pressedCalcKey=null;
+function clearCalcKeyPress(){if(pressedCalcKey){pressedCalcKey.classList.remove('is-pressed');pressedCalcKey=null}}
+document.addEventListener('pointerdown',function(e){var key=e.target.closest('.calc-keys button');if(!key||key.disabled)return;clearCalcKeyPress();pressedCalcKey=key;key.classList.add('is-pressed')},{passive:true});
+window.addEventListener('pointerup',clearCalcKeyPress,{passive:true});
+window.addEventListener('pointercancel',clearCalcKeyPress,{passive:true});
+window.addEventListener('blur',clearCalcKeyPress);
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('unit-picker-overlay').classList.contains('hidden'))closeUnitPicker();if(!$('lab-picker-overlay').classList.contains('hidden'))closeLabPicker()}});
 })();
