@@ -57,6 +57,8 @@ module.exports = async function handler(req, res) {
     if (!player) return reply(res, 403, { error: 'This device is not a member of the room. Join again.' });
     if (action === 'state') return reply(res, 200, { room: { id, game: room.game, maxPlayers: room.maxPlayers, players: room.players.map(({token, ...p}) => p), state: room.state, version: room.version } });
     if (action === 'update') {
+      if (room.state && room.game === 'ludo' && Number(room.state.turn) !== player.seat) return reply(res, 403, { error: 'It is not your turn.' });
+      if (room.state && room.game === 'chess' && room.state.turn && room.state.turn !== (player.seat === 0 ? 'w' : 'b')) return reply(res, 403, { error: 'It is not your turn.' });
       if (!body.state || typeof body.state !== 'object') return reply(res, 400, { error: 'Missing game state.' });
       if (Number(body.version) !== room.version) return reply(res, 409, { error: 'Game changed on another device. Sync and try again.', version: room.version });
       room.state = body.state;
