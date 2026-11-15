@@ -226,6 +226,58 @@ body:before{width:280px;height:280px;background:#4937b7;top:28%;left:-120px}body
 .lab-calc-disclaimer{font-size:10px;line-height:1.7;color:#8e9bb7;border:1px solid rgba(190,203,255,.12);border-radius:13px;padding:13px 15px;margin-top:14px}.lab-calc-sources{font-size:10px;line-height:1.8;color:#8996b2;margin-top:10px}.lab-calc-sources a{color:#b9c3ff;text-decoration:underline;text-underline-offset:3px}
 .lab-mode-pills{align-items:center}
 @media(max-width:580px){.lab-calc-fields{grid-template-columns:minmax(0,1fr)}.lab-calc-select{max-width:none}.lab-calc-description{font-size:11px}.lab-calc-disclaimer{font-size:9px}}
+
+/* Calculator navigation: compact header-style menu on desktop, icon cards on phones. */
+.glass-navigation{display:flex;align-items:center;justify-content:center;gap:7px;padding:7px;border-radius:22px;background:rgba(13,20,38,.46);border:1px solid rgba(180,194,245,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.glass-navigation .nav-card{position:relative;min-height:48px;flex:1 1 0;padding:11px 13px;border-radius:15px;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;white-space:nowrap;background:transparent;border:1px solid transparent;box-shadow:none;font-size:11px}
+.glass-navigation .nav-card:after{display:none}
+.glass-navigation .nav-card svg{width:19px;height:19px;flex:none}
+.glass-navigation .nav-card span{font-size:11px}
+.glass-navigation .nav-card.active{background:linear-gradient(120deg,rgba(111,93,230,.35),rgba(43,103,166,.28));border-color:rgba(174,159,255,.4);box-shadow:inset 0 1px 0 #ffffff25,0 5px 18px #05081455;color:#fff}
+body[data-theme="day"] .glass-navigation{background:rgba(255,255,255,.52);border-color:rgba(85,108,165,.2)}
+body[data-theme="day"] .glass-navigation .nav-card{color:#425371}
+body[data-theme="day"] .glass-navigation .nav-card.active{background:linear-gradient(120deg,rgba(112,116,229,.2),rgba(78,153,211,.16));color:#263653;border-color:rgba(101,120,205,.32)}
+/* Keep the unit selector as a floating card, not a full-screen dimmer. */
+.unit-picker-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-end;justify-content:center;padding:0 14px calc(104px + env(safe-area-inset-bottom));background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;pointer-events:none}
+.unit-picker-sheet{width:min(620px,100%);max-height:min(58svh,560px);border:1px solid rgba(190,203,255,.18);border-radius:24px;background:#1e1e1f;box-shadow:0 18px 55px #0009;padding-bottom:8px;pointer-events:auto}
+.unit-picker-header{height:62px;grid-template-columns:52px 1fr 52px;padding:0 12px}
+.unit-picker-header button{width:38px;height:38px;display:grid;place-items:center;border:1px solid #ffffff22;border-radius:50%;background:#ffffff0b;color:#f4f4f4;text-align:center;font-size:18px}
+.unit-picker-list{min-height:0;overscroll-behavior:contain}
+#lab-picker-overlay .unit-picker-sheet{max-height:min(48svh,460px)}
+@media(min-width:761px){
+ .tool-wrap{margin-top:26px}
+ .glass-navigation{justify-content:flex-start;gap:5px}
+ .glass-navigation .nav-card{flex:0 1 auto;padding:11px 15px}
+ .math-layout{max-width:520px;padding:16px 14px 12px}
+ .calc-keys{grid-template-columns:repeat(4,minmax(0,70px));justify-content:center;gap:9px}
+ .calc-keys.scientific{grid-template-columns:repeat(5,minmax(0,66px));gap:8px}
+ .calc-keys button{max-width:70px;font-size:20px}
+ .calc-keys.scientific button{max-width:66px;font-size:17px}
+ .calc-display{min-height:68px;padding:12px 10px 4px;font-size:clamp(26px,3vw,38px)}
+ .calc-expression{margin-bottom:12px}
+}
+@media(max-width:760px){
+ .glass-navigation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0;background:transparent;border:0;box-shadow:none}
+ .glass-navigation .nav-card{min-height:90px;flex:initial;padding:12px 5px;border-radius:18px;display:flex;flex-direction:column;gap:7px;white-space:normal}
+ .glass-navigation .nav-card svg{width:25px;height:25px}
+ .glass-navigation .nav-card span{font-size:9px}
+ .unit-picker-overlay{align-items:flex-end;padding-bottom:calc(105px + env(safe-area-inset-bottom))}
+ .unit-picker-sheet{max-height:56svh;border-radius:23px}
+ .unit-picker-header{height:58px}
+}
+@media(max-width:580px){.math-layout{max-width:100%}.calc-keys{grid-template-columns:repeat(4,minmax(0,1fr))}.calc-keys.scientific{grid-template-columns:repeat(5,minmax(0,1fr))}.calc-keys button{max-width:none}}
+/* Reusable on-screen number pad for every numeric converter and lab field. */
+.virtual-keypad{position:fixed;z-index:120;right:18px;bottom:112px;width:min(310px,calc(100vw - 28px));padding:12px;border:1px solid rgba(190,203,255,.22);border-radius:20px;background:linear-gradient(145deg,rgba(29,39,65,.98),rgba(9,15,29,.98));box-shadow:0 18px 50px #0009,inset 0 1px 0 #ffffff20;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.virtual-keypad.hidden{display:none}
+.virtual-keypad-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;color:#9eacc9;font:9px var(--mono);letter-spacing:1.4px}
+.virtual-keypad-head button{border:0;background:transparent;color:#c7cfff;font-size:11px}
+.virtual-keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.virtual-keypad-grid button{min-height:42px;border:1px solid #b9c7ff20;border-radius:11px;background:linear-gradient(145deg,#394666,#202b43);color:#f4f6ff;font-weight:700;font-size:16px}
+.virtual-keypad-grid .vk-clear{font-size:12px;color:#ffb4bd}.virtual-keypad-grid .vk-done{font-size:12px;background:linear-gradient(110deg,#6556d8,#3d83d2)}
+body[data-theme="day"] .virtual-keypad{background:linear-gradient(145deg,rgba(250,252,255,.98),rgba(220,231,249,.98));border-color:rgba(85,108,165,.25)}
+body[data-theme="day"] .virtual-keypad-head,body[data-theme="day"] .virtual-keypad-head button{color:#435575}
+body[data-theme="day"] .virtual-keypad-grid button{background:linear-gradient(145deg,#fff,#dce6f7);color:#263653;border-color:rgba(85,108,165,.2)}
+body[data-theme="day"] .virtual-keypad-grid .vk-done{background:linear-gradient(110deg,#6c78db,#4f8ec6);color:#fff}
 </style>
 
 <style>
@@ -306,6 +358,8 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <section class="tool-hero"><span class="tool-kicker">✦ PRECISION TOOLKIT / 2026</span><h1>Your tools,<br><span>beautifully calculated.</span></h1><p>A premium workspace for everyday mathematics, currency exchange, engineering conversions and clinical laboratory calculations.</p></section>
 <nav class="glass-navigation" aria-label="Calculator tools">
 <button class="nav-card glass glass-card active" data-panel="math" aria-pressed="true"><svg><use href="#i-math"/></svg><span>Math Calculator</span></button>
+<button class="nav-card glass" data-panel="scientific" aria-pressed="false"><svg><use href="#i-science"/></svg><span>Scientific Calculator</span></button>
+<button class="nav-card glass" data-panel="currency" aria-pressed="false"><svg><use href="#i-currency"/></svg><span>Currency Converter</span></button>
 <button class="nav-card glass" data-panel="units" aria-pressed="false"><svg><use href="#i-cube"/></svg><span>Unit Converter</span></button>
 <button class="nav-card glass" data-panel="lab" aria-pressed="false"><svg><use href="#i-flask"/></svg><span>Lab Calculator</span></button>
 </nav>
@@ -422,6 +476,6 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 </section>
 </main>
 
-<script defer src="calculator.js"></script>
+<div class="virtual-keypad hidden" id="virtual-keypad" role="group" aria-label="Numeric keypad"><div class="virtual-keypad-head"><span>NUMBER PAD</span><button type="button" data-vk="done" aria-label="Close numeric keypad">Done ✕</button></div><div class="virtual-keypad-grid"><button type="button" data-vk="7">7</button><button type="button" data-vk="8">8</button><button type="button" data-vk="9">9</button><button type="button" data-vk="4">4</button><button type="button" data-vk="5">5</button><button type="button" data-vk="6">6</button><button type="button" data-vk="1">1</button><button type="button" data-vk="2">2</button><button type="button" data-vk="3">3</button><button type="button" data-vk=".">.</button><button type="button" data-vk="0">0</button><button type="button" data-vk="back">⌫</button><button type="button" data-vk="clear" class="vk-clear">Clear</button><button type="button" data-vk="-">±</button><button type="button" data-vk="done" class="vk-done">Done</button></div></div>\n<script defer src="calculator.js"></script>
 <script defer src="navigation.js"></script>
 </body></html>
