@@ -19,7 +19,7 @@ const inboxKey = token => 'arcade:signals:' + token;
 const code = () => Math.random().toString(36).slice(2, 8).toUpperCase();
 const token = () => require('crypto').randomBytes(24).toString('hex');
 const cleanName = value => String(value || 'Player').trim().replace(/[<>\u0000-\u001f]/g, '').slice(0, 20) || 'Player';
-const reply = (res, status, body) => { res.status(status).setHeader('Cache-Control', 'no-store').json(body); };
+const reply = (res, status, body) => { res.setHeader('Cache-Control', 'no-store'); return res.status(status).json(body); };
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', 'same-origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
