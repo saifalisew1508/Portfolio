@@ -897,3 +897,58 @@ body[data-theme="day"] .global-nav-indicator{
   border-color:rgba(255,255,255,.62);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.52),0 0 20px rgba(86,105,207,.24);
 }
+
+
+/* Theme-aware 3D liquid-glass bubbles inside the More menu. */
+.global-more-menu a{
+  overflow:hidden;
+  isolation:isolate;
+  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.035) 48%,rgba(95,120,210,.09))!important;
+  border:1px solid rgba(202,216,255,.16)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(0,0,0,.12),0 5px 14px rgba(0,0,0,.12);
+  backdrop-filter:blur(18px) saturate(155%);
+  -webkit-backdrop-filter:blur(18px) saturate(155%);
+  transition:transform .42s cubic-bezier(.2,.9,.25,1.18),background .24s,border-color .24s,box-shadow .24s!important;
+}
+.global-more-menu a:before{
+  content:"";position:absolute;z-index:-1;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.17),transparent 42%,rgba(120,145,255,.10));
+  opacity:.9;
+}
+.global-more-menu a:hover,.global-more-menu a:focus-visible{
+  transform:translateY(-2px) scale(1.018)!important;
+  background:linear-gradient(135deg,rgba(125,108,246,.28),rgba(68,145,220,.18))!important;
+  border-color:rgba(190,195,255,.42)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 9px 20px rgba(0,0,0,.2),0 0 15px rgba(119,113,255,.12);
+}
+body[data-theme="day"] .global-more-menu{
+  background:linear-gradient(145deg,rgba(249,252,255,.84),rgba(222,232,249,.82))!important;
+  border-color:rgba(88,108,157,.26)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(96,117,165,.1),0 18px 48px rgba(45,64,105,.22),0 0 28px rgba(105,125,210,.12)!important;
+}
+body[data-theme="day"] .global-more-menu:before{
+  background:linear-gradient(125deg,rgba(255,255,255,.72),transparent 38%,transparent 70%,rgba(110,132,230,.12));
+}
+body[data-theme="day"] .global-more-menu a{
+  color:#263653!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.66),rgba(215,227,247,.48))!important;
+  border-color:rgba(101,122,174,.2)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.88),inset 0 -1px 0 rgba(95,116,166,.08),0 5px 13px rgba(61,81,126,.10);
+}
+body[data-theme="day"] .global-more-menu a:before{
+  background:linear-gradient(115deg,rgba(255,255,255,.7),transparent 45%,rgba(110,132,230,.09));
+}
+body[data-theme="day"] .global-more-menu a:after{color:#6478cf;opacity:1;}
+body[data-theme="day"] .global-more-menu a:hover,
+body[data-theme="day"] .global-more-menu a:focus-visible{
+  color:#172747!important;
+  background:linear-gradient(135deg,rgba(135,137,245,.24),rgba(95,165,225,.2))!important;
+  border-color:rgba(102,116,201,.36)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 9px 20px rgba(65,85,145,.16),0 0 15px rgba(119,113,255,.1);
+}
+/* Spring-like page handoff between Games, Calculator, Music and Projects. */
+body.global-page-enter{animation:globalPageEnter .58s cubic-bezier(.18,.9,.22,1.18) both;}
+body.global-page-leaving{animation:globalPageLeave .24s ease-in both;pointer-events:none;}
+@keyframes globalPageEnter{0%{opacity:.45;transform:translateY(13px) scale(.988);filter:blur(5px)}65%{opacity:1;transform:translateY(-2px) scale(1.002);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes globalPageLeave{to{opacity:.55;transform:scale(.992);filter:blur(3px)}}
+@media(prefers-reduced-motion:reduce){body.global-page-enter,body.global-page-leaving{animation:none!important}}
