@@ -204,7 +204,7 @@ renderChess();
 /* CHESS ONLINE ROOMS + VOICE */
 var chessRoom=null,chessSeat=0,chessApplyingRemote=false;
 function chessRoomStatus(message){var el=$('chess-network-status');if(el)el.textContent=message;}
-function chessRoomSnapshot(){return {fen:chess.fen(),history:chess.history()};}
+function chessRoomSnapshot(){return {fen:chess.fen(),history:chess.history(),turn:chess.turn()};}
 function applyChessRoomState(snapshot){
  if(!snapshot||!snapshot.fen||snapshot.fen===chess.fen())return;
  chessApplyingRemote=true;
