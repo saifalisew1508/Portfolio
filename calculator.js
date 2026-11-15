@@ -359,7 +359,7 @@ $('lab-swap')&&$('lab-swap').addEventListener('click',function(){var pair=labSel
 
 /* Derived clinical calculations. HOMA1-IR is a linear approximation, not Oxford HOMA2. */
 var labCalcDefinitions={
- homa:{title:'HOMA1-IR estimates insulin resistance from fasting glucose and fasting insulin.',formula:'HOMA1-IR = fasting insulin (µIU/mL) × fasting glucose (mg/dL) ÷ 405. For glucose in mmol/L, divide by 22.5.',fields:[['insulin','Fasting insulin (µIU/mL)','number','2'],['glucose','Fasting glucose','number','90'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
+ homa:{title:'HOMA1 estimates insulin resistance (IR), insulin sensitivity (%S) and beta-cell function (%B) from fasting insulin and glucose. This is the original linear HOMA1 model, not Oxford HOMA2.',formula:'HOMA1-IR = insulin × glucose (mmol/L) ÷ 22.5. HOMA1-%S = 100 ÷ HOMA1-IR. HOMA1-%B = 20 × insulin ÷ [glucose (mmol/L) − 3.5].',fields:[['insulin','Fasting insulin (µIU/mL)','number','2'],['glucose','Fasting glucose','number','90'],['glucoseUnit','Glucose unit','select','mg/dL',[['mg/dL','mg/dL'],['mmol/L','mmol/L']]]]},
  egfr:{title:'Adult race-free 2021 CKD-EPI creatinine equation. Intended for age 18 years and older.',formula:'eGFR = 142 × min(SCr/κ,1)^α × max(SCr/κ,1)^−1.200 × 0.9938^Age × 1.012 (female). κ = 0.7 female / 0.9 male; α = −0.241 female / −0.302 male.',fields:[['age','Age (years)','number','45'],['sex','Sex used by equation','select','male',[['male','Male'],['female','Female']]],['creatinine','Serum creatinine','number','1.0'],['creatinineUnit','Creatinine unit','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
  crcl:{title:'Cockcroft–Gault estimates creatinine clearance. This is not the same as indexed eGFR.',formula:'CrCl = [(140 − age) × weight (kg)] ÷ [72 × SCr (mg/dL)]; multiply by 0.85 for female.',fields:[['age','Age (years)','number','45'],['sex','Sex used by equation','select','male',[['male','Male'],['female','Female']]],['weight','Body weight (kg)','number','70'],['creatinine','Serum creatinine','number','1.0'],['creatinineUnit','Creatinine unit','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
  fena:{title:'FENa uses paired urine and serum sodium and creatinine concentrations. Samples should be collected close together.',formula:'FENa (%) = (urine Na × serum creatinine) ÷ (serum Na × urine creatinine) × 100.',fields:[['urineNa','Urine sodium (mmol/L)','number','20'],['serumNa','Serum sodium (mmol/L)','number','140'],['serumCr','Serum creatinine','number','1.0'],['urineCr','Urine creatinine','number','100'],['creatinineUnit','Creatinine unit for both values','select','mg/dL',[['mg/dL','mg/dL'],['µmol/L','µmol/L']]]]},
@@ -391,9 +391,14 @@ function runLabCalc(){
  var key=$('lab-calc-type').value,age,sex,scr,glucose,albumin,unit,mg,mmol,result,formula,note;
  if(key==='homa'){
   if(!positiveFields(['insulin','glucose']))return calcFail('Enter positive fasting insulin and fasting glucose values.');
+  var fastingInsulin=calcNumber('insulin');
   glucose=calcNumber('glucose');mmol=calcUnit('glucoseUnit')==='mmol/L'?glucose:glucose/18.0182;
-  result=calcNumber('insulin')*mmol/22.5;
-  return calcSuccess(result.toFixed(2),'HOMA1-IR = insulin × glucose (mmol/L) ÷ 22.5. Equivalent mg/dL divisor: 405.','HOMA1-IR is an approximate index. There is no universal diagnostic cut-off; do not label this as HOMA2.');
+  if(mmol<=3.5)return calcFail('HOMA1-%B cannot be calculated when fasting glucose is 3.5 mmol/L or lower.');
+  var homaIR=fastingInsulin*mmol/22.5;
+  if(!Number.isFinite(homaIR)||homaIR<=0)return calcFail('Unable to calculate HOMA1 indices from these values.');
+  var homaSensitivity=100/homaIR;
+  var homaBeta=20*fastingInsulin/(mmol-3.5);
+  return calcSuccess('IR: '+homaIR.toFixed(2)+'  |  Sensitivity: '+homaSensitivity.toFixed(1)+'%  |  Beta function: '+homaBeta.toFixed(1)+'%','HOMA1-IR = insulin × glucose (mmol/L) ÷ 22.5. HOMA1-%S = 100 ÷ HOMA1-IR. HOMA1-%B = 20 × insulin ÷ (glucose − 3.5).','These are HOMA1 estimates, not Oxford HOMA2 outputs. Use paired fasting samples and consistent units. They are research/interpretive indices, not standalone diagnostic cut-offs; do not use them alone to diagnose or guide treatment.');
  }
  if(key==='egfr'||key==='crcl'){
   age=calcNumber('age');sex=calcUnit('sex');scr=calcNumber('creatinine');
