@@ -974,3 +974,11 @@ body[data-theme="day"] .theme-menu button span{color:#6879d4;}
 body[data-theme="day"] .theme-menu button:hover,body[data-theme="day"] .theme-menu button.selected{background:rgba(108,126,222,.14);border-color:rgba(105,122,198,.22);}
 @media(max-width:760px){.header-actions{gap:6px}.theme-menu-toggle{width:34px;height:34px}.theme-menu{width:198px;right:0;top:calc(100% + 10px)}}
 @media(max-width:390px){.header-actions{gap:4px}.theme-menu-toggle{width:32px;height:32px}.header-actions .header-cta{padding-left:8px;padding-right:8px;font-size:9px}}
+
+/* Spring-loaded active capsule and drag-follow behavior across the global navigation. */
+.global-nav-indicator{transition:transform .76s cubic-bezier(.16,1.32,.28,1),width .58s cubic-bezier(.16,1.22,.28,1),height .42s cubic-bezier(.2,.85,.25,1.1),opacity .18s ease!important}
+.global-nav-indicator.is-dragging{transition:transform .14s cubic-bezier(.2,.75,.25,1),width .12s ease,height .12s ease!important}
+.global-nav-item{user-select:none;-webkit-user-select:none;touch-action:pan-y}
+.global-nav-item.active{animation:globalCapsuleSettle .58s cubic-bezier(.16,1.32,.28,1) both}
+@keyframes globalCapsuleSettle{0%{transform:scale(.94)}58%{transform:scale(1.055)}80%{transform:scale(.985)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.global-nav-indicator{transition:none!important}.global-nav-item.active{animation:none!important}}
