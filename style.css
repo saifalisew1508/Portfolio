@@ -1048,3 +1048,8 @@ body[data-theme="day"] .global-theme-options button.selected,body[data-theme="da
 @media(prefers-reduced-motion:reduce){
  .global-nav-indicator,.global-nav-item,.global-theme-options button{transition:none!important}
 }
+
+/* Keep the pointer fluid as a quiet ambient trail, not a large white spotlight. */
+#fog-canvas{opacity:.20!important;mix-blend-mode:screen!important}
+body[data-theme="day"] #fog-canvas{opacity:.12!important;mix-blend-mode:multiply!important}
+body[data-theme="night"] #fog-canvas{opacity:.20!important;mix-blend-mode:screen!important}
