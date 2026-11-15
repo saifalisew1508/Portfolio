@@ -92,7 +92,7 @@ function evaluate(source){
 }
 function setCalcMode(mode){
  calcMode=mode;var keypad=$('calc-keys');keypad.innerHTML='';keypad.className='calc-keys '+mode;
- document.querySelectorAll('[data-calc-mode]').forEach(function(button){var active=button.dataset.calcMode===mode;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active))});if($('math').classList.contains('active'))cards.forEach(function(card){var active=card.dataset.panel===(mode==='scientific'?'scientific':'math');card.classList.toggle('active',active);card.setAttribute('aria-pressed',String(active))});
+ document.querySelectorAll('[data-calc-mode]').forEach(function(button){var active=button.dataset.calcMode===mode;button.classList.toggle('active',active);button.setAttribute('aria-selected',String(active))});if($('math').classList.contains('active'))cards.forEach(function(card){var active=card.dataset.panel==='math';card.classList.toggle('active',active);card.setAttribute('aria-pressed',String(active))});
  (mode==='scientific'?scientificKeys:basicKeys).forEach(function(item,index){
   var button=document.createElement('button');button.type='button';button.textContent=item[0];button.dataset.action=item[1];button.className=item[2]||'';
   if(item[1]==='rad'||item[1]==='deg'){button.classList.toggle('selected',item[1]===angleMode);button.classList.add('mode-key')}
