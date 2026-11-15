@@ -869,3 +869,31 @@ body[data-theme="day"] .interest-tags span{color:#33415c;background:rgba(111,139
 .global-nav-item:active{transform:scale(.985);}
 @media(max-width:390px){.global-glass-nav{background:linear-gradient(145deg,rgba(17,24,44,.70),rgba(8,13,27,.70))!important;}}
 @media(prefers-reduced-motion:reduce){.global-nav-indicator{transition:none!important;}}
+
+
+/* Navigation refinement: only the moving active capsule has a filled surface. */
+.global-nav-item,
+.global-nav-item:not(.active),
+.global-nav-more .global-nav-item{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.global-nav-item:not(.active){color:#aeb9d2;}
+.global-nav-item.active{background:transparent!important;box-shadow:none!important;}
+.global-nav-indicator{pointer-events:none;}
+/* Day mode keeps the same 70% glass transparency, but uses a daylight tint. */
+body[data-theme="day"] .global-glass-nav{
+  background:linear-gradient(145deg,rgba(246,249,255,.70),rgba(222,232,248,.70))!important;
+  border-color:rgba(75,96,143,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 14px 38px rgba(48,67,108,.16),0 0 24px rgba(105,123,205,.10);
+}
+body[data-theme="day"] .global-nav-item:not(.active){color:#52617a;}
+body[data-theme="day"] .global-nav-item.active{color:#fff;}
+body[data-theme="day"] .global-nav-indicator{
+  background:linear-gradient(135deg,rgba(105,112,231,.88),rgba(76,139,218,.82));
+  border-color:rgba(255,255,255,.62);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.52),0 0 20px rgba(86,105,207,.24);
+}
