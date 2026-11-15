@@ -56,9 +56,20 @@ body[data-theme="day"] .bubble-eyebrow{color:#536cbd}body[data-theme="day"] .bub
 body[data-theme="day"] .bubble-progress button{background:rgba(92,126,207,.12);border-color:rgba(82,105,161,.23);color:#506ab4}
 body[data-theme="day"] .bubble-progress button.armed{background:linear-gradient(110deg,rgba(244,173,82,.22),rgba(234,117,135,.16));border-color:rgba(202,145,77,.48);color:#8b5a25}
 @media(prefers-reduced-motion:reduce){.bubble-tool-btn,.bubble-progress-track i{transition:none!important}}
+
+/* Ludo + multiplayer controls */
+.ludo-setup,.ludo-online,.ludo-room-info,.ludo-voice{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(8,14,28,.28)}
+.ludo-field{display:grid;gap:6px;font:9px var(--mono);letter-spacing:1px;color:var(--muted)}
+.ludo-field input,.ludo-room-row input,.chess-online-row input{min-width:0;border:1px solid var(--line);border-radius:10px;background:rgba(5,9,17,.55);color:var(--text);padding:11px 12px;font:12px var(--sans)}
+.ludo-online{display:block}.ludo-online p{font-size:11px;color:var(--muted);margin:5px 0 10px}.ludo-room-row{display:flex;gap:8px;flex-wrap:wrap}.ludo-room-row input{width:130px;text-transform:uppercase}.ludo-room-info{justify-content:space-between}.ludo-room-info[hidden]{display:none}.ludo-game{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:18px;align-items:start;margin-top:18px}.ludo-board-wrap{min-width:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:radial-gradient(circle,#1d2944,#0b1221 75%)}#ludo-board{display:block;width:100%;height:auto;touch-action:manipulation}.ludo-side{border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px}.ludo-turn{font-weight:800;font-size:14px}.ludo-dice{font-size:54px;text-align:center;padding:12px;border-radius:14px;background:rgba(100,120,180,.12)}.ludo-players{display:grid;gap:7px}.ludo-player{display:flex;justify-content:space-between;gap:8px;padding:8px;border-radius:9px;background:rgba(100,120,180,.09);font-size:11px}.ludo-player.active{outline:1px solid var(--cyan)}.ludo-voice{font-size:11px;color:var(--muted)}.ludo-voice span{flex:1}.chess-online-challenge input{text-transform:none}
+body[data-theme="day"] .ludo-setup,body[data-theme="day"] .ludo-online,body[data-theme="day"] .ludo-room-info,body[data-theme="day"] .ludo-voice,body[data-theme="day"] .ludo-side{background:rgba(255,255,255,.65);border-color:rgba(85,107,163,.2);color:#263653}
+body[data-theme="day"] .ludo-field,body[data-theme="day"] .ludo-online p,body[data-theme="day"] .ludo-voice{color:#62718a}
+body[data-theme="day"] .ludo-field input,body[data-theme="day"] .ludo-room-row input{background:#fff;color:#263653;border-color:rgba(85,107,163,.25)}
+@media(max-width:760px){.ludo-game{grid-template-columns:1fr}.ludo-side{grid-template-columns:repeat(2,minmax(0,1fr))}.ludo-turn,.ludo-players,.ludo-side .hint{grid-column:1/-1}.ludo-dice{font-size:42px}.ludo-room-row>*{flex:1 1 100%}.ludo-room-row input{width:100%}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js" defer></script>
 <script defer src="games.js"></script>
+<script defer src="ludo.js"></script>
 </head>
 <body>
 <script>
@@ -76,7 +87,7 @@ body[data-theme="day"] .bubble-progress button.armed{background:linear-gradient(
 <header class="site-header"><a class="wordmark" href="index.html#home">saif<span>.</span></a><div class="local-clock" aria-label="Local date and time"><span id="visitor-time">--:--</span><small id="visitor-date">Loading time…</small></div><a class="header-cta" href="index.html#contact">Let's talk <span>↗</span></a></header>
 <main class="arcade-wrap">
 <div class="arcade-head"><div><span class="arcade-kicker">SAIF'S DIGITAL ARCADE</span><h1>Play. Think. Repeat<span class="accent-dot">.</span></h1><p>Three games, one place. Pop colorful bubbles, solve a fresh Sudoku or challenge yourself at chess. Works with mouse and touch.</p></div><div class="more-links"><a href="calculator.html">Open all-in-one calculator ↗</a></div></div>
-<div class="game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab active" data-game="bubble" role="tab" aria-selected="true">🫧 Bubble Shooter</button><button class="game-tab" data-game="sudoku" role="tab" aria-selected="false">▦ Sudoku</button><button class="game-tab" data-game="chess" role="tab" aria-selected="false">♟ Chess</button></div>
+<div class="game-tabs" role="tablist" aria-label="Choose a game"><button class="game-tab active" data-game="bubble" role="tab" aria-selected="true">🫧 Bubble Shooter</button><button class="game-tab" data-game="sudoku" role="tab" aria-selected="false">▦ Sudoku</button><button class="game-tab" data-game="chess" role="tab" aria-selected="false">♟ Chess</button><button class="game-tab" data-game="ludo" role="tab" aria-selected="false">🎲 Ludo</button></div>
 <section class="game-panel active" id="bubble-panel">
 <div class="bubble-hero"><div><span class="bubble-eyebrow">ARCADE / PUZZLE SYSTEM</span><h2>Bubble <span>shooter</span></h2><p>Line up the shot. Build a combo. Clear the field.</p></div><div class="bubble-live"><i></i> LIVE SESSION</div></div>
 <div class="bubble-toolbar">
@@ -107,9 +118,29 @@ body[data-theme="day"] .bubble-progress button.armed{background:linear-gradient(
 </section>
 <section class="game-panel" id="sudoku-panel"><div class="panel-head"><div><h2>Sudoku</h2><p>Generate a new puzzle, use notes mentally, and fill every row, column and 3×3 box.</p></div><div class="game-actions"><button class="arcade-btn" id="sudoku-new">New puzzle</button><button class="arcade-btn" id="sudoku-check">Check</button></div></div>
 <div class="sudoku-layout"><div><div class="sudoku-board" id="sudoku-board" aria-label="Sudoku board"></div><div class="sudoku-controls" id="sudoku-pad"></div></div><aside class="game-side sudoku-side"><div><p class="stat-label">DIFFICULTY</p><select id="sudoku-level" class="arcade-btn"><option value="38">Easy</option><option value="48" selected>Medium</option><option value="54">Hard</option></select></div><div><p class="stat-label">MISTAKES</p><p class="stat-value" id="sudoku-mistakes">0</p></div><p class="hint">Select a cell, then choose a number. Original clues cannot be changed. Check validates the full solution.</p><p class="game-status" id="sudoku-status">Choose an empty cell to begin.</p></aside></div></section>
+<section class="game-panel" id="ludo-panel">
+<div class="panel-head"><div><h2>Ludo</h2><p>Play locally with 2–6 players or create a private online room and invite friends.</p></div><div class="game-actions"><button class="arcade-btn" id="ludo-new">New game</button></div></div>
+<div class="ludo-setup">
+ <label class="ludo-field">PLAYERS <select id="ludo-player-count" class="arcade-btn"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+ <label class="ludo-field">YOUR NAME <input id="ludo-player-name" maxlength="20" value="Player 1" placeholder="Your name"></label>
+ <button class="arcade-btn primary" id="ludo-offline-start" type="button">Play offline</button>
+</div>
+<div class="ludo-online">
+ <div><b>PLAY WITH FRIENDS ONLINE</b><p>Create a room or enter your friend's 6-character room ID.</p></div>
+ <div class="ludo-room-row"><button class="arcade-btn primary" id="ludo-create-room" type="button">Create room</button><input id="ludo-room-id" maxlength="6" placeholder="ROOM ID" autocomplete="off"><button class="arcade-btn" id="ludo-join-room" type="button">Join room</button></div>
+ <p class="game-status" id="ludo-network-status" aria-live="polite">Offline game is ready. Online rooms need the Redis connection configured on Vercel.</p>
+ <div class="ludo-room-info" id="ludo-room-info" hidden><strong>ROOM <span id="ludo-room-code">------</span></strong><span id="ludo-room-players">Waiting for players…</span><button class="arcade-btn" id="ludo-start-online" type="button">Start online game</button></div>
+</div>
+<div class="ludo-game">
+ <div class="ludo-board-wrap"><canvas id="ludo-board" width="640" height="640" aria-label="Ludo board"></canvas></div>
+ <aside class="ludo-side"><div class="ludo-turn" id="ludo-turn">Choose offline or online play</div><div class="ludo-dice" id="ludo-dice">🎲</div><button class="arcade-btn primary" id="ludo-roll" type="button" disabled>Roll dice</button><div class="ludo-players" id="ludo-players"></div><p class="hint">Roll a 6 to bring a token out. Select one of your highlighted tokens after rolling. Capture opponents, reach home, and get all four tokens home to win.</p></aside>
+</div>
+<div class="ludo-voice"><button class="arcade-btn" id="ludo-mic" type="button" disabled>🎙 Enable microphone</button><button class="arcade-btn" id="ludo-speaker" type="button" disabled>🔊 Speaker on</button><span id="ludo-voice-status">Voice chat is available in online rooms.</span></div>
+</section>
 <section class="game-panel" id="chess-panel"><div class="panel-head"><div><h2>Chess</h2><p>Full legal move rules, castling, en passant, promotion and checkmate detection.</p></div><div class="game-actions"><button class="arcade-btn" id="chess-undo">Undo</button><button class="arcade-btn" id="chess-reset">Restart</button></div></div>
 <div class="chess-modes" role="group" aria-label="Chess game mode"><button class="arcade-btn primary" type="button" data-chess-mode="computer" aria-pressed="true">♟ Play vs computer</button><button class="arcade-btn" type="button" data-chess-mode="friend" aria-pressed="false">♟ Play with a friend here</button></div>
 <div class="chess-online-challenge"><label class="stat-label" for="chess-friend-username">CHALLENGE A FRIEND ON CHESS.COM</label><div class="chess-online-row"><input id="chess-friend-username" type="text" maxlength="25" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Friend's Chess.com username"><button class="arcade-btn primary" id="chess-challenge-friend" type="button">Challenge ↗</button></div><p class="chess-mode-note">Enter their Chess.com username to open a direct challenge. Or <a href="https://www.chess.com/play/online" target="_blank" rel="noopener noreferrer">create a shareable game link on Chess.com ↗</a>.</p></div>
+<div class="chess-online-challenge"><b>PLAY ONLINE WITH A FRIEND</b><div class="chess-online-row"><input id="chess-room-id" maxlength="6" placeholder="ROOM ID" autocomplete="off"><button class="arcade-btn primary" id="chess-create-room" type="button">Create room</button><button class="arcade-btn" id="chess-join-room" type="button">Join</button></div><p class="chess-mode-note" id="chess-network-status">Create a room and share its ID with your friend.</p><div class="game-actions"><button class="arcade-btn" id="chess-mic" type="button" disabled>🎙 Enable microphone</button><button class="arcade-btn" id="chess-speaker" type="button" disabled>🔊 Speaker on</button></div><div id="chess-room-info" hidden>ROOM <strong id="chess-room-code">------</strong> · <span id="chess-room-players"></span></div></div>
 <p class="chess-mode-note" id="chess-mode-note">You play White. The computer plays Black.</p>
 <div class="chess-layout"><div class="chess-board" id="chess-board" aria-label="Chess board"></div><aside class="chess-side"><p class="stat-label">GAME STATUS</p><p class="stat-value" id="chess-status" style="font-size:18px">White to move</p><p class="stat-label">MOVE HISTORY</p><div class="move-list" id="chess-moves">No moves yet.</div><p class="hint">Choose a game mode above. In friend mode, two players share the same device. For online play, open Chess.com in a new tab.</p><p class="game-status" id="chess-feedback">White begins.</p></aside></div></section>
 </main>
