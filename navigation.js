@@ -15,6 +15,23 @@ var nav=document.createElement('nav');nav.className='global-glass-nav';nav.setAt
 var html=links.map(function(item){return '<a class="global-nav-item" data-nav="'+item[0]+'" href="'+item[2]+'">'+icons[item[0]]+'<span>'+item[1]+'</span></a>'}).join('');
 html+='<div class="global-nav-more"><button class="global-nav-item global-more-toggle" type="button" data-nav="more" aria-expanded="false" aria-haspopup="true">'+icons.more+'<span>More</span></button><div class="global-more-menu" aria-label="More pages"><a href="games.html">Games arcade</a><a href="calculator.html">Calculator</a><a href="music.html">Music player</a><a href="projects.html">Projects</a></div></div>';
 nav.innerHTML=html;var indicator=document.createElement('span');indicator.className='global-nav-indicator';indicator.setAttribute('aria-hidden','true');nav.insertBefore(indicator,nav.firstChild);document.body.appendChild(nav);
+/* Add a persistent Auto / Force Day / Force Night control beside the header CTA. */
+var header=document.querySelector('.site-header'),cta=header&&header.querySelector('.header-cta');
+if(header&&cta&&!header.querySelector('.theme-control')){
+ var actions=document.createElement('div');actions.className='header-actions';
+ var menuButton=document.createElement('button');menuButton.type='button';menuButton.className='theme-menu-toggle';menuButton.setAttribute('aria-label','Theme settings');menuButton.setAttribute('aria-haspopup','true');menuButton.setAttribute('aria-expanded','false');menuButton.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
+ var themeControl=document.createElement('div');themeControl.className='theme-control';
+ var themeMenu=document.createElement('div');themeMenu.className='theme-menu';themeMenu.setAttribute('role','group');themeMenu.setAttribute('aria-label','Choose appearance');
+ themeMenu.innerHTML='<p class="theme-menu-title">APPEARANCE</p><button type="button" data-theme-mode="auto"><span>◐</span> Auto <small>By local time</small></button><button type="button" data-theme-mode="day"><span>☀</span> Force day mode</button><button type="button" data-theme-mode="night"><span>☾</span> Force night mode</button>';
+ themeControl.append(menuButton,themeMenu);header.insertBefore(actions,cta);actions.append(cta,themeControl);
+ function refreshThemeMenu(){var mode=window.SiteTheme?window.SiteTheme.getMode():'auto';themeMenu.querySelectorAll('[data-theme-mode]').forEach(function(b){var selected=b.dataset.themeMode===mode;b.classList.toggle('selected',selected);b.setAttribute('aria-pressed',String(selected))})}
+ function closeThemeMenu(){themeControl.classList.remove('open');menuButton.setAttribute('aria-expanded','false')}
+ menuButton.addEventListener('click',function(){var open=!themeControl.classList.contains('open');themeControl.classList.toggle('open',open);menuButton.setAttribute('aria-expanded',String(open));refreshThemeMenu()});
+ themeMenu.querySelectorAll('[data-theme-mode]').forEach(function(b){b.addEventListener('click',function(){if(window.SiteTheme)window.SiteTheme.setMode(b.dataset.themeMode);refreshThemeMenu();closeThemeMenu()})});
+ document.addEventListener('click',function(e){if(!e.target.closest('.theme-control'))closeThemeMenu()});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&themeControl.classList.contains('open')){closeThemeMenu();menuButton.focus()}});
+ window.addEventListener('site-theme-change',refreshThemeMenu);refreshThemeMenu();
+}
 var items=Array.from(nav.querySelectorAll('[data-nav]')),more=nav.querySelector('.global-nav-more'),toggle=nav.querySelector('.global-more-toggle'),menu=nav.querySelector('.global-more-menu'),reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches,indicatorReady=false;
 function moveIndicator(item){if(!item)return;var navRect=nav.getBoundingClientRect(),rect=item.getBoundingClientRect(),x=rect.left-navRect.left,y=rect.top-navRect.top;if(!indicatorReady||reduced){indicator.style.width=rect.width+'px';indicator.style.height=rect.height+'px';indicator.style.transform='translate3d('+x+'px,'+y+'px,0)';indicatorReady=true;indicator.classList.add('is-ready');return}indicator.style.width=rect.width+'px';indicator.style.height=rect.height+'px';indicator.style.transform='translate3d('+x+'px,'+y+'px,0)';}
 function setActive(key){var selected=null;items.forEach(function(item){var active=item.dataset.nav===key;item.classList.toggle('active',active);if(active)selected=item;if(item.dataset.nav==='more')item.setAttribute('aria-current',active?'page':'false');else if(active)item.setAttribute('aria-current','page');else item.removeAttribute('aria-current')});moveIndicator(selected)}
