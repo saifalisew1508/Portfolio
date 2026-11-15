@@ -982,3 +982,69 @@ body[data-theme="day"] .theme-menu button:hover,body[data-theme="day"] .theme-me
 .global-nav-item.active{animation:globalCapsuleSettle .58s cubic-bezier(.16,1.32,.28,1) both}
 @keyframes globalCapsuleSettle{0%{transform:scale(.94)}58%{transform:scale(1.055)}80%{transform:scale(.985)}100%{transform:scale(1)}}
 @media(prefers-reduced-motion:reduce){.global-nav-indicator{transition:none!important}.global-nav-item.active{animation:none!important}}
+
+/* Desktop: compact hover-following capsule sits in the top header zone. */
+.global-glass-nav{
+ position:fixed!important;left:50%!important;right:auto!important;top:14px!important;bottom:auto!important;
+ transform:translateX(-50%)!important;width:max-content!important;max-width:calc(100vw - 360px)!important;
+ height:56px!important;min-height:56px!important;padding:5px!important;gap:3px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ border-radius:999px!important;z-index:150!important;overflow:visible!important;
+}
+.global-nav-links{display:flex;align-items:center;gap:2px;height:100%}
+.desktop-nav-links{display:flex!important}
+.mobile-nav-links{display:none!important}
+.global-nav-item,.global-more-toggle{
+ width:auto!important;min-width:56px!important;height:44px!important;min-height:44px!important;
+ padding:7px 12px!important;display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:center!important;gap:6px!important;
+ border-radius:999px!important;font-size:10px!important;line-height:1!important;
+}
+.global-nav-item svg{width:15px!important;height:15px!important}
+.global-nav-item span{max-width:none!important;overflow:visible!important}
+.global-nav-more{width:42px!important;height:44px!important;flex:0 0 42px!important}
+.global-more-toggle{width:42px!important;min-width:42px!important;padding:0!important}
+.global-more-toggle svg{width:19px!important;height:19px!important}
+.global-more-menu{top:calc(100% + 12px)!important;bottom:auto!important;right:0!important;max-height:min(72vh,560px);overflow:auto}
+.global-menu-heading{position:relative;margin:7px 9px 4px;color:#9eacc9;font:9px var(--mono,monospace);letter-spacing:1.5px}
+.global-menu-divider{height:1px;margin:8px 5px;background:rgba(180,194,235,.18)}
+.global-theme-options{display:grid;gap:3px;padding:2px}
+.global-theme-options button{display:flex;align-items:center;gap:9px;width:100%;padding:10px 12px;border:1px solid transparent;border-radius:999px;background:rgba(255,255,255,.035);color:#d8e0f3;font:600 11px var(--sans,Arial);text-align:left;cursor:pointer;transition:background .2s,border-color .2s,transform .45s cubic-bezier(.18,.92,.22,1.2)}
+.global-theme-options button span{width:17px;text-align:center;color:#a9a0ff}
+.global-theme-options button.selected,.global-theme-options button:hover{background:rgba(115,126,231,.22);border-color:rgba(153,165,255,.28)}
+.global-nav-indicator{transition:transform .78s cubic-bezier(.16,1.28,.25,1),width .62s cubic-bezier(.16,1.22,.25,1),height .4s ease,opacity .18s ease!important}
+.global-nav-item{transition:color .22s,transform .5s cubic-bezier(.18,.92,.22,1.2)!important}
+.global-nav-item:hover{transform:translateY(-1px)!important}
+.global-nav-more .global-nav-item:hover{transform:scale(1.04)!important}
+@media(hover:hover){
+ .global-nav-indicator{transition:transform .78s cubic-bezier(.16,1.28,.25,1),width .62s cubic-bezier(.16,1.22,.25,1),height .4s ease!important}
+}
+body[data-theme="day"] .global-menu-heading{color:#71809c}
+body[data-theme="day"] .global-theme-options button{color:#263653;background:rgba(90,110,165,.06)}
+body[data-theme="day"] .global-theme-options button span{color:#6879d4}
+body[data-theme="day"] .global-theme-options button.selected,body[data-theme="day"] .global-theme-options button:hover{background:rgba(108,126,222,.14);border-color:rgba(105,122,198,.22)}
+/* Mobile keeps the familiar bottom capsule; More becomes the same three-dot menu. */
+@media(max-width:760px){
+ .global-glass-nav{
+  left:4px!important;right:4px!important;top:auto!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;
+  transform:none!important;width:auto!important;max-width:none!important;height:62px!important;min-height:0!important;
+  padding:5px!important;gap:2px!important;display:flex!important;justify-content:space-around!important;
+ }
+ .desktop-nav-links{display:none!important}
+ .mobile-nav-links{display:flex!important;flex:1 1 auto;justify-content:space-around;min-width:0}
+ .global-nav-item,.global-more-toggle{width:auto!important;min-width:0!important;flex:1 1 0;height:50px!important;min-height:50px!important;padding:4px 1px!important;flex-direction:column!important;gap:3px!important;font-size:9px!important}
+ .global-nav-item svg{width:17px!important;height:17px!important}
+ .global-nav-more{width:48px!important;flex:0 0 48px!important;height:50px!important}
+ .global-more-toggle{width:48px!important;min-width:48px!important;flex:none!important}
+ .global-more-toggle svg{width:20px!important;height:20px!important}
+ .global-more-menu{top:auto!important;bottom:calc(100% + 12px)!important;right:0!important;width:min(248px,calc(100vw - 28px))!important}
+ body{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media(max-width:390px){
+ .global-glass-nav{left:3px!important;right:3px!important;height:59px!important}
+ .global-nav-item,.global-more-toggle{height:48px!important;min-height:48px!important;font-size:8px!important}
+ .global-nav-more{height:48px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .global-nav-indicator,.global-nav-item,.global-theme-options button{transition:none!important}
+}
