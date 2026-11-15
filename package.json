@@ -2,5 +2,8 @@
   "private": true,
   "engines": {
     "node": "24.x"
+  },
+  "dependencies": {
+    "redis": "^5.8.2"
   }
 }
