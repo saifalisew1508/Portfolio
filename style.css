@@ -952,3 +952,25 @@ body.global-page-leaving{animation:globalPageLeave .24s ease-in both;pointer-eve
 @keyframes globalPageEnter{0%{opacity:.45;transform:translateY(13px) scale(.988);filter:blur(5px)}65%{opacity:1;transform:translateY(-2px) scale(1.002);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @keyframes globalPageLeave{to{opacity:.55;transform:scale(.992);filter:blur(3px)}}
 @media(prefers-reduced-motion:reduce){body.global-page-enter,body.global-page-leaving{animation:none!important}}
+
+
+/* Header appearance menu: Auto, forced day and forced night. */
+.header-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto;position:relative;}
+.header-actions .header-cta{display:inline-flex;align-items:center;}
+.theme-control{position:relative;z-index:30;}
+.theme-menu-toggle{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--glass-border,rgba(190,204,235,.2));border-radius:50%;background:var(--glass,rgba(20,28,45,.58));color:var(--text);cursor:pointer;backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 5px 16px rgba(0,0,0,.1);}
+.theme-menu-toggle svg{width:20px;height:20px;fill:currentColor;}
+.theme-menu{position:absolute;right:0;top:calc(100% + 12px);width:208px;padding:9px;border-radius:19px;border:1px solid rgba(184,197,255,.24);background:linear-gradient(145deg,rgba(30,40,66,.96),rgba(9,15,30,.96));color:#e9eefc;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 16px 38px rgba(0,0,0,.3);backdrop-filter:blur(28px) saturate(170%);-webkit-backdrop-filter:blur(28px) saturate(170%);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-7px) scale(.97);transform-origin:top right;transition:opacity .18s ease,transform .28s cubic-bezier(.2,.9,.2,1.15),visibility .18s;}
+.theme-control.open .theme-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1);}
+.theme-menu-title{font:9px var(--mono);letter-spacing:1.4px;color:#9eacc9;padding:7px 10px;margin:0 0 3px;}
+.theme-menu button{width:100%;display:flex;align-items:center;gap:9px;text-align:left;padding:10px;border:1px solid transparent;border-radius:11px;background:transparent;color:inherit;font:600 11px var(--sans);cursor:pointer;}
+.theme-menu button span{width:18px;text-align:center;color:#9eabff;font-size:14px;}
+.theme-menu button small{margin-left:auto;color:#8e9ab4;font:9px var(--mono);}
+.theme-menu button:hover,.theme-menu button.selected{background:rgba(115,126,231,.2);border-color:rgba(153,165,255,.24);}
+body[data-theme="day"] .theme-menu-toggle{background:rgba(255,255,255,.62);border-color:rgba(75,96,143,.2);color:#263653;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 5px 15px rgba(55,74,120,.1);}
+body[data-theme="day"] .theme-menu{background:linear-gradient(145deg,rgba(250,252,255,.97),rgba(224,234,250,.97));border-color:rgba(88,108,157,.24);color:#263653;box-shadow:inset 0 1px 0 #fff,0 16px 38px rgba(45,64,105,.2);}
+body[data-theme="day"] .theme-menu-title,body[data-theme="day"] .theme-menu button small{color:#71809c;}
+body[data-theme="day"] .theme-menu button span{color:#6879d4;}
+body[data-theme="day"] .theme-menu button:hover,body[data-theme="day"] .theme-menu button.selected{background:rgba(108,126,222,.14);border-color:rgba(105,122,198,.22);}
+@media(max-width:760px){.header-actions{gap:6px}.theme-menu-toggle{width:34px;height:34px}.theme-menu{width:198px;right:0;top:calc(100% + 10px)}}
+@media(max-width:390px){.header-actions{gap:4px}.theme-menu-toggle{width:32px;height:32px}.header-actions .header-cta{padding-left:8px;padding-right:8px;font-size:9px}}
