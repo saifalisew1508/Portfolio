@@ -12,24 +12,83 @@ var $=function(id){return document.getElementById(id)};
  }
  tick();window.setInterval(tick,1000);
 })();
-/* BUBBLE SHOOTER */
+/* BUBBLE SHOOTER — responsive arcade engine */
 var canvas=$('bubble-canvas'),ctx=canvas.getContext('2d'),cols=['#ff6488','#55d6ef','#a78bfa','#f8c65b','#62dc9b'],R=21,grid=[],score=0,left=30,shot=0,aim={x:360,y:160},shooter={x:360,y:710},current=0,next=1;
+var bubbleModes={rookie:{rows:5,shots:38,pressure:8,label:'ROOKIE'},pro:{rows:6,shots:30,pressure:6,label:'PRO'},expert:{rows:7,shots:24,pressure:4,label:'EXPERT'}};
+var bubbleMode='pro',combo=0,powerCharge=0,powerArmed=false,paused=false,gameEnded=false,soundEnabled=false,audioContext=null,particles=[],particleFrame=0;
+var bestScore=0;try{bestScore=Number(localStorage.getItem('bubble-best-score')||0)}catch(e){}
 function randColor(){return Math.floor(Math.random()*cols.length)}
 function bubblePos(r,c){return {x:25+c*42+(r%2?21:0),y:25+r*36}}
-function drawCircle(x,y,color,rad){ctx.beginPath();ctx.arc(x,y,rad,0,Math.PI*2);var g=ctx.createRadialGradient(x-rad*.35,y-rad*.4,2,x,y,rad);g.addColorStop(0,'#ffffff');g.addColorStop(.18,cols[color]);g.addColorStop(1,'#10182a');ctx.fillStyle=g;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=cols[color];ctx.stroke()}
-function drawBubble(){ctx.clearRect(0,0,720,760);ctx.fillStyle='#0b1426';ctx.fillRect(0,0,720,760);ctx.strokeStyle='#283b60';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(8,260);ctx.lineTo(712,260);ctx.stroke();for(var r=0;r<grid.length;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);drawCircle(p.x,p.y,grid[r][c],R)}ctx.beginPath();ctx.moveTo(shooter.x,shooter.y);ctx.lineTo(aim.x,aim.y);ctx.strokeStyle='#ffffff33';ctx.setLineDash([6,8]);ctx.stroke();ctx.setLineDash([]);drawCircle(shooter.x,shooter.y,current,R);drawCircle(665,710,next,14);ctx.fillStyle='#91a4c8';ctx.font='13px monospace';ctx.fillText('NEXT',640,675);$('bubble-score').textContent=score;$('bubble-left').textContent=left;$('bubble-next').textContent='●';$('bubble-next').style.color=cols[next]}
-function resetBubble(){grid=[];for(var r=0;r<10;r++){grid[r]=[];for(var c=0;c<16-(r%2);c++)grid[r][c]=r<6?randColor():-1}score=0;left=30;shot=0;current=randColor();next=randColor();$('bubble-status').textContent='Ready. Take your first shot.';drawBubble()}
+function playBubbleTone(freq,duration){if(!soundEnabled)return;try{var AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!audioContext)audioContext=new AC();if(audioContext.state==='suspended')audioContext.resume();var osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(.0001,audioContext.currentTime);gain.gain.exponentialRampToValueAtTime(.055,audioContext.currentTime+.012);gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+duration);osc.connect(gain);gain.connect(audioContext.destination);osc.start();osc.stop(audioContext.currentTime+duration+.02)}catch(e){}}
+function updateBubbleHud(){
+ $('bubble-score').textContent=score;$('bubble-left').textContent=left;$('bubble-best').textContent=bestScore;$('bubble-combo').textContent='×'+combo;$('bubble-next').textContent='●';$('bubble-next').style.color=cols[next];
+ $('bubble-level-label').textContent=bubbleModes[bubbleMode].label+' MODE';$('bubble-stage-level').textContent=bubbleModes[bubbleMode].label+' / '+String(shot+1).padStart(2,'0');
+ $('bubble-power-fill').style.width=(powerCharge/8*100)+'%';$('bubble-power-count').textContent=powerCharge>=8?'READY':powerCharge+'/8';$('bubble-power').disabled=powerCharge<8&&!powerArmed;$('bubble-power').classList.toggle('armed',powerArmed);$('bubble-power').setAttribute('aria-pressed',String(powerArmed));$('bubble-power').setAttribute('aria-label',powerCharge>=8?'Arm pulse power shot':'Pulse charge '+powerCharge+' of 8');
+}
+function drawCircle(x,y,color,rad,glow){
+ ctx.save();if(glow){ctx.shadowColor=cols[color];ctx.shadowBlur=glow}
+ ctx.beginPath();ctx.arc(x,y,rad,0,Math.PI*2);var g=ctx.createRadialGradient(x-rad*.34,y-rad*.4,1,x,y,rad);g.addColorStop(0,'#ffffff');g.addColorStop(.17,cols[color]);g.addColorStop(.72,cols[color]);g.addColorStop(1,'#10182a');ctx.fillStyle=g;ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle=cols[color];ctx.stroke();
+ ctx.shadowBlur=0;ctx.beginPath();ctx.ellipse(x-rad*.28,y-rad*.36,rad*.25,rad*.12,-.55,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.62)';ctx.fill();ctx.restore();
+}
+function drawBubble(){
+ ctx.clearRect(0,0,720,760);var bg=ctx.createLinearGradient(0,0,0,760);bg.addColorStop(0,'#101f39');bg.addColorStop(.58,'#0a1427');bg.addColorStop(1,'#080f1e');ctx.fillStyle=bg;ctx.fillRect(0,0,720,760);
+ for(var s=0;s<38;s++){var sx=(s*193+37)%720,sy=(s*127+51)%740;ctx.fillStyle='rgba(147,199,255,'+(s%3===0?'.32':'.13')+')';ctx.fillRect(sx,sy,2,2)}
+ ctx.strokeStyle='rgba(105,180,233,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(10,260);ctx.lineTo(710,260);ctx.stroke();
+ ctx.setLineDash([4,8]);ctx.strokeStyle='rgba(105,180,233,.12)';ctx.beginPath();ctx.moveTo(10,260);ctx.lineTo(10,735);ctx.moveTo(710,260);ctx.lineTo(710,735);ctx.stroke();ctx.setLineDash([]);
+ for(var r=0;r<grid.length;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);drawCircle(p.x,p.y,grid[r][c],R,2)}
+ if(!paused&&!gameEnded){
+  var dx=aim.x-shooter.x,dy=aim.y-shooter.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
+  for(var t=28;t<Math.min(len,500);t+=24){var tx=shooter.x+ux*t,ty=shooter.y+uy*t;if(tx<R||tx>720-R)break;ctx.beginPath();ctx.arc(tx,ty,2.4,0,Math.PI*2);ctx.fillStyle=powerArmed?'rgba(255,199,105,.8)':'rgba(173,222,255,.58)';ctx.fill()}
+  ctx.beginPath();ctx.arc(aim.x,aim.y,7,0,Math.PI*2);ctx.strokeStyle=powerArmed?'#ffd27c':'#a7e9ff';ctx.lineWidth=1.5;ctx.stroke();
+ }
+ drawCircle(shooter.x,shooter.y,current,R,powerArmed?22:8);
+ ctx.beginPath();ctx.arc(shooter.x,shooter.y+24,38,Math.PI,Math.PI*2);ctx.strokeStyle='rgba(124,185,255,.24)';ctx.lineWidth=5;ctx.stroke();
+ drawCircle(665,710,next,14,5);ctx.fillStyle='#91a9cc';ctx.font='10px monospace';ctx.fillText('NEXT',648,677);
+ particles.forEach(function(p){ctx.save();ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.shadowColor=p.color;ctx.shadowBlur=9;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore()});
+ if(paused||gameEnded){ctx.fillStyle='rgba(4,9,20,.7)';ctx.fillRect(0,0,720,760);ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='700 34px sans-serif';ctx.fillText(paused?'PAUSED':(left>0?'FIELD CLEARED':'SESSION OVER'),360,350);ctx.fillStyle='#a9c4e9';ctx.font='15px monospace';ctx.fillText(paused?'Resume when you are ready':(left>0?'Excellent run. Start another round.':'Restart to try again.'),360,383);ctx.textAlign='start'}
+ updateBubbleHud();
+}
+function animateBubbleParticles(){if(particleFrame)return;particleFrame=requestAnimationFrame(function step(){particles.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life-=.025});particles=particles.filter(function(p){return p.life>0});drawBubble();if(particles.length)particleFrame=requestAnimationFrame(step);else particleFrame=0})}
+function burstBubble(x,y,color,count){for(var i=0;i<count;i++){var a=Math.random()*Math.PI*2,speed=1+Math.random()*4;particles.push({x:x,y:y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed-1,life:.7+Math.random()*.3,size:2+Math.random()*3,color:cols[color]})}animateBubbleParticles()}
+function resetBubble(){
+ var mode=bubbleModes[bubbleMode];grid=[];for(var r=0;r<10;r++){grid[r]=[];for(var c=0;c<16-(r%2);c++)grid[r][c]=r<mode.rows?randColor():-1}
+ score=0;left=mode.shots;shot=0;combo=0;powerCharge=0;powerArmed=false;paused=false;gameEnded=false;particles=[];aim={x:360,y:160};current=randColor();next=randColor();
+ $('bubble-status').textContent='Ready. Drag to aim, then release to fire.';$('bubble-pause').innerHTML='<span>Ⅱ</span> Pause';$('bubble-pause').setAttribute('aria-pressed','false');$('bubble-tip').textContent='Aim at matching clusters. Floating bubbles drop for bonus points.';drawBubble();
+}
 function neighbors(r,c){var d=[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]];if(r%2===1)d=[[0,-1],[0,1],[-1,-1],[-1,0],[1,-1],[1,0]];return d.map(function(v){return[r+v[0],c+v[1]]})}
 function connected(r,c,color,seen){var k=r+','+c;if(seen[k]||!grid[r]||grid[r][c]!==color)return[];seen[k]=1;var out=[[r,c]];neighbors(r,c).forEach(function(n){out=out.concat(connected(n[0],n[1],color,seen))});return out}
-function dropFloating(){var seen={},stack=[];for(var c=0;c<grid[0].length;c++)if(grid[0][c]>=0)stack.push([0,c]);while(stack.length){var a=stack.pop(),k=a.join(',');if(seen[k]||!grid[a[0]]||grid[a[0]][a[1]]<0)continue;seen[k]=1;neighbors(a[0],a[1]).forEach(function(n){if(grid[n[0]]&&grid[n[0]][n[1]]>=0)stack.push(n)})}var dropped=0;grid.forEach(function(row,r){row.forEach(function(v,c){if(v>=0&&!seen[r+','+c]){grid[r][c]=-1;dropped++}})});score+=dropped*20}
-function shoot(x,y){if(left<=0||$('bubble-status').textContent.indexOf('won')>=0)return;var dx=x-shooter.x,dy=y-shooter.y;if(dy>-25)return;var hit=null;for(var s=1;s<=50;s++){var px=shooter.x+dx*s/50,py=shooter.y+dy*s/50;if(px<R||px>720-R||py<R){hit={x:px,y:py};break}for(var r=0;r<grid.length&&!hit;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);if(Math.hypot(px-p.x,py-p.y)<R*1.85){hit={x:px,y:py};break}}}if(!hit)hit={x:Math.max(R,Math.min(720-R,x)),y:Math.max(R,Math.min(680,y))};var best=null,dist=1e9;for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}if(!best)return;grid[best[0]][best[1]]=current;var group=connected(best[0],best[1],current,{});if(group.length>=3){group.forEach(function(a){grid[a[0]][a[1]]=-1});score+=group.length*10;dropFloating();$('bubble-status').textContent='Nice shot! '+group.length+' bubbles popped.'}else $('bubble-status').textContent='Keep matching colors.';left--;shot++;if(grid.every(function(row){return row.every(function(v){return v<0})}))$('bubble-status').textContent='You won! Board cleared.';else if(left<=0)$('bubble-status').textContent='Out of bubbles. Start a new game.';else if(shot%5===0){var row=[];for(var z=0;z<16;z++)row.push(randColor());grid.unshift(row);grid.pop()}current=next;next=randColor();drawBubble()}
+function dropFloating(){var seen={},stack=[];for(var c=0;c<grid[0].length;c++)if(grid[0][c]>=0)stack.push([0,c]);while(stack.length){var a=stack.pop(),k=a.join(',');if(seen[k]||!grid[a[0]]||grid[a[0]][a[1]]<0)continue;seen[k]=1;neighbors(a[0],a[1]).forEach(function(n){if(grid[n[0]]&&grid[n[0]][n[1]]>=0)stack.push(n)})}var dropped=0;grid.forEach(function(row,r){row.forEach(function(v,c){if(v>=0&&!seen[r+','+c]){grid[r][c]=-1;dropped++}})});score+=dropped*20;return dropped}
+function saveBubbleBest(){if(score>bestScore){bestScore=score;try{localStorage.setItem('bubble-best-score',String(bestScore))}catch(e){}}}
+function endBubble(won){gameEnded=true;paused=false;saveBubbleBest();$('bubble-status').textContent=won?'You cleared the field! New personal-best potential unlocked.':'Out of shots. Try a different angle next run.';playBubbleTone(won?880:190,.22);drawBubble()}
+function shoot(x,y){
+ if(left<=0||paused||gameEnded)return;var dx=x-shooter.x,dy=y-shooter.y;if(dy>-25)return;
+ var hit=null;for(var s=1;s<=65;s++){var px=shooter.x+dx*s/65,py=shooter.y+dy*s/65;if(px<R||px>720-R||py<R){hit={x:px,y:py};break}for(var r=0;r<grid.length&&!hit;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);if(Math.hypot(px-p.x,py-p.y)<R*1.85){hit={x:px,y:py};break}}}
+ if(!hit)hit={x:Math.max(R,Math.min(720-R,x)),y:Math.max(R,Math.min(680,y))};
+ var best=null,dist=1e9;for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}
+ if(!best)return;grid[best[0]][best[1]]=current;var impact=bubblePos(best[0],best[1]),cleared=0,popped=[];
+ if(powerArmed&&powerCharge>=8){for(var pr=0;pr<grid.length;pr++)for(var pc=0;pc<grid[pr].length;pc++)if(grid[pr][pc]>=0){var pp=bubblePos(pr,pc);if(Math.hypot(pp.x-impact.x,pp.y-impact.y)<=R*2.55){popped.push([pr,pc,grid[pr][pc]]);grid[pr][pc]=-1;cleared++}}score+=cleared*25;powerCharge=0;powerArmed=false;combo=0;$('bubble-status').textContent='PULSE HIT! '+cleared+' bubbles cleared.';playBubbleTone(720,.16)}
+ else{var group=connected(best[0],best[1],current,{});if(group.length>=3){group.forEach(function(a){popped.push([a[0],a[1],grid[a[0]][a[1]]]);grid[a[0]][a[1]]=-1});cleared=group.length;combo++;score+=cleared*10*(1+Math.min(combo-1,5)*.25);powerCharge=Math.min(8,powerCharge+cleared);$('bubble-status').textContent=(combo>1?'COMBO ×'+combo+'! ':'Nice shot! ')+cleared+' bubbles popped.';$('bubble-tip').textContent=combo>1?'Keep the chain alive to build your score multiplier.':'Every clear charges your Pulse shot.';playBubbleTone(430+Math.min(combo,5)*85,.12)}
+ else{combo=0;$('bubble-status').textContent='No match. Reposition for the next shot.';playBubbleTone(240,.08)}}
+ popped.forEach(function(a){var p=bubblePos(a[0],a[1]);burstBubble(p.x,p.y,a[2],5)});
+ var dropped=dropFloating();if(dropped){$('bubble-status').textContent+=' '+dropped+' floating bubbles dropped!';playBubbleTone(660,.14)}
+ left--;shot++;saveBubbleBest();
+ if(grid.every(function(row){return row.every(function(v){return v<0})})){endBubble(true);return}
+ if(shot%bubbleModes[bubbleMode].pressure===0&&left>0){var row=[];for(var z=0;z<16;z++)row.push(randColor());grid.unshift(row);grid.pop();$('bubble-status').textContent='Ceiling advanced. Keep moving!';if(grid.some(function(line,r){return line.some(function(v){return v>=0&&bubblePos(r,0).y>=shooter.y-95})})){endBubble(false);return}}
+ if(left<=0){endBubble(false);return}
+ current=next;next=randColor();drawBubble();
+}
 var aiming=false,activePointer=null,aimOrigin=null,aimStartedAt=0,aimMoved=false;
 function updateAim(e){var b=canvas.getBoundingClientRect();aim={x:(e.clientX-b.left)*720/b.width,y:(e.clientY-b.top)*760/b.height};if(aimOrigin&&Math.hypot(e.clientX-aimOrigin.x,e.clientY-aimOrigin.y)>7)aimMoved=true;if(aim.y>=shooter.y-20)aim.y=shooter.y-21;drawBubble()}
-canvas.addEventListener('pointermove',function(e){if(aiming&&activePointer!==e.pointerId)return;updateAim(e)});
-canvas.addEventListener('pointerdown',function(e){if(e.button!==undefined&&e.button!==0)return;e.preventDefault();aiming=true;activePointer=e.pointerId;aimOrigin={x:e.clientX,y:e.clientY};aimStartedAt=performance.now();aimMoved=false;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);updateAim(e);$('bubble-status').textContent='Hold and drag to aim, then release to shoot.'});
-canvas.addEventListener('pointerup',function(e){if(!aiming||activePointer!==e.pointerId)return;updateAim(e);var deliberate=e.pointerType==='mouse'||aimMoved||(performance.now()-aimStartedAt)>=220;aiming=false;activePointer=null;aimOrigin=null;if(deliberate)shoot(aim.x,aim.y);else{$('bubble-status').textContent='Hold a little longer or drag to aim, then release.';drawBubble()}});
+canvas.addEventListener('pointermove',function(e){if(aiming&&activePointer!==e.pointerId)return;if(!paused&&!gameEnded)updateAim(e)});
+canvas.addEventListener('pointerdown',function(e){if(paused||gameEnded||left<=0)return;if(e.button!==undefined&&e.button!==0)return;e.preventDefault();aiming=true;activePointer=e.pointerId;aimOrigin={x:e.clientX,y:e.clientY};aimStartedAt=performance.now();aimMoved=false;if(canvas.setPointerCapture)canvas.setPointerCapture(e.pointerId);updateAim(e);$('bubble-status').textContent='Aiming… release to fire.'});
+canvas.addEventListener('pointerup',function(e){if(!aiming||activePointer!==e.pointerId)return;updateAim(e);var deliberate=e.pointerType==='mouse'||aimMoved||(performance.now()-aimStartedAt)>=180;aiming=false;activePointer=null;aimOrigin=null;if(deliberate)shoot(aim.x,aim.y);else{$('bubble-status').textContent='Drag to aim before releasing.';drawBubble()}});
 canvas.addEventListener('pointercancel',function(e){if(activePointer===e.pointerId){aiming=false;activePointer=null;aimOrigin=null;drawBubble()}});
-$('bubble-new').onclick=function(){aiming=false;activePointer=null;aimOrigin=null;resetBubble()};resetBubble();
+$('bubble-new').onclick=function(){aiming=false;activePointer=null;aimOrigin=null;resetBubble()};
+$('bubble-level').onchange=function(){bubbleMode=this.value;resetBubble()};
+$('bubble-pause').onclick=function(){if(gameEnded)return;paused=!paused;aiming=false;activePointer=null;this.innerHTML=paused?'<span>▶</span> Resume':'<span>Ⅱ</span> Pause';this.setAttribute('aria-pressed',String(paused));$('bubble-status').textContent=paused?'Game paused. Take a breather.':'Back in the field. Aim your next shot.';drawBubble()};
+$('bubble-sound').onclick=function(){soundEnabled=!soundEnabled;this.innerHTML=soundEnabled?'<span>♫</span> Sound on':'<span>♫</span> Sound off';this.setAttribute('aria-pressed',String(soundEnabled));if(soundEnabled)playBubbleTone(520,.1)};
+$('bubble-power').onclick=function(){if(powerCharge<8)return;powerArmed=!powerArmed;$('bubble-status').textContent=powerArmed?'Pulse armed. Your next shot clears an impact zone.':'Pulse cancelled.';drawBubble()};
+resetBubble();
 /* SUDOKU */
 var puzzle=[],solution=[],board=[],selected=-1,mistakes=0;
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
