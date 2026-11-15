@@ -471,10 +471,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('unit
 
 /* Shared touch-friendly numeric keypad for every numeric converter and clinical field. */
 (function(){
- var pad=$('virtual-keypad'),target=null,coarse=window.matchMedia('(pointer:coarse)').matches;
+ var pad=$('virtual-keypad'),target=null;
  if(!pad)return;
  function eligible(el){return el&&el.matches('input')&&(el.dataset.virtualKeyboard==='true'||el.type==='number'||el.inputMode==='decimal')&&!el.readOnly&&!el.disabled;}
- function open(el){if(!coarse||!eligible(el))return;target=el;pad.classList.remove('hidden');}
+ function open(el){if(!eligible(el))return;target=el;pad.classList.remove('hidden');}
  function close(blur){pad.classList.add('hidden');var old=target;target=null;if(blur&&old)old.blur();}
  document.addEventListener('focusin',function(e){if(eligible(e.target))open(e.target);else if(!e.target.closest('#virtual-keypad'))close(false);});
  document.addEventListener('click',function(e){var el=e.target.closest('input');if(el&&eligible(el))open(el);});
