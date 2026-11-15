@@ -281,12 +281,12 @@ body[data-theme="day"] .virtual-keypad-grid .vk-done{background:linear-gradient(
 
 /* Compact calculator shortcuts. Math + Scientific remain one tool with the in-panel mode switch. */
 @media(max-width:760px){
- .glass-navigation{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
- .glass-navigation .nav-card{min-height:66px;padding:8px 4px;border-radius:15px;gap:5px}
- .glass-navigation .nav-card svg{width:21px;height:21px}
- .glass-navigation .nav-card span{font-size:8px;line-height:1.25;text-align:center}
+ .glass-navigation{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .glass-navigation .nav-card{min-height:62px;padding:7px 9px;border-radius:14px;gap:8px;flex-direction:row}
+ .glass-navigation .nav-card svg{width:20px;height:20px}
+ .glass-navigation .nav-card span{font-size:8px;line-height:1.2;text-align:left}
 }
-@media(max-width:390px){.glass-navigation{gap:5px}.glass-navigation .nav-card{min-height:61px;padding:7px 3px}.glass-navigation .nav-card svg{width:19px;height:19px}.glass-navigation .nav-card span{font-size:7.5px}}
+@media(max-width:390px){.glass-navigation{gap:6px}.glass-navigation .nav-card{min-height:58px;padding:6px 7px}.glass-navigation .nav-card svg{width:18px;height:18px}.glass-navigation .nav-card span{font-size:7.5px}}
 /* Spring motion for every segmented/capsule selection in the calculator UI. */
 .calc-mode,.category-pill,.unit-swap-round,.currency-swap,.glass-navigation .nav-card{
  transition:transform .58s cubic-bezier(.18,.92,.22,1.22),background .3s,border-color .3s,box-shadow .3s,color .25s!important;
