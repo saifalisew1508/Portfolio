@@ -200,4 +200,52 @@ $('chess-undo').onclick=function(){
 };
 $('chess-reset').onclick=function(){setChessMode(chessMode)};
 renderChess();
+
+/* CHESS ONLINE ROOMS + VOICE */
+var chessRoom=null,chessSeat=0,chessApplyingRemote=false;
+function chessRoomStatus(message){var el=$('chess-network-status');if(el)el.textContent=message;}
+function chessRoomSnapshot(){return {fen:chess.fen(),history:chess.history()};}
+function applyChessRoomState(snapshot){
+ if(!snapshot||!snapshot.fen||snapshot.fen===chess.fen())return;
+ chessApplyingRemote=true;
+ try{if(Array.isArray(snapshot.history)){chess.reset();snapshot.history.forEach(function(san){chess.move(san)});if(chess.fen()!==snapshot.fen)chess.load(snapshot.fen);}else chess.load(snapshot.fen);selectedSquare=null;legalTargets=[];renderChess();chessFeedback('Opponent moved. Your turn.');}
+ catch(error){console.warn('Could not apply remote chess state',error);}
+ chessApplyingRemote=false;
+}
+function chessRoomPlayers(room){var names=room.players.map(function(p){return p.name}).join(' · ');$('chess-room-info').hidden=false;$('chess-room-code').textContent=room.id;$('chess-room-players').textContent=names;}
+async function chessCreateOrJoin(action){
+ try{
+  if(!window.ArcadeNetwork)throw new Error('Multiplayer client did not load. Refresh the page.');
+  chessRoom&&chessRoom.close();chessRoom=window.ArcadeNetwork.createRoom('chess');
+  chessRoom.addEventListener('room',function(e){chessRoomPlayers(e.detail);chessRoom.syncPeers().catch(function(){});});
+  chessRoom.addEventListener('sync',function(e){var room=e.detail;if(room.state)applyChessRoomState(room.state);chessRoomPlayers(room);chessRoom.syncPeers().catch(function(){});});
+  chessRoom.addEventListener('error',function(e){chessRoomStatus(e.detail.message);});
+  chessRoom.addEventListener('voice-status',function(e){chessRoomStatus(e.detail);});
+  var name=prompt('Enter your player name')||'Player';
+  var data=action==='create'?await chessRoom.create(name,2):await chessRoom.join($('chess-room-id').value,name);
+  chessSeat=chessRoom.seat;setChessMode('friend');chessRoomPlayers(data.room);
+  if(action==='create'){await chessRoom.update(chessRoomSnapshot());chessRoomStatus('Room created. Share '+data.roomId+' with your friend. You are White.');}
+  else if(data.room.state){applyChessRoomState(data.room.state);chessRoomStatus('Joined room '+data.roomId+'. You are '+(chessSeat===0?'White':'Black')+'.');}
+  else chessRoomStatus('Joined room '+data.roomId+'. Waiting for the room owner to start.');
+  $('chess-mic').disabled=false;$('chess-speaker').disabled=false;
+ }catch(error){chessRoomStatus(error.message);}
+}
+$('chess-create-room').addEventListener('click',function(){chessCreateOrJoin('create')});
+$('chess-join-room').addEventListener('click',function(){chessCreateOrJoin('join')});
+var originalOnlineChessClick=clickChess;
+clickChess=function(sq){
+ if(chessRoom&&!chessApplyingRemote){
+  if(chess.turn()!==(chessSeat===0?'w':'b')){chessFeedback('Wait for your turn.');return;}
+  var before=chess.history().length;originalOnlineChessClick(sq);
+  if(chess.history().length>before){chessRoom.update(chessRoomSnapshot()).then(function(ok){if(!ok)chessRoomStatus('Board changed remotely. Synced latest position.');}).catch(function(e){chessRoomStatus(e.message);});}
+  return;
+ }
+ originalOnlineChessClick(sq);
+};
+var oldChessUndo=$('chess-undo').onclick,oldChessReset=$('chess-reset').onclick;
+$('chess-undo').onclick=function(){if(chessRoom){chessFeedback('Undo is disabled in online matches.');return;}if(oldChessUndo)oldChessUndo();};
+$('chess-reset').onclick=function(){if(chessRoom){chessFeedback('Leave the online room before restarting.');return;}if(oldChessReset)oldChessReset();};
+$('chess-mic').onclick=async function(){if(!chessRoom)return;try{if(!chessRoom.micOn){await chessRoom.enableMic();this.textContent='🎙 Mute microphone';}else{chessRoom.setMic(false);this.textContent='🎙 Enable microphone';}}catch(error){chessRoomStatus(error.message);}};
+$('chess-speaker').onclick=function(){if(!chessRoom)return;chessRoom.setSpeaker(!chessRoom.speakerOn);this.textContent=chessRoom.speakerOn?'🔊 Speaker on':'🔇 Speaker off';};
+
 })();
