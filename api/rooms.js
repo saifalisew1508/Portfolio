@@ -46,6 +46,7 @@ module.exports = async function handler(req, res) {
     const key = roomKey(id), raw = await db.get(key);
     if (!raw) return reply(res, 404, { error: 'Room not found or expired.' });
     const room = JSON.parse(raw);
+    if (action === 'join' && body.game && body.game !== room.game) return reply(res, 409, { error: 'This room belongs to a different game.' });
     if (action === 'join') {
       const existing = room.players.find(p => p.token === body.playerToken);
       if (existing) return reply(res, 200, { roomId: id, playerToken: existing.token, seat: existing.seat, room: { id, game: room.game, maxPlayers: room.maxPlayers, players: room.players.map(({token, ...p}) => p), state: room.state, version: room.version } });
