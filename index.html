@@ -6,6 +6,17 @@
 <title>Saif Ali — Developer & Bot Builder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"><script src="assets/js/vanilla-tilt.js" defer></script><script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.4" defer></script><script src="script.js" defer></script></head><body>
+<script>
+(function(){
+ var key='saif-theme-mode',mode='auto';
+ try{mode=localStorage.getItem(key)||'auto'}catch(e){}
+ function autoTheme(){var h=new Date().getHours();return h>=7&&h<19?'day':'night'}
+ function apply(){var theme=mode==='day'||mode==='night'?mode:autoTheme();document.documentElement.dataset.theme=theme;if(document.body)document.body.dataset.theme=theme;document.documentElement.style.colorScheme=theme;var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',theme==='day'?'#edf2fb':'#080b12');return theme}
+ window.SiteTheme={getMode:function(){return mode},getTheme:function(){return mode==='day'||mode==='night'?mode:autoTheme()},setMode:function(next){mode=next==='day'||next==='night'?next:'auto';try{localStorage.setItem(key,mode)}catch(e){}apply();window.dispatchEvent(new CustomEvent('site-theme-change',{detail:{mode:mode,theme:document.body.dataset.theme}}))},refresh:apply};
+ apply();window.setInterval(function(){if(mode==='auto')apply()},60000);
+ window.addEventListener('storage',function(e){if(e.key===key){mode=e.newValue||'auto';apply()}});
+})();
+</script>
 <div class="ambient" aria-hidden="true"></div><canvas id="fog-canvas" aria-hidden="true"></canvas>
 <header class="site-header"><a class="wordmark" href="#home" aria-label="Saif Ali home">saif<span>.</span></a><div class="local-clock" aria-label="Visitor local date and time"><span id="visitor-time">--:--:--</span><small id="visitor-date">Loading local time…</small></div><a class="header-cta" href="#contact">Let's talk <span>↗</span></a></header>
 <main>
