@@ -25,6 +25,21 @@ toggle.addEventListener('click',function(){if(more.classList.contains('open')){c
 document.addEventListener('click',function(e){if(!e.target.closest('.global-nav-more'))closeMenu()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();toggle.focus();setActive(activeForLocation())}});
 nav.querySelectorAll('.global-nav-item[href]').forEach(function(a){a.addEventListener('click',function(){closeMenu();setActive(a.dataset.nav)})});
+/* Animate the handoff between the More destinations without breaking modified clicks. */
+document.body.classList.add('global-page-enter');
+document.body.addEventListener('animationend',function(e){if(e.animationName==='globalPageEnter')document.body.classList.remove('global-page-enter')});
+menu.querySelectorAll('a[href]').forEach(function(a){
+ a.addEventListener('click',function(e){
+  if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+  var destination=a.href;
+  if(!destination||destination===location.href)return;
+  e.preventDefault();
+  closeMenu();
+  document.body.classList.remove('global-page-enter');
+  document.body.classList.add('global-page-leaving');
+  window.setTimeout(function(){location.href=destination},220);
+ });
+});
 window.addEventListener('resize',function(){var active=items.find(function(item){return item.classList.contains('active')});if(active)moveIndicator(active)},{passive:true});
 setActive(activeForLocation());
 if(isHome){
