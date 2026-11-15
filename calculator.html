@@ -380,7 +380,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <div class="panel-heading"><div><h2>Currency converter</h2><p>Convert using the latest available Frankfurter reference rates. These are published reference rates, not live trading quotes.</p></div><span class="panel-tag">02 / EXCHANGE</span></div>
 <div class="currency-shell">
 <div class="currency-topline"><span class="live-dot" id="currency-live-dot"></span><span id="currency-live-label">RATE STATUS · NOT LOADED</span></div>
-<div class="field currency-amount"><label for="currency-amount">AMOUNT TO CONVERT</label><input class="glass-input" id="currency-amount" type="number" min="0" step="any" value="1" inputmode="decimal"></div>
+<div class="field currency-amount"><label for="currency-amount">AMOUNT TO CONVERT</label><input class="glass-input" id="currency-amount" type="number" min="0" step="any" value="1" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="currency-pair">
 <div class="currency-card"><div class="currency-card-head"><span>FROM</span><span>YOU HAVE</span></div><div class="currency-identity"><img class="currency-flag" id="currency-from-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag"><span class="currency-flag-fallback hidden" id="currency-from-fallback" aria-hidden="true">¤</span><div><div class="currency-code" id="currency-from-code">USD</div><div class="currency-name" id="currency-from-name">US Dollar</div></div></div><select class="glass-select" id="currency-from" aria-label="From currency"></select></div>
 <button class="currency-swap" id="currency-swap" type="button" aria-label="Swap currencies"><svg><use href="#i-swap"/></svg></button>
@@ -395,7 +395,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <div class="panel-heading"><div><h2>Unit converter</h2><p>Choose a category, enter a value and select units from the grouped unit library. Concentration supports mass and molar units; mass ↔ molar conversion needs an analyte molecular weight in Clinical Lab Calculator.</p></div><span class="panel-tag">03 / CONVERSIONS</span></div>
 <div class="category-pills unit-category-grid" id="unit-pills" aria-label="Unit categories"></div>
 <div class="unit-convert-card">
-<div class="field"><label for="unit-value">VALUE</label><input class="glass-input" id="unit-value" type="text" inputmode="decimal" value="1" autocomplete="off"></div>
+<div class="field"><label for="unit-value">VALUE</label><input class="glass-input" id="unit-value" type="text" value="1" autocomplete="off" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="unit-pair-grid">
 <div class="field"><label>FROM UNIT</label><button class="unit-picker-trigger" id="unit-from-trigger" type="button" aria-haspopup="dialog">Meter (m)<span>⌄</span></button></div>
 <button class="unit-swap-round" id="unit-swap" type="button" aria-label="Swap units">⇄</button>
@@ -422,14 +422,14 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 </div>
 <div id="lab-conversion-workspace">
 <div class="convert-grid lab-fields">
-<div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100"></div>
+<div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="field"><label for="lab-test">ANALYTE / TEST NAME</label><input class="glass-input" id="lab-test" list="lab-tests" placeholder="e.g. Glucose" autocomplete="off"><datalist id="lab-tests"><option value="Glucose"><option value="Urea"><option value="Creatinine"><option value="Cholesterol"><option value="Uric acid"><option value="Bilirubin"><option value="Lactate"><option value="Triglycerides"></datalist></div>
 <div class="field"><label>FROM UNIT</label><button class="unit-picker-trigger" id="lab-from-trigger" type="button" aria-haspopup="dialog">Milligram/deciliter (mg/dL)<span>⌄</span></button></div>
 <div class="field"><label>TO UNIT</label><button class="unit-picker-trigger" id="lab-to-trigger" type="button" aria-haspopup="dialog">Millimole/liter (mmol/L)<span>⌄</span></button></div>
 </div>
 <div class="analyte-field" id="lab-mw-options">
 <div class="field"><label for="lab-mw-mode">MOLECULAR WEIGHT METHOD</label><select class="glass-select" id="lab-mw-mode"><option value="test">Use selected analyte molecular weight</option><option value="manual">Enter molecular weight manually</option></select></div>
-<div class="field hidden" id="lab-mw-manual-wrap"><label for="lab-mw">MOLECULAR WEIGHT (g/mol)</label><input class="glass-input" id="lab-mw" type="number" min="0" step="any" placeholder="Enter g/mol"></div>
+<div class="field hidden" id="lab-mw-manual-wrap"><label for="lab-mw">MOLECULAR WEIGHT (g/mol)</label><input class="glass-input" id="lab-mw" type="number" min="0" step="any" placeholder="Enter g/mol" data-virtual-keyboard="true" inputmode="none"></div>
 </div>
 <p class="result-meta" id="lab-analyte-note">Choose an analyte for its preset molecular weight. Manual molecular weight is also supported.</p>
 <div class="tool-actions"><button class="glass-button primary" id="lab-convert" type="button">Calculate conversion ↗</button><button class="glass-button" id="lab-swap" type="button">Swap units</button></div>
