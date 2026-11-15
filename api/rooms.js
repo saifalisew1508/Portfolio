@@ -45,6 +45,7 @@ module.exports = async function handler(req, res) {
     if (action === 'join' && body.game && body.game !== room.game) return reply(res, 409, { error: 'This room belongs to a different game.' });
     if (action === 'join') {
       const existing = room.players.find(p => p.token === body.playerToken);
+      if (!existing && room.game === 'ludo' && room.state) return reply(res, 409, { error: 'This Ludo game has already started.' });
       if (existing) return reply(res, 200, { roomId: id, playerToken: existing.token, seat: existing.seat, room: { id, game: room.game, maxPlayers: room.maxPlayers, players: room.players.map(({token, ...p}) => p), state: room.state, version: room.version } });
       if (room.players.length >= room.maxPlayers) return reply(res, 409, { error: 'This room is full.' });
       const playerToken = token(), seat = room.players.length;
