@@ -21,10 +21,6 @@ const token = () => require('crypto').randomBytes(24).toString('hex');
 const cleanName = value => String(value || 'Player').trim().replace(/[<>\u0000-\u001f]/g, '').slice(0, 20) || 'Player';
 const reply = (res, status, body) => { res.setHeader('Cache-Control', 'no-store'); return res.status(status).json(body); };
 module.exports = async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', 'same-origin');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return reply(res, 405, { error: 'Use POST.' });
   try {
     const db = await redis();
