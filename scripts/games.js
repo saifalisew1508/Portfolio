@@ -61,7 +61,7 @@ function resetBubble(){
  score=0;left=mode.shots;shot=0;combo=0;powerCharge=0;powerArmed=false;paused=false;gameEnded=false;particles=[];aim={x:360,y:160};current=randColor();next=randColor();
  $('bubble-status').textContent='Ready. Drag to aim, then release to fire.';$('bubble-pause').innerHTML='<span>Ⅱ</span> Pause';$('bubble-pause').setAttribute('aria-pressed','false');$('bubble-tip').textContent='Aim at matching clusters. Floating bubbles drop for bonus points.';drawBubble();
 }
-function neighbors(r,c){var d=[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]];if(r%2===1)d=[[0,-1],[0,1],[-1,-1],[-1,0],[1,-1],[1,0]];return d.map(function(v){return[r+v[0],c+v[1]]})}
+function neighbors(r,c){var d=r%2===0?[[0,-1],[0,1],[-1,-1],[-1,0],[1,-1],[1,0]]:[[0,-1],[0,1],[-1,0],[-1,1],[1,0],[1,1]];return d.map(function(v){return[r+v[0],c+v[1]]})}
 function connected(r,c,color,seen){var k=r+','+c;if(seen[k]||!grid[r]||grid[r][c]!==color)return[];seen[k]=1;var out=[[r,c]];neighbors(r,c).forEach(function(n){out=out.concat(connected(n[0],n[1],color,seen))});return out}
 function dropFloating(){var seen={},stack=[];for(var c=0;c<grid[0].length;c++)if(grid[0][c]>=0)stack.push([0,c]);while(stack.length){var a=stack.pop(),k=a.join(',');if(seen[k]||!grid[a[0]]||grid[a[0]][a[1]]<0)continue;seen[k]=1;neighbors(a[0],a[1]).forEach(function(n){if(grid[n[0]]&&grid[n[0]][n[1]]>=0)stack.push(n)})}var dropped=0;grid.forEach(function(row,r){row.forEach(function(v,c){if(v>=0&&!seen[r+','+c]){grid[r][c]=-1;dropped++}})});score+=dropped*20;return dropped}
 function saveBubbleBest(){if(score>bestScore){bestScore=score;try{localStorage.setItem('bubble-best-score',String(bestScore))}catch(e){}}}
