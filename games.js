@@ -98,6 +98,16 @@ function renderSudoku(){var root=$('sudoku-board');root.innerHTML='';board.forEa
 function newSudoku(){solution=Array(81).fill(0);solveSudoku(solution);puzzle=solution.slice();var remove=Number($('sudoku-level').value);shuffle(Array.from({length:81},function(_,i){return i})).slice(0,remove).forEach(function(i){puzzle[i]=0});board=puzzle.slice();selected=-1;mistakes=0;$('sudoku-status').textContent='New puzzle ready.';renderSudoku()}
 function setSudoku(n){if(selected<0){$('sudoku-status').textContent='Select an empty cell first.';return}if(puzzle[selected])return;board[selected]=n;if(n&&n!==solution[selected])mistakes++;renderSudoku();$('sudoku-status').textContent=board.every(function(v,i){return v===solution[i]})?'Solved! Perfect work.':n?'Number entered.':'Cell cleared.'}
 for(var n=1;n<=9;n++){(function(v){var b=document.createElement('button');b.className='arcade-btn';b.textContent=v;b.onclick=function(){setSudoku(v)};$('sudoku-pad').appendChild(b)})(n)}var erase=document.createElement('button');erase.className='arcade-btn';erase.textContent='⌫';erase.onclick=function(){setSudoku(0)};$('sudoku-pad').appendChild(erase);$('sudoku-new').onclick=newSudoku;$('sudoku-check').onclick=function(){$('sudoku-status').textContent=board.every(function(v,i){return v===solution[i]})?'Solved! Every row, column and box is correct.':'Not solved yet. Check highlighted mistakes and empty cells.'};$('sudoku-level').onchange=newSudoku;newSudoku();
+document.addEventListener('keydown',function(e){
+ var panel=$('sudoku-panel'),root=$('sudoku-board'),active=document.activeElement;
+ if(!panel||!panel.classList.contains('active')||!root||!root.contains(active))return;
+ if(e.altKey||e.ctrlKey||e.metaKey)return;
+ var delta=0;
+ if(e.key==='ArrowUp')delta=-9;else if(e.key==='ArrowDown')delta=9;else if(e.key==='ArrowLeft')delta=-1;else if(e.key==='ArrowRight')delta=1;
+ if(delta){e.preventDefault();selected=Math.max(0,Math.min(80,(selected<0?0:selected)+delta));renderSudoku();var cells=root.querySelectorAll('.sudoku-cell');if(cells[selected])cells[selected].focus();return}
+ if(/^[1-9]$/.test(e.key)){e.preventDefault();setSudoku(Number(e.key));var cells=root.querySelectorAll('.sudoku-cell');if(cells[selected])cells[selected].focus();return}
+ if(e.key==='Backspace'||e.key==='Delete'||e.key==='0'){e.preventDefault();setSudoku(0);var cells=root.querySelectorAll('.sudoku-cell');if(cells[selected])cells[selected].focus()}
+});
 /* CHESS: local legal chess, optional simple computer opponent, friend hot-seat mode. */
 var chess=new Chess(),selectedSquare=null,legalTargets=[],chessMode='computer',aiThinking=false;
 var pieceGlyph={wp:'♙',wn:'♘',wb:'♗',wr:'♖',wq:'♕',wk:'♔',bp:'♟︎',bn:'♞',bb:'♝',br:'♜',bq:'♛',bk:'♚'};
