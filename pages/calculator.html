@@ -453,7 +453,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <p class="status-line" id="lab-status" aria-live="polite">Select mass or molar concentration to begin.</p>
 <div class="unit-picker-overlay hidden" id="lab-picker-overlay">
 <div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="lab-picker-title">
-<div class="unit-picker-header"><button type="button" id="lab-picker-cancel">Cancel</button><h3 id="lab-picker-title">Select unit</h3><span></span></div>
+<div class="unit-picker-header"><button type="button" id="lab-picker-cancel" aria-label="Close unit picker">✕</button><h3 id="lab-picker-title">Select unit</h3><span></span></div>
 <div class="unit-picker-list" id="lab-picker-list"></div>
 </div>
 </div>
@@ -468,6 +468,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
    <option value="anion">Anion gap · Albumin corrected</option>
    <option value="calcium">Corrected total calcium · Albumin adjusted</option>
    <option value="ionized">Measured ionized calcium · Unit conversion</option>
+   <option value="estimatedIonized">Estimated ionized calcium · Approximation</option>
    <option value="buncr">BUN / Creatinine ratio</option>
    <option value="globulin">Globulin · A/G ratio</option>
    <option value="sodium">Corrected sodium · Hyperglycaemia</option>
