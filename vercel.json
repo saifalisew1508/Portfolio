@@ -2,26 +2,26 @@
   "rewrites": [
     {
       "source": "/music",
-      "destination": "/music.html"
+      "destination": "/pages/music.html"
     },
     {
       "source": "/calculator",
-      "destination": "/calculator.html"
+      "destination": "/pages/calculator.html"
     },
     {
       "source": "/game",
-      "destination": "/games.html"
+      "destination": "/pages/games.html"
     }
   ],
   "redirects": [
     {
       "source": "/projects",
-      "destination": "/#projects",
+      "destination": "/",
       "permanent": true
     },
     {
       "source": "/projects.html",
-      "destination": "/#projects",
+      "destination": "/",
       "permanent": true
     },
     {

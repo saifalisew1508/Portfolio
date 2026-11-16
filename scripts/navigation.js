@@ -2,11 +2,11 @@
 'use strict';
 if(document.querySelector('.global-glass-nav'))return;
 var path=location.pathname.split('/').pop()||'index.html',isHome=path===''||path==='index.html';
-var desktopLinks=[['home','Home','/#home'],['about','About','/#about'],['resume','Resume','/#resume'],['projects','Projects','/#projects'],['contact','Contact','/#contact']];
-var mobileLinks=[['home','Home','/#home'],['about','About','/#about'],['resume','Resume','/#resume'],['projects','Projects','/#projects'],['contact','Contact','/#contact']];
+var desktopLinks=[['home','Home','/'],['about','About','/'],['resume','Resume','/'],['projects','Projects','/'],['contact','Contact','/']];
+var mobileLinks=[['home','Home','/'],['about','About','/'],['resume','Resume','/'],['projects','Projects','/'],['contact','Contact','/']];
 var icons={home:'<svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1V10Z"/></svg>',about:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',resume:'<svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 13h6m-6 4h6"/></svg>',projects:'<svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V4h8v3M4 11h16"/></svg>',contact:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',links:'<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2-2A5 5 0 0 0 12 4l-1.1 1.1M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></svg>',game:'<svg viewBox="0 0 24 24"><path d="M6 9h12a4 4 0 0 1 3.8 5.3l-1 3A2 2 0 0 1 17 18l-2-2H9l-2 2a2 2 0 0 1-3.8-.7l-1-3A4 4 0 0 1 6 9Z"/><path d="M7 12v4m-2-2h4m7-1h.01M18 15h.01"/></svg>',more:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>'};
 var nav=document.createElement('nav');nav.className='global-glass-nav';nav.setAttribute('aria-label','Primary navigation');
-var html='<div class="global-nav-links desktop-nav-links">'+desktopLinks.map(function(a){return '<a class="global-nav-item" data-nav="'+a[0]+'" href="'+a[2]+'">'+icons[a[0]]+'<span>'+a[1]+'</span></a>'}).join('')+'</div>';
+var html='<div class="global-nav-links desktop-nav-links">'+desktopLinks.map(function(a){return '<a class="global-nav-item" data-nav="'+a[0]+'" data-scroll-target="'+a[0]+'" href="'+a[2]+'">'+icons[a[0]]+'<span>'+a[1]+'</span></a>'}).join('')+'</div>';
 html+='<div class="global-nav-links mobile-nav-links">'+mobileLinks.map(function(a){return '<a class="global-nav-item" data-nav="'+a[0]+'" href="'+a[2]+'">'+icons[a[0]]+'<span>'+a[1]+'</span></a>'}).join('')+'</div>';
 html+='<div class="global-nav-more"><button class="global-nav-item global-more-toggle" type="button" data-nav="more" aria-label="More options" aria-expanded="false" aria-haspopup="true">'+icons.more+'</button><div class="global-more-menu" aria-label="More pages and appearance"><p class="global-menu-heading">MORE</p><a href="/music">Music</a><a href="/game">Game</a><a href="/calculator">Calculator</a><div class="global-menu-divider"></div><p class="global-menu-heading">APPEARANCE</p><div class="global-theme-options" role="group" aria-label="Appearance options"></div></div></div>'
 nav.innerHTML=html;
@@ -24,17 +24,18 @@ nav.addEventListener('pointerover',function(e){if(e.pointerType==='touch')return
 nav.addEventListener('pointerleave',function(){if(!navDrag)moveIndicator(activeItem())});
 var navDrag=null;
 function itemAt(x,y){var el=document.elementFromPoint(x,y);return el&&el.closest?el.closest('.global-nav-item'):null}
+function scrollToSection(key){
+ if(location.pathname!=='/'&&location.pathname!=='/index.html'){try{sessionStorage.setItem('saif-scroll-target',key)}catch(e){}location.href='/';return}
+ var section=document.getElementById(key);if(!section)return;
+ history.replaceState(null,'','/');
+ section.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+ activeKey=key;setActive(key);closeMenu();
+}
 function activateDragged(item){
  if(!item)return;
- var href=item.getAttribute('href');
- if(!href){if(item===toggle)openMenu();return}
- var url=new URL(href,location.href);
- if(url.origin===location.origin&&(url.pathname==='/'||url.pathname==='/index.html'||url.pathname===location.pathname)&&url.hash){
-  history.pushState(null,'',url.pathname+url.hash);
-  var section=document.querySelector(url.hash);
-  if(section)section.scrollIntoView({behavior:'smooth',block:'start'});
-  activeKey=item.dataset.nav;setActive(activeKey);closeMenu();
- }else location.href=url.href;
+ if(item.dataset.scrollTarget){scrollToSection(item.dataset.scrollTarget);return}
+ var href=item.getAttribute('href');if(!href){if(item===toggle)openMenu();return}
+ location.href=new URL(href,location.href).href;
 }
 nav.addEventListener('pointerdown',function(e){
  if(e.button!==0||e.pointerType==='touch')return;
@@ -69,12 +70,14 @@ function openMenu(){more.classList.add('open');toggle.setAttribute('aria-expande
 toggle.addEventListener('click',function(){if(more.classList.contains('open')){closeMenu();moveIndicator(activeItem())}else openMenu()});
 themeOptions.addEventListener('click',function(e){var b=e.target.closest('[data-theme-mode]');if(!b)return;if(window.SiteTheme)window.SiteTheme.setMode(b.dataset.themeMode);refreshThemeOptions();closeMenu();moveIndicator(activeItem())});
 menu.querySelectorAll('a[href]').forEach(function(a){a.addEventListener('click',function(e){if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();var dest=a.href;closeMenu();document.body.classList.add('global-page-leaving');window.setTimeout(function(){location.href=dest},210)})});
-nav.addEventListener('click',function(e){var a=e.target.closest('.global-nav-item[href]');if(!a)return;activeKey=a.dataset.nav;closeMenu();});
+nav.addEventListener('click',function(e){var a=e.target.closest('.global-nav-item[href]');if(!a)return;if(a.dataset.scrollTarget){e.preventDefault();scrollToSection(a.dataset.scrollTarget);return}activeKey=a.dataset.nav;closeMenu();});
 document.addEventListener('click',function(e){if(!e.target.closest('.global-nav-more'))closeMenu()});
+document.addEventListener('click',function(e){var a=e.target.closest('a[data-scroll-target]');if(!a||nav.contains(a))return;e.preventDefault();scrollToSection(a.dataset.scrollTarget)});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&more.classList.contains('open')){closeMenu();moveIndicator(activeItem());toggle.focus()}});
 window.addEventListener('site-theme-change',refreshThemeOptions);
 window.addEventListener('resize',function(){var item=activeItem();moveIndicator(item,true)},{passive:true});
 if(desktopQuery.addEventListener)desktopQuery.addEventListener('change',function(){setActive(activeKey)});else desktopQuery.addListener(function(){setActive(activeKey)});
+try{var pending=sessionStorage.getItem('saif-scroll-target');if(pending){sessionStorage.removeItem('saif-scroll-target');window.addEventListener('load',function(){var target=document.getElementById(pending);if(target){target.scrollIntoView({behavior:'auto',block:'start'});activeKey=pending;setActive(activeKey)}},{once:true})}}catch(e){}
 document.body.classList.add('global-page-enter');
 document.body.addEventListener('animationend',function(e){if(e.animationName==='globalPageEnter')document.body.classList.remove('global-page-enter')});
 setActive(activeKey);refreshThemeOptions();
