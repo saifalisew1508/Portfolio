@@ -1,8 +1,43 @@
 {
   "rewrites": [
     {
+      "source": "/music",
+      "destination": "/music.html"
+    },
+    {
+      "source": "/calculator",
+      "destination": "/calculator.html"
+    },
+    {
       "source": "/game",
       "destination": "/games.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/projects",
+      "destination": "/#projects",
+      "permanent": true
+    },
+    {
+      "source": "/projects.html",
+      "destination": "/#projects",
+      "permanent": true
+    },
+    {
+      "source": "/music.html",
+      "destination": "/music",
+      "permanent": true
+    },
+    {
+      "source": "/calculator.html",
+      "destination": "/calculator",
+      "permanent": true
+    },
+    {
+      "source": "/games.html",
+      "destination": "/game",
+      "permanent": true
     }
   ]
 }
