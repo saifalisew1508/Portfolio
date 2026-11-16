@@ -37,9 +37,15 @@ function drawBubble(){
  ctx.setLineDash([4,8]);ctx.strokeStyle='rgba(105,180,233,.12)';ctx.beginPath();ctx.moveTo(10,260);ctx.lineTo(10,735);ctx.moveTo(710,260);ctx.lineTo(710,735);ctx.stroke();ctx.setLineDash([]);
  for(var r=0;r<grid.length;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);drawCircle(p.x,p.y,grid[r][c],R,2)}
  if(!paused&&!gameEnded){
-  var dx=aim.x-shooter.x,dy=aim.y-shooter.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
-  for(var t=28;t<Math.min(len,500);t+=24){var tx=shooter.x+ux*t,ty=shooter.y+uy*t;if(tx<R||tx>720-R)break;ctx.beginPath();ctx.arc(tx,ty,2.4,0,Math.PI*2);ctx.fillStyle=powerArmed?'rgba(255,199,105,.8)':'rgba(173,222,255,.58)';ctx.fill()}
-  ctx.beginPath();ctx.arc(aim.x,aim.y,7,0,Math.PI*2);ctx.strokeStyle=powerArmed?'#ffd27c':'#a7e9ff';ctx.lineWidth=1.5;ctx.stroke();
+  var dx=aim.x-shooter.x,dy=aim.y-shooter.y,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,rx=shooter.x,ry=shooter.y,remaining=620;
+  for(var bounce=0;bounce<3&&remaining>0&&uy<-.015;bounce++){
+   var wallT=ux<0?(R-rx)/ux:(ux>0?(720-R-rx)/ux:Infinity),topT=(R-ry)/uy,limit=Math.min(remaining,wallT>0?wallT:Infinity,topT>0?topT:Infinity),bubbleT=Infinity;
+   for(var gr=0;gr<grid.length;gr++)for(var gc=0;gc<grid[gr].length;gc++)if(grid[gr][gc]>=0){var bp0=bubblePos(gr,gc),ox=rx-bp0.x,oy=ry-bp0.y,bb=2*(ox*ux+oy*uy),cc=ox*ox+oy*oy-(R*1.92)*(R*1.92),disc=bb*bb-4*cc;if(disc>=0){var tt=(-bb-Math.sqrt(disc))/2;if(tt>8&&tt<bubbleT)bubbleT=tt;}}
+   if(bubbleT<limit)limit=bubbleT;for(var t=12;t<limit;t+=20){ctx.beginPath();ctx.arc(rx+ux*t,ry+uy*t,2.3,0,Math.PI*2);ctx.fillStyle=powerArmed?'rgba(255,199,105,.82)':'rgba(173,222,255,.68)';ctx.fill();}
+   var ex=rx+ux*limit,ey=ry+uy*limit;ctx.beginPath();ctx.arc(ex,ey,4,0,Math.PI*2);ctx.fillStyle='#a7e9ff';ctx.fill();remaining-=limit;
+   if(bubbleT<=limit||topT<=wallT)break;rx=ex;ry=ey;ux=-ux;
+  }
+  ctx.beginPath();ctx.arc(aim.x,aim.y,6,0,Math.PI*2);ctx.strokeStyle=powerArmed?'#ffd27c':'#a7e9ff';ctx.lineWidth=1.5;ctx.stroke();
  }
  drawCircle(shooter.x,shooter.y,current,R,powerArmed?22:8);
  ctx.beginPath();ctx.arc(shooter.x,shooter.y+24,38,Math.PI,Math.PI*2);ctx.strokeStyle='rgba(124,185,255,.24)';ctx.lineWidth=5;ctx.stroke();
@@ -62,9 +68,18 @@ function saveBubbleBest(){if(score>bestScore){bestScore=score;try{localStorage.s
 function endBubble(won){gameEnded=true;paused=false;saveBubbleBest();$('bubble-status').textContent=won?'You cleared the field! New personal-best potential unlocked.':'Out of shots. Try a different angle next run.';playBubbleTone(won?880:190,.22);drawBubble()}
 function shoot(x,y){
  if(left<=0||paused||gameEnded)return;var dx=x-shooter.x,dy=y-shooter.y;if(dy>-25)return;
- var hit=null;for(var s=1;s<=65;s++){var px=shooter.x+dx*s/65,py=shooter.y+dy*s/65;if(px<R||px>720-R||py<R){hit={x:px,y:py};break}for(var r=0;r<grid.length&&!hit;r++)for(var c=0;c<grid[r].length;c++)if(grid[r][c]>=0){var p=bubblePos(r,c);if(Math.hypot(px-p.x,py-p.y)<R*1.85){hit={x:px,y:py};break}}}
+ var hit=null,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,rx=shooter.x,ry=shooter.y,travel=0;
+ for(var bounce=0;bounce<3&&travel<620;bounce++){
+  var wallT=ux<0?(R-rx)/ux:(ux>0?(720-R-rx)/ux:Infinity),topT=(R-ry)/uy,limit=Math.min(wallT>0?wallT:Infinity,topT>0?topT:Infinity,620-travel),bubbleT=Infinity;
+  for(var rr0=0;rr0<grid.length;rr0++)for(var cc0=0;cc0<grid[rr0].length;cc0++)if(grid[rr0][cc0]>=0){var bp=bubblePos(rr0,cc0),ox=rx-bp.x,oy=ry-bp.y,bb=2*(ox*ux+oy*uy),cc=ox*ox+oy*oy-(R*1.9)*(R*1.9),disc=bb*bb-4*cc;if(disc>=0){var tt=(-bb-Math.sqrt(disc))/2;if(tt>1&&tt<bubbleT)bubbleT=tt;}}
+  if(bubbleT<limit)limit=bubbleT;hit={x:rx+ux*limit,y:ry+uy*limit};travel+=limit;
+  if(bubbleT<=limit||topT<=wallT)break;rx=hit.x;ry=hit.y;ux=-ux;
+ }
  if(!hit)hit={x:Math.max(R,Math.min(720-R,x)),y:Math.max(R,Math.min(680,y))};
- var best=null,dist=1e9;for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}
+ var best=null,dist=1e9;
+ for(var rr=0;rr<grid.length;rr++)for(var cc=0;cc<grid[rr].length;cc++)if(grid[rr][cc]<0){var adjacent=neighbors(rr,cc).some(function(n){return grid[n[0]]&&grid[n[0]][n[1]]>=0});if(!adjacent)continue;var bp=bubblePos(rr,cc),dd=Math.hypot(bp.x-hit.x,bp.y-hit.y);if(dd<dist){dist=dd;best=[rr,cc]}}
+ if(!best){var near=null,nd=Infinity;for(var ar=0;ar<grid.length;ar++)for(var ac=0;ac<grid[ar].length;ac++)if(grid[ar][ac]>=0){var ap=bubblePos(ar,ac),ad=Math.hypot(ap.x-hit.x,ap.y-hit.y);if(ad<nd){nd=ad;near=[ar,ac]}}if(near)neighbors(near[0],near[1]).forEach(function(n){if(grid[n[0]]&&n[1]>=0&&n[1]<grid[n[0]].length&&grid[n[0]][n[1]]<0){var np=bubblePos(n[0],n[1]),dd=Math.hypot(np.x-hit.x,np.y-hit.y);if(dd<dist){dist=dd;best=n}}})}
+ if(!best){$('bubble-status').textContent='No free landing slot. Try another angle.';drawBubble();return;}
  if(!best)return;grid[best[0]][best[1]]=current;var impact=bubblePos(best[0],best[1]),cleared=0,popped=[];
  if(powerArmed&&powerCharge>=8){for(var pr=0;pr<grid.length;pr++)for(var pc=0;pc<grid[pr].length;pc++)if(grid[pr][pc]>=0){var pp=bubblePos(pr,pc);if(Math.hypot(pp.x-impact.x,pp.y-impact.y)<=R*2.55){popped.push([pr,pc,grid[pr][pc]]);grid[pr][pc]=-1;cleared++}}score+=cleared*25;powerCharge=0;powerArmed=false;combo=0;$('bubble-status').textContent='PULSE HIT! '+cleared+' bubbles cleared.';playBubbleTone(720,.16)}
  else{var group=connected(best[0],best[1],current,{});if(group.length>=3){group.forEach(function(a){popped.push([a[0],a[1],grid[a[0]][a[1]]]);grid[a[0]][a[1]]=-1});cleared=group.length;combo++;score+=cleared*10*(1+Math.min(combo-1,5)*.25);powerCharge=Math.min(8,powerCharge+cleared);$('bubble-status').textContent=(combo>1?'COMBO ×'+combo+'! ':'Nice shot! ')+cleared+' bubbles popped.';$('bubble-tip').textContent=combo>1?'Keep the chain alive to build your score multiplier.':'Every clear charges your Pulse shot.';playBubbleTone(430+Math.min(combo,5)*85,.12)}

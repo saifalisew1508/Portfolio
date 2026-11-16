@@ -479,10 +479,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(!$('unit
  var pad=$('virtual-keypad'),target=null;
  if(!pad)return;
  function eligible(el){return el&&el.matches('input')&&(el.dataset.virtualKeyboard==='true'||el.type==='number'||el.inputMode==='decimal')&&!el.readOnly&&!el.disabled;}
- function open(el){if(!eligible(el))return;target=el;pad.classList.remove('hidden');}
- function close(blur){pad.classList.add('hidden');var old=target;target=null;if(blur&&old)old.blur();}
- document.addEventListener('focusin',function(e){if(eligible(e.target))open(e.target);else if(!e.target.closest('#virtual-keypad'))close(false);});
- document.addEventListener('click',function(e){var el=e.target.closest('input');if(el&&eligible(el))open(el);});
+ function open(el){if(!eligible(el))return;target=el;var t=$('virtual-keypad-toggle');if(t)t.setAttribute('aria-pressed',String(!pad.classList.contains('hidden')));}
+ function close(blur){pad.classList.add('hidden');var old=target;target=null;var t=$('virtual-keypad-toggle');if(t)t.setAttribute('aria-pressed','false');if(blur&&old)old.blur();}
+ document.addEventListener('focusin',function(e){if(eligible(e.target))open(e.target);else if(!e.target.closest('#virtual-keypad')&&!e.target.closest('#virtual-keypad-toggle'))close(false);});
+ document.addEventListener('click',function(e){var el=e.target.closest('input');if(el&&eligible(el))open(el);var t=e.target.closest('#virtual-keypad-toggle');if(t){if(pad.classList.contains('hidden')){if(!target){target=document.activeElement;if(!eligible(target))target=document.querySelector('.tool-panel.active input[data-virtual-keyboard="true"]')}if(target)pad.classList.remove('hidden')}else close(false);t.setAttribute('aria-pressed',String(!pad.classList.contains('hidden')));}});
  function update(value){if(!target)return;var input=target,current=input.value||'';
  if(value==='clear')current='';
  else if(value==='back')current=current.slice(0,-1);
