@@ -462,7 +462,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <div class="lab-calculations hidden" id="lab-calculations-workspace">
  <div class="field lab-calc-select"><label for="lab-calc-type">SELECT CALCULATION</label>
   <select class="glass-select" id="lab-calc-type">
-   <option value="homa">HOMA1 · IR, insulin sensitivity &amp; beta function</option>
+   <option value="homa">HOMA1 · IR, insulin sensitivity &amp; beta function</option><option value="quicki">QUICKI · Insulin sensitivity index</option><option value="fib4">FIB-4 · Liver fibrosis risk score</option><option value="eag">Estimated average glucose · HbA1c</option><option value="mentzer">Mentzer index · Microcytosis screening</option><option value="tsat">Transferrin saturation · Iron profile</option>
    <option value="egfr">eGFR · CKD-EPI 2021</option>
    <option value="crcl">Creatinine clearance · Cockcroft–Gault</option>
    <option value="fena">FENa · Fractional excretion of sodium</option>
@@ -477,13 +477,14 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
    <option value="ldl">LDL-C · Friedewald</option>
   </select>
  </div>
- <p class="result-meta lab-calc-description" id="lab-calc-description"></p>
+ <p class="result-meta lab-calc-description" id="lab-calc-description"></p><div class="homa2-resource info-glass"><h3>HOMA2 · Oxford model</h3><p>HOMA2 is a non-linear iterative model. This calculator does not approximate it with HOMA1 equations. Use the official Oxford HOMA2 software/API under its licence.</p><a class="glass-button" href="https://process.innovation.ox.ac.uk/software/p/2112/homa2-calculator/1" target="_blank" rel="noopener noreferrer">Open official HOMA2 resource ↗</a></div>
  <div class="lab-calc-fields" id="lab-calc-fields"></div>
  <div class="tool-actions"><button class="glass-button primary" id="lab-calc-run" type="button">Calculate result ↗</button><button class="glass-button" id="lab-calc-reset" type="button">Reset values</button></div>
  <div class="convert-result lab-calc-result" aria-live="polite"><div class="result-label">CALCULATION RESULT</div><div class="result-value" id="lab-calc-result">—</div><div class="result-meta" id="lab-calc-formula">Select a calculation and enter the required values.</div></div>
  <p class="status-line" id="lab-calc-status" aria-live="polite">Calculations run locally in your browser.</p>
  <p class="lab-calc-disclaimer">Educational and laboratory calculation support only. Verify units, assay standardization, specimen timing and the applicable clinical guideline. Derived values do not establish a diagnosis or replace measured tests and professional interpretation.</p>
  <p class="lab-calc-sources">Equation references:
+  <a href="https://www.rcpa.edu.au/Manuals/RCPA-Manual/Pathology-Tests/F/FIB-4" target="_blank" rel="noopener noreferrer">RCPA · FIB-4</a> ·
   <a href="https://www.niddk.nih.gov/research-funding/research-programs/laboratory/glomerular-filtration-rate-equations/adults" target="_blank" rel="noopener noreferrer">NIDDK · CKD-EPI 2021</a> ·
   <a href="https://www.rdm.ox.ac.uk/about/our-facilities-and-units/DTU/software/homa/faq" target="_blank" rel="noopener noreferrer">Oxford · HOMA1</a> ·
   <a href="https://www.ncbi.nlm.nih.gov/books/NBK507821/" target="_blank" rel="noopener noreferrer">NCBI · FENa</a> ·

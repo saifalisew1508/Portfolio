@@ -10,7 +10,7 @@ const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear())
 if(!reduced&&window.VanillaTilt){try{VanillaTilt.init($$('.info-card,.resume-panel,.project-card,.contact-card'),{max:6,speed:500,scale:1.015,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
 // Animated WebGL fog on desktop and mobile, with a lower simulation cost on phones.
-const fog=$('#fog-canvas');
+const fog=$('#fog-canvas');document.documentElement.classList.add('fog-fallback');
 const startFog=()=>{if(!fog||reduced||typeof window.WebGLFluid!=='function')return;try{
  const mobile=matchMedia('(max-width:760px)').matches||coarse;
  window.WebGLFluid(fog,{TRIGGER:'hover',IMMEDIATE:true,AUTO:true,INTERVAL:mobile?4200:3200,SIM_RESOLUTION:mobile?64:128,DYE_RESOLUTION:mobile?384:768,DENSITY_DISSIPATION:.94,VELOCITY_DISSIPATION:.42,PRESSURE:.82,PRESSURE_ITERATIONS:18,CURL:18,SPLAT_RADIUS:.12,SPLAT_FORCE:mobile?850:1250,SPLAT_COUNT:1,SPLAT_COLOR:{r:.22,g:.31,b:.82},COLORFUL:false,SHADING:true,COLOR_UPDATE_SPEED:0,TRANSPARENT:true,BACK_COLOR:{r:0,g:0,b:0},BLOOM:false,BLOOM_ITERATIONS:2,BLOOM_RESOLUTION:mobile?128:256,BLOOM_INTENSITY:.08,BLOOM_THRESHOLD:.35,BLOOM_SOFT_KNEE:.7,SUNRAYS:false});
