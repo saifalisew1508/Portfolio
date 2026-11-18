@@ -1,16 +1,8 @@
 (function(){
 'use strict';
 var $=function(id){return document.getElementById(id)};
-/* Visitor-local clock for the arcade header. */
-(function(){
- var time=$('visitor-time'),date=$('visitor-date');
- if(!time)return;
- function tick(){
-  var now=new Date(),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
-  time.textContent=new Intl.DateTimeFormat('en-US',{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now).toUpperCase();
-  if(date){var day=new Intl.DateTimeFormat('en-US',{timeZone:zone,weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(now);var offset=Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'longOffset'}).formatToParts(now).find(function(part){return part.type==='timeZoneName'});date.textContent=day+', '+(offset?offset.value:'GMT').replace(/^GMT([+-])0(\\d)/,'GMT$1$2');}
- }
- tick();window.setInterval(tick,1000);
+/* Live arcade-header clock, localized to the visitor's device/browser timezone. */
+(function(){var time=$('visitor-time'),date=$('visitor-date');if(!time)return;var zone='',fmt={};function tick(){var now=new Date(),z='UTC';try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'}catch(e){}try{if(z!==zone){zone=z;fmt.t=new Intl.DateTimeFormat(undefined,{timeZone:z,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});fmt.d=new Intl.DateTimeFormat(undefined,{timeZone:z,weekday:'short',month:'short',day:'numeric',year:'numeric'});fmt.o=new Intl.DateTimeFormat(undefined,{timeZone:z,timeZoneName:'shortOffset'})}time.textContent=fmt.t.format(now).toUpperCase();if(date){var o=fmt.o.formatToParts(now).find(function(p){return p.type==='timeZoneName'});date.textContent=fmt.d.format(now)+' · '+(o?o.value:'UTC');date.title='Live local time · '+zone}}catch(e){time.textContent=now.toLocaleTimeString();if(date)date.textContent=now.toLocaleDateString()+' · Local time'}}tick();window.setInterval(tick,1000);window.addEventListener('focus',tick);document.addEventListener('visibilitychange',function(){if(!document.hidden)tick()});
 /* SPACE COMMAND: canvas-based military sci-fi defence shooter */
 (function(){
  var c=$('space-canvas');if(!c)return;var x=c.getContext('2d'),W=900,H=600,score=0,lives=3,wave=1,frame=0,spawn=0,cool=0,active=false,paused=false,ended=false,last=0,keys={},pointer=null,shots=[],foes=[],hostile=[],fx=[],stars=[];
