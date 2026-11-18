@@ -2,17 +2,8 @@
 'use strict';
 var $=function(id){return document.getElementById(id)};
 var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-/* Visitor-local clock, kept visible on compact headers too. */
-(function(){
- var time=$('visitor-time'),date=$('visitor-date');
- if(!time)return;
- function tick(){
-  var now=new Date(),zone=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';
-  time.textContent=new Intl.DateTimeFormat('en-US',{timeZone:zone,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).format(now).toUpperCase();
-  if(date){var day=new Intl.DateTimeFormat('en-US',{timeZone:zone,weekday:'short',month:'short',day:'numeric',year:'numeric'}).format(now);var offset=Intl.DateTimeFormat('en-US',{timeZone:zone,timeZoneName:'longOffset'}).formatToParts(now).find(function(part){return part.type==='timeZoneName'});date.textContent=day+', '+(offset?offset.value:'GMT').replace(/^GMT([+-])0(\\d)/,'GMT$1$2');}
- }
- tick();window.setInterval(tick,1000);
-})();
+/* Live visitor clock using the browser/device timezone for the visitor's current location. */
+(function(){var time=$('visitor-time'),date=$('visitor-date');if(!time)return;var zone='',fmt={};function tick(){var now=new Date(),z='UTC';try{z=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC'}catch(e){}try{if(z!==zone){zone=z;fmt.t=new Intl.DateTimeFormat(undefined,{timeZone:z,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});fmt.d=new Intl.DateTimeFormat(undefined,{timeZone:z,weekday:'short',month:'short',day:'numeric',year:'numeric'});fmt.o=new Intl.DateTimeFormat(undefined,{timeZone:z,timeZoneName:'shortOffset'})}time.textContent=fmt.t.format(now).toUpperCase();if(date){var o=fmt.o.formatToParts(now).find(function(p){return p.type==='timeZoneName'});date.textContent=fmt.d.format(now)+' · '+(o?o.value:'UTC');date.title='Live local time · '+zone}}catch(e){time.textContent=now.toLocaleTimeString();if(date)date.textContent=now.toLocaleDateString()+' · Local time'}}tick();setInterval(tick,1000);addEventListener('focus',tick);document.addEventListener('visibilitychange',function(){if(!document.hidden)tick()})})();
 function pulse(id){if(reduced)return;var el=$(id);el.classList.remove('updated');void el.offsetWidth;el.classList.add('updated')}
 /* Reusable dashboard navigation */
 var panels=Array.from(document.querySelectorAll('.tool-panel')),cards=Array.from(document.querySelectorAll('.nav-card[data-panel]'));
@@ -332,6 +323,8 @@ document.querySelectorAll('[data-lab-kind]').forEach(function(button){button.add
  if(!calculations){labSelections[labKind]=labSelections[labKind]|| (labKind==='mass'?['mg/dL','g/L']:['mmol/L','µmol/L']);updateLabButtons();$('lab-result').textContent='—';$('lab-formula').textContent='';$('lab-status').textContent=labKind==='mass'?'Mass concentration mode selected.':'Molar concentration mode selected.';$('lab-status').className='status-line'}
  })});
 updateLabButtons();renderLabModes();
+document.querySelectorAll('[data-lab-concentration]').forEach(function(button){button.addEventListener('click',function(){labKind=button.dataset.labConcentration;labSelections[labKind]=labSelections[labKind]||(labKind==='mass'?['mg/dL','g/L']:['mmol/L','µmol/L']);document.querySelectorAll('[data-lab-concentration]').forEach(function(b){var on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});updateLabButtons();$('lab-result').textContent='—';$('lab-formula').textContent='';$('lab-status').textContent=labKind==='mass'?'Mass concentration mode selected.':'Molar concentration mode selected.';$('lab-status').className='status-line'})});
+
 $('lab-from-trigger').addEventListener('click',function(){openLabPicker('lab-from')});
 $('lab-to-trigger').addEventListener('click',function(){openLabPicker('lab-to')});
 $('lab-picker-cancel').addEventListener('click',closeLabPicker);

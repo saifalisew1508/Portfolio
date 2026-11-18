@@ -295,6 +295,7 @@ body[data-theme="day"] .virtual-keypad-grid .vk-done{background:linear-gradient(
 @keyframes capsuleSpring{0%{transform:scale(.94)}58%{transform:scale(1.055)}78%{transform:scale(.985)}100%{transform:scale(1)}}
 .calc-mode:active,.category-pill:active,.glass-navigation .nav-card:active{transform:scale(.94)!important}
 @media(prefers-reduced-motion:reduce){.calc-mode,.category-pill,.glass-navigation .nav-card{transition:none!important}.calc-mode.active,.category-pill.active,.glass-navigation .nav-card.active{animation:none!important}}
+.lab-concentration-switch{display:flex;gap:8px;margin:0 0 16px;padding:5px;width:max-content;max-width:100%;border:1px solid rgba(174,190,245,.18);border-radius:999px;background:rgba(9,16,34,.42);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.lab-concentration-switch .category-pill{min-height:34px;padding:8px 14px;border-radius:999px;font-size:10px;white-space:nowrap}.lab-concentration-switch .category-pill.active{background:linear-gradient(120deg,rgba(112,91,224,.58),rgba(55,122,190,.48));border-color:rgba(174,165,255,.55);box-shadow:inset 0 1px 0 #ffffff30,0 5px 18px #5c65d52b}@media(max-width:420px){.lab-concentration-switch{width:100%}.lab-concentration-switch .category-pill{flex:1;padding:8px 7px;font-size:9px}}
 </style>
 
 <style>
@@ -430,13 +431,13 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 </div>
 </section>
 <section class="tool-panel glass" id="lab">
-<div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Convert mass and molar concentrations using analyte-specific molecular weights, or calculate common derived clinical laboratory parameters.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
+<div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Convert mass or molar concentrations using analyte-specific molecular weights, or calculate derived clinical laboratory parameters.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
 <div class="category-pills lab-mode-pills" id="lab-pills">
-<button class="category-pill active" type="button" data-lab-kind="mass" aria-pressed="true">Mass concentration</button>
-<button class="category-pill" type="button" data-lab-kind="molar" aria-pressed="false">Molar concentration</button>
+<button class="category-pill active" type="button" data-lab-kind="mass" aria-pressed="true">Mass / molar concentration</button>
 <button class="category-pill" type="button" data-lab-kind="calculations" aria-pressed="false">Clinical calculations</button>
 </div>
 <div id="lab-conversion-workspace">
+<div class="category-pills lab-concentration-switch" role="tablist" aria-label="Concentration type"><button class="category-pill active" type="button" data-lab-concentration="mass" aria-pressed="true">Mass concentration</button><button class="category-pill" type="button" data-lab-concentration="molar" aria-pressed="false">Molar concentration</button></div>
 <div class="convert-grid lab-fields">
 <div class="field"><label for="lab-value">RESULT VALUE</label><input class="glass-input" id="lab-value" type="number" step="any" value="100" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="field"><label for="lab-test">ANALYTE / TEST NAME</label><input class="glass-input" id="lab-test" list="lab-tests" placeholder="e.g. Glucose" autocomplete="off"><datalist id="lab-tests"><option value="Glucose"><option value="Urea"><option value="Creatinine"><option value="Cholesterol"><option value="Uric acid"><option value="Bilirubin"><option value="Lactate"><option value="Triglycerides"></datalist></div>
