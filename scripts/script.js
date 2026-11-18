@@ -32,11 +32,14 @@ $$('.more-toggle').forEach(button=>button.addEventListener('click',()=>{const pa
 document.addEventListener('click',event=>{if(!event.target.closest('.nav-more'))$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.nav-more').forEach(item=>{item.classList.remove('open');$('.more-toggle',item).setAttribute('aria-expanded','false');});});
 
-// Live visitor-local clock. Intl uses the IANA timezone configured on the visitor's device/browser.
+// Shared visitor clock for non-home pages.
+if(!window.__visitorClockStarted){window.__visitorClockStarted=true;
 const time=$('#visitor-time'),date=$('#visitor-date');let visitorZone='',clockFormatters=null;
 const renderClock=()=>{const now=new Date();try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone||'UTC';if(z!==visitorZone||!clockFormatters){visitorZone=z;clockFormatters={t:new Intl.DateTimeFormat(undefined,{timeZone:z,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}),d:new Intl.DateTimeFormat(undefined,{timeZone:z,weekday:'short',month:'short',day:'numeric',year:'numeric'}),o:new Intl.DateTimeFormat(undefined,{timeZone:z,timeZoneName:'shortOffset'})}}if(time)time.textContent=clockFormatters.t.format(now).toUpperCase();if(date){const o=clockFormatters.o.formatToParts(now).find(p=>p.type==='timeZoneName')?.value||'UTC';date.textContent=clockFormatters.d.format(now)+' · '+o;date.title='Live local time · '+visitorZone}const h=Number(new Intl.DateTimeFormat('en-GB',{timeZone:visitorZone,hour:'2-digit',hourCycle:'h23'}).format(now));if(window.SiteTheme)window.SiteTheme.refresh();else document.body.dataset.theme=h>=7&&h<19?'day':'night'}catch(e){if(time)time.textContent=now.toLocaleTimeString();if(date)date.textContent=now.toLocaleDateString()+' · Local time'}};
 renderClock();setInterval(renderClock,1000);addEventListener('focus',renderClock);document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderClock()});
 
+
+}
 // Contact form: timeout and JSON error handling prevent a stuck submit state.
 const form=$('#contact-form'),status=$('#form-status'),submit=form&&$('button[type=submit]',form);
 if(form)form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity())return;const data=Object.fromEntries(new FormData(form).entries());if(data._honey)return;if(submit)submit.disabled=true;if(status)status.textContent='Sending your message…';const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);try{
