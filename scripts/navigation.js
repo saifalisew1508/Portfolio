@@ -22,7 +22,8 @@ function setActive(key){activeKey=key;var all=Array.from(nav.querySelectorAll('.
 function hoverItem(item){if(!item)return;moveIndicator(item)}
 nav.addEventListener('pointerover',function(e){if(e.pointerType==='touch')return;var item=e.target.closest('.global-nav-item');if(item&&nav.contains(item))hoverItem(item)});
 nav.addEventListener('pointerleave',function(){if(!navDrag)moveIndicator(activeItem())});
-var navDrag=null;
+var navDrag=null,suppressClick=false;
+nav.addEventListener('click',function(e){if(!suppressClick)return;suppressClick=false;e.preventDefault();e.stopImmediatePropagation();},true);
 function itemAt(x,y){var el=document.elementFromPoint(x,y);return el&&el.closest?el.closest('.global-nav-item'):null}
 function scrollToSection(key){
  if(location.pathname!=='/'&&location.pathname!=='/index.html'){try{sessionStorage.setItem('saif-scroll-target',key)}catch(e){}location.href='/';return}
@@ -56,7 +57,7 @@ window.addEventListener('pointerup',function(e){
  var drag=navDrag;navDrag=null;indicator.classList.remove('is-dragging');
  if(!drag.moved){moveIndicator(activeItem());return}
  var target=itemAt(e.clientX,e.clientY);
- if(target&&nav.contains(target))activateDragged(target);
+ if(target&&nav.contains(target)){suppressClick=true;activateDragged(target)}
  else moveIndicator(drag.origin);
 },true);
 window.addEventListener('pointercancel',function(){
