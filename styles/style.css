@@ -1073,3 +1073,69 @@ body[data-theme="night"] #fog-canvas{opacity:.20!important;mix-blend-mode:screen
 #fog-canvas{z-index:0!important;opacity:.28!important;mix-blend-mode:screen!important}body[data-theme="day"] #fog-canvas{opacity:.13!important;mix-blend-mode:multiply!important}.fog-fallback .ambient:before,.fog-fallback .ambient:after{content:"";position:absolute;width:46vw;height:46vw;max-width:620px;max-height:620px;border-radius:50%;filter:blur(65px);opacity:.2;pointer-events:none;animation:ambientDrift 19s ease-in-out infinite alternate}.fog-fallback .ambient:before{left:-16vw;top:18vh;background:radial-gradient(circle,rgba(79,119,255,.45),transparent 68%)}.fog-fallback .ambient:after{right:-18vw;top:48vh;background:radial-gradient(circle,rgba(39,187,215,.30),transparent 70%);animation-delay:-8s}@keyframes ambientDrift{to{transform:translate3d(8vw,-5vh,0) scale(1.15)}}.hero,.about-section,.resume-section,.projects-section,.contact-section,.site-footer{position:relative;z-index:1}@media(prefers-reduced-motion:reduce){.fog-fallback .ambient:before,.fog-fallback .ambient:after{animation:none}}
 
 .homa2-resource{margin:18px 0;padding:17px}.homa2-resource p{margin-bottom:12px}.homa2-resource .glass-button{display:inline-flex;text-decoration:none;align-items:center}
+
+
+/* Unified transparent 3D glass treatment for every homepage tilt card. */
+.info-card,.resume-panel,.project-card,.contact-card{
+  background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.035) 46%,rgba(111,131,255,.075))!important;
+  border:1px solid rgba(205,220,255,.22)!important;
+  backdrop-filter:blur(28px) saturate(165%)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(165%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.045),0 18px 55px rgba(0,0,0,.2),0 0 28px rgba(112,139,255,.055)!important;
+  transform-style:preserve-3d;
+  isolation:isolate;
+}
+.info-card:before,.resume-panel:before,.project-card:before,.contact-card:before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(125deg,rgba(255,255,255,.17),transparent 30%,transparent 68%,rgba(119,151,255,.09));
+  opacity:.9;
+}
+.info-card>* ,.resume-panel>* ,.project-card>* ,.contact-card>*{position:relative;z-index:1}
+.info-card:hover,.resume-panel:hover,.project-card:hover,.contact-card:hover{
+  border-color:rgba(166,190,255,.48)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 24px 70px rgba(22,39,100,.25),0 0 32px rgba(112,139,255,.1)!important;
+}
+body[data-theme="day"] .info-card,body[data-theme="day"] .resume-panel,body[data-theme="day"] .project-card,body[data-theme="day"] .contact-card{
+  background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(238,244,255,.42) 48%,rgba(195,210,255,.28))!important;
+  border-color:rgba(90,112,165,.24)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.82),0 18px 48px rgba(45,65,110,.11)!important;
+}
+body[data-theme="day"] .info-card:before,body[data-theme="day"] .resume-panel:before,body[data-theme="day"] .project-card:before,body[data-theme="day"] .contact-card:before{
+  background:linear-gradient(125deg,rgba(255,255,255,.7),transparent 34%,transparent 70%,rgba(115,140,220,.1));
+}
+
+/* Education, experience and both skills cards share one swipeable row. */
+.resume-slider{position:relative;width:100%;min-width:0;margin-top:14px}
+.resume-track{
+  display:flex;align-items:stretch;gap:14px;width:100%;min-width:0;
+  overflow-x:auto;overflow-y:hidden;padding:3px 2px 18px;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  scrollbar-width:thin;scrollbar-color:rgba(145,165,255,.48) rgba(145,165,255,.08);
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+.resume-track::-webkit-scrollbar{height:6px}
+.resume-track::-webkit-scrollbar-track{background:rgba(145,165,255,.08);border-radius:20px}
+.resume-track::-webkit-scrollbar-thumb{background:rgba(145,165,255,.42);border-radius:20px}
+.resume-track>.resume-columns,.resume-track>.resume-skill-cards{display:contents}
+.resume-track>.resume-columns>.resume-panel,.resume-track>.resume-skill-cards>.resume-panel{
+  display:block;flex:0 0 calc(50% - 7px);min-width:0;scroll-snap-align:start;
+}
+.resume-track .resume-panel{height:100%}
+.resume-track .timeline{min-width:0}
+.resume-track .resume-skill-card{margin:0}
+.section-wrap.section-arrived .resume-track>.resume-columns>.resume-panel,
+.section-wrap.section-arrived .resume-track>.resume-skill-cards>.resume-panel{
+  animation:resumeCardSlide .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.section-wrap.section-arrived .resume-track>.resume-columns>.resume-panel:nth-child(2),
+.section-wrap.section-arrived .resume-track>.resume-skill-cards>.resume-panel:nth-child(2){animation-delay:90ms}
+@keyframes resumeCardSlide{from{opacity:.35;transform:translate3d(34px,0,0) scale(.985)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@media(max-width:760px){
+  .resume-track{gap:12px;padding-bottom:16px}
+  .resume-track>.resume-columns>.resume-panel,.resume-track>.resume-skill-cards>.resume-panel{flex-basis:min(88%,420px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .resume-track{scroll-behavior:auto;scroll-snap-type:x proximity}
+  .section-wrap.section-arrived .resume-track>.resume-columns>.resume-panel,
+  .section-wrap.section-arrived .resume-track>.resume-skill-cards>.resume-panel{animation:none}
+}
