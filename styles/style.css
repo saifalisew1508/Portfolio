@@ -1255,3 +1255,82 @@ body.home-page[data-theme="night"] #fog-canvas{
 .home-page.fog-fallback .ambient:after{
   opacity:.28;
 }
+
+
+/* Homepage fog: keep the WebGL canvas above page surfaces but below content. */
+.home-page .ambient{
+  z-index:0!important;
+  pointer-events:none!important;
+}
+.home-page #fog-canvas{
+  z-index:2!important;
+  opacity:.68!important;
+  mix-blend-mode:screen!important;
+  pointer-events:none!important;
+}
+.home-page main,
+.home-page .site-footer{
+  position:relative;
+  z-index:3;
+}
+body.home-page[data-theme="day"] #fog-canvas{
+  opacity:.38!important;
+  mix-blend-mode:multiply!important;
+}
+body.home-page[data-theme="night"] #fog-canvas{
+  opacity:.68!important;
+  mix-blend-mode:screen!important;
+}
+
+/* Apply the same Expo-inspired Liquid Glass finish to card and panel
+   components throughout every page, including cards added later. */
+:where(
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  position:relative;
+  isolation:isolate;
+  border:1px solid rgba(205,220,255,.23)!important;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.16),transparent 43%),
+    linear-gradient(138deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 48%,rgba(111,131,255,.065))!important;
+  -webkit-backdrop-filter:blur(28px) saturate(165%);
+  backdrop-filter:blur(28px) saturate(165%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(255,255,255,.045),
+    0 18px 48px rgba(0,0,0,.19),
+    0 0 26px rgba(112,139,255,.055);
+}
+:where(
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+)::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(125deg,rgba(255,255,255,.17),transparent 29%,transparent 69%,rgba(119,151,255,.09));
+}
+body[data-theme="day"] :where(
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  border-color:rgba(88,111,165,.25)!important;
+  background:
+    radial-gradient(ellipse at 12% 0%,rgba(255,255,255,.82),transparent 45%),
+    linear-gradient(138deg,rgba(255,255,255,.76),rgba(237,243,255,.48) 52%,rgba(192,208,250,.3))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.86),
+    inset 0 -1px 0 rgba(255,255,255,.22),
+    0 18px 46px rgba(45,65,110,.11);
+}
+
+/* Keep capsule navigation responsive instead of making the active pill feel sticky. */
+.global-nav-indicator{
+  transition:transform .34s cubic-bezier(.22,.61,.36,1),
+    width .24s ease-out,height .24s ease-out,opacity .16s ease!important;
+}
+.global-nav-indicator.is-dragging{
+  transition:none!important;
+}
