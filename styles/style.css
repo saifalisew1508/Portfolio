@@ -1234,3 +1234,24 @@ body[data-theme="day"] :where(
     .chess-online-challenge,.chess-side
   ){transition:none!important}
 }
+
+
+/* Restore the animated fluid-fog visibility on the homepage. */
+.home-page #fog-canvas{
+  z-index:0!important;
+  opacity:.46!important;
+  mix-blend-mode:screen!important;
+  pointer-events:none!important;
+}
+body.home-page[data-theme="day"] #fog-canvas{
+  opacity:.24!important;
+  mix-blend-mode:multiply!important;
+}
+body.home-page[data-theme="night"] #fog-canvas{
+  opacity:.46!important;
+  mix-blend-mode:screen!important;
+}
+.home-page.fog-fallback .ambient:before,
+.home-page.fog-fallback .ambient:after{
+  opacity:.28;
+}
