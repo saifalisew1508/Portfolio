@@ -1334,3 +1334,98 @@ body[data-theme="day"] :where(
 .global-nav-indicator.is-dragging{
   transition:none!important;
 }
+
+
+/* Transparent Claymorphism: soft raised surfaces, no frosted-glass blur. */
+:where(
+  main .info-card,main .resume-panel,main .project-card,main .contact-card,
+  main .about-detail-strip>div,main .music-section,main .music-player,
+  main .music-now-playing,main .music-track,main .youtube-player-container,
+  main .tool-panel,main .glass-card,main .currency-card,main .unit-convert-card,
+  main .homa2-resource,main .lab-calc-result,main .lab-calc-disclaimer,
+  main .game-panel,main .bubble-next-card,main .bubble-side,main .candy-side,
+  main .space-overlay,main .game-side,main .ludo-online,main .ludo-turn-card,
+  main .ludo-dice-card,main .ludo-player-card,main .chess-online-challenge,
+  main .chess-side,main .spotify-embed-wrap,
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  border:1px solid rgba(174,190,235,.16)!important;
+  border-radius:22px;
+  background:
+    radial-gradient(ellipse at 18% 8%,rgba(173,194,255,.13),transparent 58%),
+    linear-gradient(145deg,rgba(45,57,83,.48),rgba(19,27,44,.40))!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:
+    9px 10px 24px rgba(0,0,0,.27),
+    -7px -7px 20px rgba(155,177,235,.075),
+    inset 1px 1px 2px rgba(255,255,255,.12),
+    inset -1px -1px 2px rgba(0,0,0,.12)!important;
+  transition:box-shadow .28s ease,border-color .28s ease,transform .28s ease;
+}
+:where(
+  main .info-card,main .resume-panel,main .project-card,main .contact-card,
+  main .about-detail-strip>div,main .music-section,main .music-player,
+  main .music-now-playing,main .music-track,main .youtube-player-container,
+  main .tool-panel,main .glass-card,main .currency-card,main .unit-convert-card,
+  main .homa2-resource,main .lab-calc-result,main .lab-calc-disclaimer,
+  main .game-panel,main .bubble-next-card,main .bubble-side,main .candy-side,
+  main .space-overlay,main .game-side,main .ludo-online,main .ludo-turn-card,
+  main .ludo-dice-card,main .ludo-player-card,main .chess-online-challenge,
+  main .chess-side,main .spotify-embed-wrap,
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+)::before{
+  background:radial-gradient(ellipse at 15% 8%,rgba(210,224,255,.10),transparent 64%)!important;
+  opacity:1!important;
+}
+@media(hover:hover) and (pointer:fine){
+  :where(
+    main .info-card,main .resume-panel,main .project-card,main .contact-card,
+    main .about-detail-strip>div,main .music-section,main .music-player,
+    main .music-now-playing,main .music-track,main .tool-panel,main .glass-card,
+    main .currency-card,main .unit-convert-card,main .homa2-resource,
+    main .lab-calc-result,main .game-panel,main .bubble-next-card,main .bubble-side,
+    main .candy-side,main .space-overlay,main .game-side,main .ludo-online,
+    main .ludo-turn-card,main .ludo-dice-card,main .ludo-player-card,
+    main .chess-online-challenge,main .chess-side,
+    main .card,main .panel,main .tile,
+    main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+  ):hover{
+    border-color:rgba(177,198,255,.30)!important;
+    box-shadow:
+      12px 13px 28px rgba(0,0,0,.30),
+      -8px -8px 22px rgba(155,177,235,.09),
+      inset 1px 1px 2px rgba(255,255,255,.15),
+      inset -1px -1px 2px rgba(0,0,0,.12)!important;
+  }
+}
+body[data-theme="day"] :where(
+  main .info-card,main .resume-panel,main .project-card,main .contact-card,
+  main .about-detail-strip>div,main .music-section,main .music-player,
+  main .music-now-playing,main .music-track,main .youtube-player-container,
+  main .tool-panel,main .glass-card,main .currency-card,main .unit-convert-card,
+  main .homa2-resource,main .lab-calc-result,main .lab-calc-disclaimer,
+  main .game-panel,main .bubble-next-card,main .bubble-side,main .candy-side,
+  main .space-overlay,main .game-side,main .ludo-online,main .ludo-turn-card,
+  main .ludo-dice-card,main .ludo-player-card,main .chess-online-challenge,
+  main .chess-side,main .spotify-embed-wrap,
+  main .card,main .panel,main .tile,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  border-color:rgba(100,122,176,.18)!important;
+  background:
+    radial-gradient(ellipse at 18% 8%,rgba(255,255,255,.72),transparent 60%),
+    linear-gradient(145deg,rgba(239,244,255,.68),rgba(202,215,241,.40))!important;
+  box-shadow:
+    9px 10px 24px rgba(77,96,139,.15),
+    -7px -7px 20px rgba(255,255,255,.68),
+    inset 1px 1px 2px rgba(255,255,255,.76),
+    inset -1px -1px 2px rgba(91,111,157,.08)!important;
+}
+@media(prefers-reduced-motion:reduce){
+  :where(main .card,main .panel,main .tile,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]){
+    transition:none!important;
+  }
+}
