@@ -1638,3 +1638,143 @@ body[data-theme="day"] .contact-card{
 @media(prefers-reduced-motion:reduce){
  .about-profile-photo,.info-card,.resume-panel,.resume-skill-card,.about-detail-strip>div,.project-card,.contact-card{transform:none!important;will-change:auto}
 }
+
+
+/* LIQUID GLASS REFINEMENT
+   Clear, light-transmitting glass: remove the frosted blur and use
+   specular reflections, optical edge highlights and layered depth. */
+body :where(
+  .site-header,.global-glass-nav,.global-more-menu,
+  .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+  .about-profile-photo,.about-detail-strip>div,
+  .music-section,.music-player,.music-now-playing,.music-track,.youtube-player-container,.spotify-embed-wrap,
+  .glass,.glass-card,.tool-panel,.currency-card,.unit-convert-card,
+  .lab-calculations,.lab-calc-result,.lab-calc-disclaimer,.unit-picker-sheet,.homa2-resource,
+  .nav-card,.calc-mode,.category-pill,.unit-picker-trigger,.unit-pair-grid,.lab-mode-pills,
+  .game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,
+  .ludo-room-info,.ludo-voice,.ludo-turn-card,.ludo-dice-card,.ludo-player-card,
+  .chess-online-challenge,.bubble-next-card,.bubble-side,.candy-side,.space-overlay,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  background-color:rgba(11,19,38,.15)!important;
+  background-image:
+    radial-gradient(125% 95% at 4% -8%,rgba(255,255,255,.24) 0%,rgba(255,255,255,.055) 32%,transparent 62%),
+    radial-gradient(90% 80% at 100% 110%,rgba(90,143,255,.16),transparent 64%),
+    linear-gradient(128deg,rgba(255,255,255,.105) 0%,rgba(255,255,255,.018) 36%,rgba(103,139,255,.055) 70%,rgba(255,255,255,.085) 100%)!important;
+  -webkit-backdrop-filter:saturate(190%) contrast(112%) brightness(1.06)!important;
+  backdrop-filter:saturate(190%) contrast(112%) brightness(1.06)!important;
+  border:1px solid rgba(220,232,255,.30)!important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.48),
+    inset 1px 0 0 rgba(255,255,255,.17),
+    inset -1px 0 0 rgba(142,177,255,.12),
+    inset 0 -1px 0 rgba(255,255,255,.10),
+    0 22px 55px rgba(0,0,0,.22),
+    0 4px 14px rgba(52,88,170,.12)!important;
+  background-clip:padding-box;
+  isolation:isolate;
+}
+
+/* A clean glass rim and broad moving-light impression, without blur. */
+body :where(
+  .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+  .about-profile-photo,.about-detail-strip>div,
+  .music-section,.music-player,.music-now-playing,.music-track,.youtube-player-container,
+  .glass,.glass-card,.tool-panel,.currency-card,.unit-convert-card,
+  .lab-calculations,.lab-calc-result,.unit-picker-sheet,.homa2-resource,
+  .game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,
+  .ludo-turn-card,.ludo-dice-card,.ludo-player-card,.chess-online-challenge,
+  .bubble-next-card,.bubble-side,.candy-side,.space-overlay,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+)::before{
+  background:
+    linear-gradient(116deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.035) 18%,transparent 39%),
+    linear-gradient(300deg,rgba(125,169,255,.12),transparent 35%)!important;
+  opacity:.82!important;
+  pointer-events:none;
+}
+body :where(
+  .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+  .about-profile-photo,.about-detail-strip>div,
+  .music-section,.music-player,.music-track,.glass-card,.tool-panel,
+  .currency-card,.unit-convert-card,.lab-calculations,.lab-calc-result,
+  .homa2-resource,.game-panel,.game-side,.sudoku-side,.chess-side,
+  .ludo-panel,.ludo-setup,.ludo-online,.ludo-turn-card,.ludo-dice-card,
+  .ludo-player-card,.chess-online-challenge,.bubble-next-card,.bubble-side,
+  .candy-side,.space-overlay,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+)::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:inherit;
+  border-top:1px solid rgba(255,255,255,.24);
+  border-right:1px solid rgba(255,255,255,.07);
+  background:linear-gradient(155deg,rgba(255,255,255,.055),transparent 24%,transparent 78%,rgba(124,162,255,.045));
+  opacity:.7;
+  pointer-events:none;
+}
+
+/* Day mode remains transparent rather than turning into opaque milky panels. */
+body[data-theme="day"] :where(
+  .site-header,.global-glass-nav,.global-more-menu,
+  .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+  .about-profile-photo,.about-detail-strip>div,
+  .music-section,.music-player,.music-now-playing,.music-track,.youtube-player-container,
+  .glass,.glass-card,.tool-panel,.currency-card,.unit-convert-card,
+  .lab-calculations,.lab-calc-result,.lab-calc-disclaimer,.unit-picker-sheet,.homa2-resource,
+  .nav-card,.calc-mode,.category-pill,.unit-picker-trigger,.unit-pair-grid,.lab-mode-pills,
+  .game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,
+  .ludo-room-info,.ludo-voice,.ludo-turn-card,.ludo-dice-card,.ludo-player-card,
+  .chess-online-challenge,.bubble-next-card,.bubble-side,.candy-side,.space-overlay,
+  main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+){
+  background-color:rgba(226,237,255,.16)!important;
+  background-image:
+    radial-gradient(125% 95% at 4% -8%,rgba(255,255,255,.64),rgba(255,255,255,.12) 32%,transparent 62%),
+    radial-gradient(90% 80% at 100% 110%,rgba(112,151,255,.12),transparent 64%),
+    linear-gradient(128deg,rgba(255,255,255,.40),rgba(255,255,255,.075) 40%,rgba(132,165,235,.10) 72%,rgba(255,255,255,.28))!important;
+  border-color:rgba(255,255,255,.62)!important;
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.94),
+    inset 1px 0 0 rgba(255,255,255,.54),
+    inset -1px 0 0 rgba(110,140,198,.12),
+    inset 0 -1px 0 rgba(255,255,255,.35),
+    0 22px 48px rgba(55,78,130,.14)!important;
+  -webkit-backdrop-filter:saturate(185%) contrast(108%) brightness(1.035)!important;
+  backdrop-filter:saturate(185%) contrast(108%) brightness(1.035)!important;
+}
+
+/* Stronger specular response and lift on pointer hover. */
+@media(hover:hover) and (pointer:fine){
+  body :where(
+    .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+    .about-profile-photo,.about-detail-strip>div,.music-player,.music-track,
+    .glass-card,.tool-panel,.currency-card,.unit-convert-card,.lab-calc-result,
+    .game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-turn-card,
+    .ludo-dice-card,.ludo-player-card,.chess-online-challenge,
+    main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+  ):hover{
+    border-color:rgba(225,237,255,.55)!important;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.62),
+      inset 1px 0 0 rgba(255,255,255,.23),
+      0 28px 68px rgba(0,0,0,.26),
+      0 0 28px rgba(112,151,255,.16)!important;
+  }
+}
+
+/* Explicitly disable all Gaussian frosted-glass blur on touch screens too. */
+@media(max-width:760px){
+  body :where(
+    .site-header,.global-glass-nav,.global-more-menu,
+    .info-card,.resume-panel,.resume-skill-card,.project-card,.contact-card,
+    .about-profile-photo,.about-detail-strip>div,.music-section,.music-player,.music-track,
+    .glass,.glass-card,.tool-panel,.currency-card,.unit-convert-card,.lab-calculations,
+    .lab-calc-result,.unit-picker-sheet,.game-panel,.game-side,.sudoku-side,.chess-side,
+    .ludo-panel,.ludo-setup,.ludo-online,.ludo-turn-card,.ludo-dice-card,.ludo-player-card,
+    main [class*="-card"],main [class*="-panel"],main [class*="-tile"]
+  ){
+    -webkit-backdrop-filter:saturate(180%) contrast(110%) brightness(1.05)!important;
+    backdrop-filter:saturate(180%) contrast(110%) brightness(1.05)!important;
+  }
+}
