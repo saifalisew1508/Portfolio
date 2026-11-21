@@ -60,7 +60,7 @@ function cleanGameState(game, state, room) {
     for (let i = 0; i < state.players.length; i++) {
       const player = state.players[i];
       if (!isObject(player) || !Array.isArray(player.tokens) || player.tokens.length !== 4) return null;
-      if (!player.tokens.every(value => Number.isInteger(value) && value >= -1 && value <= 58)) return null;
+      if (!player.tokens.every(value => Number.isInteger(value) && value >= -1 && value <= (state.players.length > 4 ? 66 : 58))) return null;
       players.push({
         id: i,
         name: cleanName(player.name),
