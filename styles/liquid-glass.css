@@ -1,0 +1,55 @@
+/* ===== Liquid Glass refraction layer =====
+   Sits on top of the existing .glass-card styles.
+   - Keeps ONE 1px edge (no extra rings, no ::after borders)
+   - Refraction only runs where scripts/liquid-glass.js flags support (.lg-refract)
+   - Everywhere else the normal frosted glass from style.css stays as fallback */
+
+:root {
+  --lg-soft: 3px;          /* small blur applied after refraction */
+  --lg-saturate: 170%;
+}
+
+/* Soft inner light only (blurred inset shadows, not hard rings) */
+.glass-card.lg-refract {
+  -webkit-backdrop-filter: var(--lg-filter) blur(var(--lg-soft)) saturate(var(--lg-saturate)) !important;
+  backdrop-filter: var(--lg-filter) blur(var(--lg-soft)) saturate(var(--lg-saturate)) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  box-shadow:
+    inset 3px 3px 8px -3px rgba(255, 255, 255, 0.55),
+    inset -3px -3px 8px -3px rgba(255, 255, 255, 0.18),
+    0 14px 34px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Specular sheen follows the pointer (set by JS via --lg-x / --lg-y) */
+.glass-card.lg-refract::before {
+  background:
+    radial-gradient(
+      220px circle at var(--lg-x, 20%) var(--lg-y, 0%),
+      rgba(255, 255, 255, 0.22),
+      transparent 60%
+    ),
+    linear-gradient(135deg, rgba(255,255,255,0.16) 0%, transparent 42%) !important;
+  opacity: 0.8 !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .glass-card.lg-refract:hover {
+    background: rgba(255, 255, 255, 0.07) !important;
+    box-shadow:
+      inset 3px 3px 9px -3px rgba(255, 255, 255, 0.7),
+      inset -3px -3px 9px -3px rgba(255, 255, 255, 0.24),
+      0 18px 40px rgba(0, 0, 0, 0.26) !important;
+  }
+}
+
+/* Day theme: slightly more body so text stays readable on light background */
+body[data-theme="day"] .glass-card.lg-refract {
+  background: rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Text/inputs inside a refracting card must stay crisp */
+.glass-card.lg-refract > * { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-card.lg-refract::before { transition: none; }
+}
