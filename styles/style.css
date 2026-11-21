@@ -1778,3 +1778,23 @@ body[data-theme="day"] :where(
     backdrop-filter:saturate(180%) contrast(110%) brightness(1.05)!important;
   }
 }
+
+/* Liquid glass with a pronounced machined 3D rim. No Gaussian frosting. */
+:where(.site-header,.global-glass-nav,.global-more-menu,.mobile-nav,.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-section,.music-player,.music-track,.glass,.glass-card,.tool-panel,.nav-card,.currency-card,.unit-convert-card,.lab-calculations,.lab-calc-result,.unit-picker-sheet,.homa2-resource,.game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,.ludo-turn-card,.ludo-dice-card,.ludo-player-card,.chess-online-challenge,.bubble-next-card,.bubble-side,.candy-side,.space-overlay,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]){
+ position:relative;isolation:isolate;
+ background-color:rgba(15,24,45,.12)!important;
+ background-image:radial-gradient(130% 100% at 3% 0%,rgba(255,255,255,.23),transparent 43%),linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.025) 34%,rgba(101,145,255,.065) 72%,rgba(255,255,255,.12))!important;
+ -webkit-backdrop-filter:saturate(190%) contrast(115%) brightness(1.07)!important;backdrop-filter:saturate(190%) contrast(115%) brightness(1.07)!important;
+ border:1px solid rgba(224,235,255,.36)!important;
+ box-shadow:inset 0 2px 0 rgba(255,255,255,.78),inset 1.5px 0 0 rgba(255,255,255,.28),inset -1.5px 0 0 rgba(126,164,255,.24),inset 0 -2px 0 rgba(255,255,255,.18),0 2px 0 rgba(255,255,255,.14),0 20px 44px rgba(0,0,0,.25),0 0 0 1px rgba(148,178,255,.10)!important;
+}
+:where(.site-header,.global-glass-nav,.global-more-menu,.mobile-nav,.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-section,.music-player,.music-track,.glass,.glass-card,.tool-panel,.nav-card,.currency-card,.unit-convert-card,.lab-calculations,.lab-calc-result,.unit-picker-sheet,.homa2-resource,.game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,.ludo-turn-card,.ludo-dice-card,.ludo-player-card,.chess-online-challenge,.bubble-next-card,.bubble-side,.candy-side,.space-overlay,main [class*="-card"],main [class*="-panel"],main [class*="-tile"])::after{
+ content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;
+ border:1px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.58);border-left-color:rgba(255,255,255,.34);border-right-color:rgba(139,174,255,.24);border-bottom-color:rgba(255,255,255,.13);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.26),inset 0 -1px 0 rgba(115,155,255,.14);
+}
+.resume-panel,.resume-panel.resume-skill-card{background:transparent!important;background-image:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:0!important;box-shadow:none!important;isolation:auto}
+.resume-panel::before,.resume-panel::after,.resume-skill-card::before,.resume-skill-card::after{content:none!important;display:none!important}
+.resume-panel{transform:none!important;filter:none!important}
+@media(hover:hover) and (pointer:fine){:where(.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-player,.music-track,.glass-card,.tool-panel,.currency-card,.unit-convert-card,.lab-calc-result,.game-panel,.game-side,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]):hover{box-shadow:inset 0 2px 0 rgba(255,255,255,.88),inset 1px 0 0 rgba(255,255,255,.34),inset -1px 0 0 rgba(135,173,255,.3),0 28px 60px rgba(0,0,0,.3),0 0 30px rgba(118,157,255,.2)!important}}
+@media(max-width:760px){:where(.site-header,.global-glass-nav,.global-more-menu,.mobile-nav,.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-player,.music-track,.glass,.glass-card,.tool-panel,.nav-card,.currency-card,.unit-convert-card,.lab-calculations,.lab-calc-result,.unit-picker-sheet,.game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]){-webkit-backdrop-filter:saturate(185%) contrast(114%) brightness(1.06)!important;backdrop-filter:saturate(185%) contrast(114%) brightness(1.06)!important}}

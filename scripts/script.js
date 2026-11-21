@@ -7,7 +7,7 @@ const heroTypingEffect=$('.hero-typewriter');if(heroTypingEffect){const typingLi
 const coarse=matchMedia('(pointer: coarse)').matches;
 const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear());
 
-if(!reduced&&window.VanillaTilt){try{VanillaTilt.init(Array.from(document.querySelectorAll('.about-profile-photo,.info-card,.resume-panel,.resume-skill-card,.about-detail-strip>div,.project-card,.contact-card')),{max:7,speed:520,scale:1.018,perspective:1100,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
+if(!reduced&&window.VanillaTilt){try{VanillaTilt.init(Array.from(document.querySelectorAll('.about-profile-photo,.info-card,.about-detail-strip>div,.project-card,.contact-card')),{max:7,speed:520,scale:1.018,perspective:1100,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
 // Animated WebGL fog on desktop and mobile, with a lower simulation cost on phones.
 const fog=$('#fog-canvas');document.documentElement.classList.add('fog-fallback');
