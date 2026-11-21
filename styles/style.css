@@ -1798,3 +1798,99 @@ body[data-theme="day"] :where(
 .resume-panel{transform:none!important;filter:none!important}
 @media(hover:hover) and (pointer:fine){:where(.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-player,.music-track,.glass-card,.tool-panel,.currency-card,.unit-convert-card,.lab-calc-result,.game-panel,.game-side,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]):hover{box-shadow:inset 0 2px 0 rgba(255,255,255,.88),inset 1px 0 0 rgba(255,255,255,.34),inset -1px 0 0 rgba(135,173,255,.3),0 28px 60px rgba(0,0,0,.3),0 0 30px rgba(118,157,255,.2)!important}}
 @media(max-width:760px){:where(.site-header,.global-glass-nav,.global-more-menu,.mobile-nav,.info-card,.project-card,.contact-card,.about-profile-photo,.about-detail-strip>div,.music-player,.music-track,.glass,.glass-card,.tool-panel,.nav-card,.currency-card,.unit-convert-card,.lab-calculations,.lab-calc-result,.unit-picker-sheet,.game-panel,.game-side,.sudoku-side,.chess-side,.ludo-panel,.ludo-setup,.ludo-online,main [class*="-card"],main [class*="-panel"],main [class*="-tile"]){-webkit-backdrop-filter:saturate(185%) contrast(114%) brightness(1.06)!important;backdrop-filter:saturate(185%) contrast(114%) brightness(1.06)!important}}
+
+
+/* Reusable clear Liquid Glass card. Tune these four variables globally. */
+:root {
+  --glass-blur: 20px;
+  --glass-opacity: 0.10;
+  --glass-radius: 28px;
+  --glass-border: rgba(255,255,255,0.25);
+}
+
+/* Single-edge transparent glass surface with restrained 3D depth. */
+.glass-card {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--glass-radius) !important;
+  outline: none !important;
+  background: rgba(255,255,255,var(--glass-opacity)) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%) !important;
+  box-shadow:
+    inset 1px 1px 2px rgba(255,255,255,0.30),
+    inset -1px -1px 2px rgba(0,0,0,0.12),
+    0 12px 28px rgba(0,0,0,0.16) !important;
+  transition: transform 0.35s ease, background 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* One diagonal reflection only; it has no border or visible rim. */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border: 0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.06) 22%,
+    transparent 48%,
+    rgba(255,255,255,0.025) 72%,
+    transparent 100%
+  ) !important;
+  opacity: 0.65 !important;
+  transition: opacity 0.35s ease;
+}
+
+/* Disable legacy decorative after-layers on cards: no duplicate borders. */
+.glass-card::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Restrained hover lift and slightly brighter glass. */
+@media (hover: hover) and (pointer: fine) {
+  .glass-card:hover {
+    transform: translateY(-4px) !important;
+    background: rgba(255,255,255,0.13) !important;
+    box-shadow:
+      inset 1px 1px 2px rgba(255,255,255,0.42),
+      inset -1px -1px 2px rgba(0,0,0,0.12),
+      0 16px 34px rgba(0,0,0,0.19) !important;
+  }
+  .glass-card:hover::before {
+    opacity: 0.9 !important;
+  }
+}
+
+/* Fallback when backdrop-filter is unavailable. */
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+  .glass-card {
+    background: rgba(255,255,255,0.17) !important;
+  }
+}
+
+/* Smaller radius and no hover lift on touch devices. */
+@media (max-width: 600px) {
+  :root {
+    --glass-radius: 24px;
+  }
+  .glass-card:hover {
+    transform: none !important;
+  }
+}
+
+/* Respect reduced-motion settings. */
+@media (prefers-reduced-motion: reduce) {
+  .glass-card,
+  .glass-card::before {
+    transition: none;
+  }
+  .glass-card:hover {
+    transform: none !important;
+  }
+}

@@ -376,9 +376,9 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <section class="tool-hero"><span class="tool-kicker">✦ PRECISION TOOLKIT / 2026</span><h1>Your tools,<br><span>beautifully calculated.</span></h1><p>A premium workspace for everyday mathematics, currency exchange, engineering conversions and clinical laboratory calculations.</p></section>
 <nav class="glass-navigation" aria-label="Calculator tools">
 <button class="nav-card glass glass-card active" data-panel="math" aria-pressed="true"><svg><use href="#i-math"/></svg><span>Math &amp; Scientific Calculator</span></button>
-<button class="nav-card glass" data-panel="currency" aria-pressed="false"><svg><use href="#i-currency"/></svg><span>Currency Converter</span></button>
-<button class="nav-card glass" data-panel="units" aria-pressed="false"><svg><use href="#i-cube"/></svg><span>Unit Converter</span></button>
-<button class="nav-card glass" data-panel="lab" aria-pressed="false"><svg><use href="#i-flask"/></svg><span>Lab Calculator</span></button>
+<button class="nav-card glass glass-card" data-panel="currency" aria-pressed="false"><svg><use href="#i-currency"/></svg><span>Currency Converter</span></button>
+<button class="nav-card glass glass-card" data-panel="units" aria-pressed="false"><svg><use href="#i-cube"/></svg><span>Unit Converter</span></button>
+<button class="nav-card glass glass-card" data-panel="lab" aria-pressed="false"><svg><use href="#i-flask"/></svg><span>Lab Calculator</span></button>
 </nav>
 <section class="tool-panel glass glass-card active" id="math">
 <div class="panel-heading"><div><h2>Math calculator</h2><p>Switch between a clean everyday keypad and a full scientific calculator.</p></div><span class="panel-tag">01 / MATHEMATICS</span></div>
@@ -393,25 +393,25 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <div class="calc-hint" id="calc-hint">Keyboard supported · Enter to calculate · Esc to clear</div>
 </div>
 </section>
-<section class="tool-panel glass" id="currency">
+<section class="tool-panel glass glass-card" id="currency">
 <div class="panel-heading"><div><h2>Currency converter</h2><p>Convert using the latest available Frankfurter reference rates. These are published reference rates, not live trading quotes.</p></div><span class="panel-tag">02 / EXCHANGE</span></div>
 <div class="currency-shell">
 <div class="currency-topline"><span class="live-dot" id="currency-live-dot"></span><span id="currency-live-label">RATE STATUS · NOT LOADED</span></div>
 <div class="field currency-amount"><label for="currency-amount">AMOUNT TO CONVERT</label><input class="glass-input" id="currency-amount" type="number" min="0" step="any" value="1" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="currency-pair">
-<div class="currency-card"><div class="currency-card-head"><span>FROM</span><span>YOU HAVE</span></div><div class="currency-identity"><img class="currency-flag" id="currency-from-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag"><span class="currency-flag-fallback hidden" id="currency-from-fallback" aria-hidden="true">¤</span><div><div class="currency-code" id="currency-from-code">USD</div><div class="currency-name" id="currency-from-name">US Dollar</div></div></div><select class="glass-select" id="currency-from" aria-label="From currency"></select></div>
+<div class="currency-card glass-card"><div class="currency-card-head"><span>FROM</span><span>YOU HAVE</span></div><div class="currency-identity"><img class="currency-flag" id="currency-from-flag" src="https://flagcdn.com/w40/us.png" alt="United States flag"><span class="currency-flag-fallback hidden" id="currency-from-fallback" aria-hidden="true">¤</span><div><div class="currency-code" id="currency-from-code">USD</div><div class="currency-name" id="currency-from-name">US Dollar</div></div></div><select class="glass-select" id="currency-from" aria-label="From currency"></select></div>
 <button class="currency-swap" id="currency-swap" type="button" aria-label="Swap currencies"><svg><use href="#i-swap"/></svg></button>
-<div class="currency-card"><div class="currency-card-head"><span>TO</span><span>YOU GET</span></div><div class="currency-identity"><img class="currency-flag" id="currency-to-flag" src="https://flagcdn.com/w40/in.png" alt="India flag"><span class="currency-flag-fallback hidden" id="currency-to-fallback" aria-hidden="true">¤</span><div><div class="currency-code" id="currency-to-code">INR</div><div class="currency-name" id="currency-to-name">Indian Rupee</div></div></div><select class="glass-select" id="currency-to" aria-label="To currency"></select></div>
+<div class="currency-card glass-card"><div class="currency-card-head"><span>TO</span><span>YOU GET</span></div><div class="currency-identity"><img class="currency-flag" id="currency-to-flag" src="https://flagcdn.com/w40/in.png" alt="India flag"><span class="currency-flag-fallback hidden" id="currency-to-fallback" aria-hidden="true">¤</span><div><div class="currency-code" id="currency-to-code">INR</div><div class="currency-name" id="currency-to-name">Indian Rupee</div></div></div><select class="glass-select" id="currency-to" aria-label="To currency"></select></div>
 </div>
 <div class="currency-footer"><button class="glass-button primary" id="currency-convert" type="button">Convert currency ↗</button><div class="currency-rate" id="currency-meta">Rates load when you convert. Last updated date will appear here.</div></div>
 <div class="convert-result"><div class="result-label">CONVERTED AMOUNT</div><div class="result-value" id="currency-result">—</div><div class="result-meta" id="currency-result-meta">Choose currencies and convert to retrieve a reference rate.</div></div>
 <p class="status-line" id="currency-status" aria-live="polite">Ready when you are.</p>
 </div>
 </section>
-<section class="tool-panel glass" id="units">
+<section class="tool-panel glass glass-card" id="units">
 <div class="panel-heading"><div><h2>Unit converter</h2><p>Choose a category, enter a value and select units from the grouped unit library. Concentration supports mass and molar units; mass ↔ molar conversion needs an analyte molecular weight in Clinical Lab Calculator.</p></div><span class="panel-tag">03 / CONVERSIONS</span></div>
 <div class="category-pills unit-category-grid" id="unit-pills" aria-label="Unit categories"></div>
-<div class="unit-convert-card">
+<div class="unit-convert-card glass-card">
 <div class="field"><label for="unit-value">VALUE</label><input class="glass-input" id="unit-value" type="text" value="1" autocomplete="off" data-virtual-keyboard="true" inputmode="none"></div>
 <div class="unit-pair-grid">
 <div class="field"><label>FROM UNIT</label><button class="unit-picker-trigger" id="unit-from-trigger" type="button" aria-haspopup="dialog">Meter (m)<span>⌄</span></button></div>
@@ -423,14 +423,14 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <p class="status-line" id="unit-status" aria-live="polite">Select a category to begin.</p>
 </div>
 <div class="unit-picker-overlay hidden" id="unit-picker-overlay" aria-hidden="true">
-<div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="unit-picker-title">
+<div class="unit-picker-sheet glass-card" role="dialog" aria-modal="true" aria-labelledby="unit-picker-title">
 <div class="unit-picker-header"><span></span><h3 id="unit-picker-title">Select unit</h3><button type="button" class="unit-picker-close" id="unit-picker-cancel" aria-label="Close unit picker">✕</button></div>
 <div class="unit-picker-search-wrap" id="unit-picker-search-wrap"><input id="unit-picker-search" type="search" placeholder="Search units…" aria-label="Search units"></div>
 <div class="unit-picker-list" id="unit-picker-list"></div>
 </div>
 </div>
 </section>
-<section class="tool-panel glass" id="lab">
+<section class="tool-panel glass glass-card" id="lab">
 <div class="panel-heading"><div><h2>Clinical lab calculator</h2><p>Convert mass or molar concentrations using analyte-specific molecular weights, or calculate derived clinical laboratory parameters.</p></div><span class="panel-tag">04 / LAB SCIENCE</span></div>
 <div class="category-pills lab-mode-pills" id="lab-pills">
 <button class="category-pill active" type="button" data-lab-kind="mass" aria-pressed="true">Mass / molar concentration</button>
@@ -453,7 +453,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <div class="convert-result"><div class="result-label">LAB CONVERSION RESULT</div><div class="result-value" id="lab-result">—</div><div class="result-meta" id="lab-formula">No result calculated yet.</div></div>
 <p class="status-line" id="lab-status" aria-live="polite">Select mass or molar concentration to begin.</p>
 <div class="unit-picker-overlay hidden" id="lab-picker-overlay">
-<div class="unit-picker-sheet" role="dialog" aria-modal="true" aria-labelledby="lab-picker-title">
+<div class="unit-picker-sheet glass-card" role="dialog" aria-modal="true" aria-labelledby="lab-picker-title">
 <div class="unit-picker-header"><button type="button" id="lab-picker-cancel" aria-label="Close unit picker">✕</button><h3 id="lab-picker-title">Select unit</h3><span></span></div>
 <div class="unit-picker-list" id="lab-picker-list"></div>
 </div>
@@ -470,7 +470,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <p class="status-line" id="lab-molar-status" aria-live="polite">Ready.</p><button class="glass-button primary" type="button" id="lab-molar-convert">Convert result ↗</button>
 </div>
 </div>
-<div class="lab-calculations hidden" id="lab-calculations-workspace">
+<div class="lab-calculations hidden glass-card" id="lab-calculations-workspace">
  <div class="field lab-calc-select"><label for="lab-calc-type">SELECT CALCULATION</label>
   <select class="glass-select" id="lab-calc-type">
    <option value="homa">HOMA1 · IR, insulin sensitivity &amp; beta function</option><option value="quicki">QUICKI · Insulin sensitivity index</option><option value="fib4">FIB-4 · Liver fibrosis risk score</option><option value="eag">Estimated average glucose · HbA1c</option><option value="mentzer">Mentzer index · Microcytosis screening</option><option value="tsat">Transferrin saturation · Iron profile</option>
@@ -488,12 +488,12 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
    <option value="ldl">LDL-C · Friedewald</option><option value="nonhdl">Non-HDL cholesterol</option><option value="cholratio">Total cholesterol / HDL ratio</option><option value="deritis">AST / ALT · De Ritis ratio</option><option value="apri">APRI · AST / Platelet ratio index</option><option value="rratio">R ratio · Liver injury pattern</option>
   </select>
  </div>
- <p class="result-meta lab-calc-description" id="lab-calc-description"></p><div class="homa2-resource info-glass"><h3>HOMA2 · Non-linear model</h3><p>HOMA2 is an iterative physiological model, not a HOMA1 shortcut. Oxford provides iHOMA2 for academic and non-commercial use under its academic licence. Use the official educational model and read its terms. This website does not mislabel a HOMA1 approximation as HOMA2.</p><a class="glass-button primary" href="https://www.phc.ox.ac.uk/research/resources/ihoma2" target="_blank" rel="noopener noreferrer">Oxford iHOMA2 · academic / non-commercial ↗</a> <a class="glass-button" href="https://www.rdm.ox.ac.uk/about/our-facilities-and-units/DTU/software/homa/faq" target="_blank" rel="noopener noreferrer">Published model and HOMA FAQ ↗</a></div>
+ <p class="result-meta lab-calc-description" id="lab-calc-description"></p><div class="homa2-resource info-glass glass-card"><h3>HOMA2 · Non-linear model</h3><p>HOMA2 is an iterative physiological model, not a HOMA1 shortcut. Oxford provides iHOMA2 for academic and non-commercial use under its academic licence. Use the official educational model and read its terms. This website does not mislabel a HOMA1 approximation as HOMA2.</p><a class="glass-button primary" href="https://www.phc.ox.ac.uk/research/resources/ihoma2" target="_blank" rel="noopener noreferrer">Oxford iHOMA2 · academic / non-commercial ↗</a> <a class="glass-button" href="https://www.rdm.ox.ac.uk/about/our-facilities-and-units/DTU/software/homa/faq" target="_blank" rel="noopener noreferrer">Published model and HOMA FAQ ↗</a></div>
  <div class="lab-calc-fields" id="lab-calc-fields"></div>
  <div class="tool-actions"><button class="glass-button primary" id="lab-calc-run" type="button">Calculate result ↗</button><button class="glass-button" id="lab-calc-reset" type="button">Reset values</button></div>
- <div class="convert-result lab-calc-result" aria-live="polite"><div class="result-label">CALCULATION RESULT</div><div class="result-value" id="lab-calc-result">—</div><div class="result-meta" id="lab-calc-formula">Select a calculation and enter the required values.</div></div>
+ <div class="convert-result lab-calc-result glass-card" aria-live="polite"><div class="result-label">CALCULATION RESULT</div><div class="result-value" id="lab-calc-result">—</div><div class="result-meta" id="lab-calc-formula">Select a calculation and enter the required values.</div></div>
  <p class="status-line" id="lab-calc-status" aria-live="polite">Calculations run locally in your browser.</p>
- <p class="lab-calc-disclaimer">Educational and laboratory calculation support only. Verify units, assay standardization, specimen timing and the applicable clinical guideline. Derived values do not establish a diagnosis or replace measured tests and professional interpretation.</p>
+ <p class="lab-calc-disclaimer glass-card">Educational and laboratory calculation support only. Verify units, assay standardization, specimen timing and the applicable clinical guideline. Derived values do not establish a diagnosis or replace measured tests and professional interpretation.</p>
  <p class="lab-calc-sources">Equation references:
   <a href="https://www.rcpa.edu.au/Manuals/RCPA-Manual/Pathology-Tests/F/FIB-4" target="_blank" rel="noopener noreferrer">RCPA · FIB-4</a> ·
   <a href="https://www.niddk.nih.gov/research-funding/research-programs/laboratory/glomerular-filtration-rate-equations/adults" target="_blank" rel="noopener noreferrer">NIDDK · CKD-EPI 2021</a> ·
