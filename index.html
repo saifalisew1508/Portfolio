@@ -2,14 +2,13 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080b12"><meta name="color-scheme" content="dark light">
 <meta name="description" content="Saif Ali — self-taught developer, open-source enthusiast and bot builder. Learn about Saif Ali and get in touch."><meta name="author" content="Saif Ali">
- <meta property="og:title" content="Saif Ali — Developer & Bot Builder"><meta property="og:description" content="Building useful things for the web and Telegram."><meta property="og:type" content="website">
- <title>Saif Ali — Developer & Bot Builder</title>
- <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
--<link rel="stylesheet" href="/styles/style.css"><script src="assets/js/vanilla-tilt.js" defer></script><script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.4" defer></script><script src="/scripts/script.js" defer></script></head><body class="home-page">
-+<link rel="stylesheet" href="/styles/style.css"><link rel="stylesheet" href="/styles/liquid-glass.css"><script src="/scripts/liquid-glass.js" defer></script><script src="assets/js/vanilla-tilt.js" defer></script><script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.4" defer></script><script src="/scripts/script.js" defer></script></head><body class="home-page">
- <script>
- (function(){
-  var key='saif-theme-mode',mode='auto';
+<meta property="og:title" content="Saif Ali — Developer & Bot Builder"><meta property="og:description" content="Building useful things for the web and Telegram."><meta property="og:type" content="website">
+<title>Saif Ali — Developer & Bot Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/style.css"><link rel="stylesheet" href="/styles/liquid-glass.css"><link rel="stylesheet" href="/styles/nav.css"><script src="/scripts/liquid-glass.js" defer></script><script src="assets/js/vanilla-tilt.js" defer></script><script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.4" defer></script><script src="/scripts/script.js" defer></script></head><body class="home-page">
+<script>
+(function(){
+ var key='saif-theme-mode',mode='auto';
  try{mode=localStorage.getItem(key)||'auto'}catch(e){}
  function autoTheme(){var h=new Date().getHours();return h>=7&&h<19?'day':'night'}
  function apply(){var theme=mode==='day'||mode==='night'?mode:autoTheme();document.documentElement.dataset.theme=theme;if(document.body)document.body.dataset.theme=theme;document.documentElement.style.colorScheme=theme;var meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content',theme==='day'?'#edf2fb':'#080b12');return theme}
