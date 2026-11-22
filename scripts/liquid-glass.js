@@ -22,19 +22,6 @@
   host.appendChild(defs);
   document.body.appendChild(host);
 
-  var CARD_SELECTOR = [
-    '.site-header', '.global-glass-nav', '.global-more-menu',
-    '.about-profile-photo', '.info-card', '.resume-panel', '.resume-skill-card',
-    '.about-detail-strip > div', '.project-card', '.contact-card',
-    '.music-section', '.youtube-player-container', '.music-now-playing', '.music-track',
-    '.nav-card', '.tool-panel', '.currency-card', '.unit-convert-card',
-    '.unit-picker-sheet', '.lab-calc-result',
-    '.game-panel', '.bubble-side', '.bubble-next-card', '.candy-panel', '.candy-side',
-    '.space-panel', '.space-overlay', '.game-side', '.sudoku-side', '.ludo-panel',
-    '.ludo-setup', '.ludo-room-info', '.ludo-turn-card', '.ludo-dice-card',
-    '.ludo-player-card', '.chess-side'
-  ].join(',');
-
   var SCALE = 34;      // refraction strength (px of displacement at the edge)
   var BEZEL = 0.16;    // edge band width as a fraction of the shorter side
   var uid = 0;
@@ -99,39 +86,16 @@
     entries.forEach(function (e) { build(e.target); });
   }) : null;
 
-  function enhance(el) {
-    if (!el || el.nodeType !== 1 || !el.matches(CARD_SELECTOR)) return;
-    el.classList.add('glass-card');
-    if (el.__lgInitialized) return;
-    el.__lgInitialized = true;
-    build(el);
-    if (ro) ro.observe(el);
-    el.addEventListener('pointermove', function (ev) {
-      var r = el.getBoundingClientRect();
-      el.style.setProperty('--lg-x', (ev.clientX - r.left) + 'px');
-      el.style.setProperty('--lg-y', (ev.clientY - r.top) + 'px');
-    }, { passive: true });
-  }
-
-  function scan(root) {
-    if (!root || root.nodeType !== 1) return;
-    enhance(root);
-    root.querySelectorAll(CARD_SELECTOR).forEach(enhance);
-  }
-
   function init() {
-    scan(document.body);
-    // Catch cards rendered later by the music player, calculator and games.
-    if ('MutationObserver' in window) {
-      var mo = new MutationObserver(function (records) {
-        records.forEach(function (record) {
-          record.addedNodes.forEach(function (node) {
-            if (node.nodeType === 1) scan(node);
-          });
-        });
-      });
-      mo.observe(document.body, { childList: true, subtree: true });
-    }
+    document.querySelectorAll('.glass-card').forEach(function (el) {
+      build(el);
+      if (ro) ro.observe(el);
+      el.addEventListener('pointermove', function (ev) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--lg-x', (ev.clientX - r.left) + 'px');
+        el.style.setProperty('--lg-y', (ev.clientY - r.top) + 'px');
+      }, { passive: true });
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

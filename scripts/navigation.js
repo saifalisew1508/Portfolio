@@ -16,7 +16,7 @@ var desktopQuery=window.matchMedia('(min-width: 761px)');
 function links(){return Array.from(nav.querySelectorAll((desktopQuery.matches?'.desktop-nav-links':'.mobile-nav-links')+' .global-nav-item'))}
 function currentKey(){if(!isHome){if(location.hash==='#projects')return 'projects';if(path==='projects.html')return 'projects';if(path==='index.html'&&location.hash==='#resume')return 'resume';return 'more'}var h=location.hash.slice(1);return h==='about'?'about':h==='resume'?'resume':h==='projects'?'projects':h==='contact'?'contact':'home'}
 var activeKey=currentKey(),indicatorReady=false;
-function moveIndicator(item,instant){if(!item)return;var nr=nav.getBoundingClientRect(),r=item.getBoundingClientRect(),x=r.left-nr.left,y=r.top-nr.top;indicator.style.width=r.width+'px';indicator.style.height=r.height+'px';indicator.style.transform='translate3d('+x+'px,'+y+'px,0)';indicator.style.willChange='transform,width,height';if(!indicatorReady||instant||reduced){indicator.style.transition='none';indicatorReady=true;indicator.classList.add('is-ready');requestAnimationFrame(function(){indicator.style.removeProperty('transition')})}else indicator.classList.add('is-ready')}
+function moveIndicator(item,instant){if(!item)return;var nr=nav.getBoundingClientRect(),r=item.getBoundingClientRect(),x=r.left-nr.left-nav.clientLeft,y=r.top-nr.top-nav.clientTop;indicator.style.width=r.width+'px';indicator.style.height=r.height+'px';indicator.style.transform='translate3d('+x+'px,'+y+'px,0)';indicator.style.willChange='transform,width,height';if(!indicatorReady||instant||reduced){indicator.style.transition='none';indicatorReady=true;indicator.classList.add('is-ready');requestAnimationFrame(function(){indicator.style.removeProperty('transition')})}else indicator.classList.add('is-ready')}
 function activeItem(){return links().find(function(a){return a.dataset.nav===activeKey})||nav.querySelector('.global-more-toggle')}
 function setActive(key){activeKey=key;var all=Array.from(nav.querySelectorAll('.global-nav-item'));all.forEach(function(a){var active=a.dataset.nav===key||(key==='projects'&&a.dataset.nav==='more');a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});moveIndicator(activeItem())}
 function hoverItem(item){if(!item)return;moveIndicator(item)}
@@ -82,5 +82,20 @@ try{var pending=sessionStorage.getItem('saif-scroll-target');if(pending){session
 document.body.classList.add('global-page-enter');
 document.body.addEventListener('animationend',function(e){if(e.animationName==='globalPageEnter')document.body.classList.remove('global-page-enter')});
 setActive(activeKey);refreshThemeOptions();
+/* Desktop: dock the capsule in the header (between clock and "Let's talk"); mobile: bottom of the screen. */
+var header=document.querySelector('.site-header'),cta=header&&header.querySelector('.header-cta');
+function place(){
+ var dock=desktopQuery.matches&&header&&cta;
+ if(dock){if(nav.parentNode!==header)header.insertBefore(nav,cta);nav.classList.add('in-header');header.classList.add('has-nav')}
+ else{if(nav.parentNode!==document.body)document.body.appendChild(nav);nav.classList.remove('in-header');if(header)header.classList.remove('has-nav')}
+ closeMenu();
+ requestAnimationFrame(function(){moveIndicator(activeItem(),true)});
+}
+place();
+if(desktopQuery.addEventListener)desktopQuery.addEventListener('change',place);else desktopQuery.addListener(place);
+/* Keep the pill glued to the active item when fonts load or sizes change. */
+if(window.ResizeObserver){var roNav=new ResizeObserver(function(){moveIndicator(activeItem(),true)});roNav.observe(nav);if(header)roNav.observe(header)}
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveIndicator(activeItem(),true)});
+window.addEventListener('load',function(){moveIndicator(activeItem(),true)});
 if(isHome){var ids=['home','about','resume','projects','contact'].map(function(id){return document.getElementById(id)}).filter(Boolean),queued=false;function updateScroll(){if(location.hash&&location.hash!=='#home')return;var marker=window.scrollY+Math.min(window.innerHeight*.36,260),cur=ids[0];ids.forEach(function(s){if(s.offsetTop<=marker)cur=s});var key=cur.id;activeKey=key;setActive(activeKey)}window.addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(function(){updateScroll();queued=false})}},{passive:true});window.addEventListener('hashchange',function(){setActive(currentKey())});window.addEventListener('load',updateScroll,{once:true});updateScroll()}
 })();
