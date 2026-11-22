@@ -1894,3 +1894,179 @@ body[data-theme="day"] :where(
     transform: none !important;
   }
 }
+
+/* =====================================================================
+   FIX PASS: resume layers, Education title pill, calculator pill wrappers
+   Cause: nested elements each had backdrop-filter, so the browser cut the
+   blur into visible rectangles. Only the outer card keeps backdrop blur now.
+   ===================================================================== */
+
+/* ---------- RESUME: remove the extra outer layer ---------- */
+html body .resume-slider,
+html body .resume-track,
+html body .resume-columns,
+html body .resume-skill-cards {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+  outline: none !important;
+}
+html body .resume-track::before,
+html body .resume-track::after,
+html body .resume-slider::before,
+html body .resume-slider::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* One clean surface per resume card (Education, Experience, Skills) */
+html body main .resume-panel {
+  background: linear-gradient(145deg, rgba(24,33,51,.58), rgba(12,17,28,.44)) !important;
+  border: 1px solid rgba(190,207,255,.16) !important;
+  border-radius: 22px !important;
+  backdrop-filter: blur(18px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 16px 44px rgba(0,0,0,.16) !important;
+  transform: none !important;
+  filter: none !important;
+  isolation: auto !important;
+}
+html body main .resume-panel::before,
+html body main .resume-panel::after {
+  content: none !important;
+  display: none !important;
+}
+html body[data-theme="day"] main .resume-panel {
+  background: linear-gradient(145deg, rgba(255,255,255,.72), rgba(224,233,249,.5)) !important;
+  border-color: rgba(87,112,166,.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 14px 40px rgba(45,65,110,.1) !important;
+}
+
+/* Section title: glass pill that is only as wide as its text */
+html body main .resume-panel-title {
+  display: inline-flex !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  align-items: center;
+  gap: 10px !important;
+  margin: 0 0 24px !important;
+  padding: 9px 18px 9px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(196,210,255,.24) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 8px 22px rgba(0,0,0,.12) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  font-size: 16px !important;
+  line-height: 1.2 !important;
+}
+html body main .resume-panel-title::before,
+html body main .resume-panel-title::after {
+  content: none !important;
+  display: none !important;
+}
+html body[data-theme="day"] main .resume-panel-title {
+  background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(228,236,252,.7)) !important;
+  border-color: rgba(87,112,166,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 8px 20px rgba(45,65,110,.1) !important;
+  color: #172033 !important;
+}
+
+/* ---------- CALCULATOR: wrappers must not draw their own box ---------- */
+html body .category-pills:not(.lab-concentration-switch) {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  outline: none !important;
+}
+html body .category-pills .category-pill {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Top 4 tool tiles (Math, Currency, Unit, Lab): no extra rectangle behind them */
+html body .unit-category-grid {
+  background: none !important;
+  border: 0 !important;
+}
+
+/* Mass / Molar + Clinical calculations pills: single glass per pill, no outer box */
+html body .lab-mode-pills {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+}
+html body .lab-mode-pills .category-pill {
+  background: linear-gradient(145deg, rgba(255,255,255,.1), rgba(255,255,255,.03)) !important;
+  border-color: rgba(196,210,255,.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18) !important;
+  color: #cdd6ea !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+html body .lab-mode-pills .category-pill.active {
+  background: linear-gradient(120deg, rgba(112,91,224,.55), rgba(55,122,190,.45)) !important;
+  border-color: rgba(174,165,255,.55) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 5px 18px rgba(92,101,213,.22) !important;
+}
+html body[data-theme="day"] .lab-mode-pills .category-pill {
+  background: rgba(255,255,255,.6) !important;
+  border-color: rgba(85,108,165,.2) !important;
+  color: #33415c !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9) !important;
+}
+html body[data-theme="day"] .lab-mode-pills .category-pill.active {
+  background: linear-gradient(120deg, #7184ff, #5bb4df) !important;
+  border-color: rgba(255,255,255,.55) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(90,110,220,.28) !important;
+}
+
+/* Mass / Molar concentration switch: no dark box in day mode */
+html body .lab-concentration-switch {
+  background: rgba(9,16,34,.55) !important;
+  border: 1px solid rgba(174,190,245,.2) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 5px !important;
+  border-radius: 999px !important;
+}
+html body .lab-concentration-switch .category-pill {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: #b5c0da !important;
+}
+html body .lab-concentration-switch .category-pill.active {
+  background: linear-gradient(120deg, rgba(112,91,224,.6), rgba(55,122,190,.5)) !important;
+  border-color: rgba(174,165,255,.55) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 5px 18px rgba(92,101,213,.25) !important;
+}
+html body[data-theme="day"] .lab-concentration-switch {
+  background: rgba(255,255,255,.6) !important;
+  border-color: rgba(85,108,165,.2) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 6px 18px rgba(45,65,110,.08) !important;
+}
+html body[data-theme="day"] .lab-concentration-switch .category-pill {
+  color: #33415c !important;
+}
+html body[data-theme="day"] .lab-concentration-switch .category-pill.active {
+  background: linear-gradient(120deg, #7184ff, #5bb4df) !important;
+  border-color: rgba(255,255,255,.55) !important;
+  color: #fff !important;
+  box-shadow: 0 6px 18px rgba(90,110,220,.3) !important;
+}
