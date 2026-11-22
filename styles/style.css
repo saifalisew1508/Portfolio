@@ -2070,3 +2070,68 @@ html body[data-theme="day"] .lab-concentration-switch .category-pill.active {
   color: #fff !important;
   box-shadow: 0 6px 18px rgba(90,110,220,.3) !important;
 }
+
+
+/* Resume: four equal slides across desktop; one-card swipe track on phones. */
+@media (min-width: 1100px) {
+  html body .resume-track {
+    display: flex !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    gap: 14px !important;
+    padding: 3px 0 18px !important;
+  }
+  html body .resume-track > .resume-columns,
+  html body .resume-track > .resume-skill-cards { display: contents !important; }
+  html body .resume-track > .resume-columns > .resume-panel,
+  html body .resume-track > .resume-skill-cards > .resume-panel {
+    flex: 1 1 0 !important;
+    width: 25% !important;
+    min-width: 0 !important;
+    scroll-snap-align: none !important;
+  }
+}
+@media (min-width: 761px) and (max-width: 1099px) {
+  html body .resume-track > .resume-columns > .resume-panel,
+  html body .resume-track > .resume-skill-cards > .resume-panel {
+    flex-basis: calc(50% - 7px) !important;
+  }
+}
+@media (max-width: 760px) {
+  html body .resume-track {
+    display: flex !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 12px !important;
+    padding: 3px 2px 18px !important;
+    touch-action: pan-x pan-y !important;
+  }
+  html body .resume-track > .resume-columns,
+  html body .resume-track > .resume-skill-cards { display: contents !important; }
+  html body .resume-track > .resume-columns > .resume-panel,
+  html body .resume-track > .resume-skill-cards > .resume-panel {
+    flex: 0 0 min(88%, 420px) !important;
+    width: auto !important;
+    scroll-snap-align: center !important;
+  }
+}
+
+/* Touch expansion for About cards and the contact form card. */
+@media (hover: none), (pointer: coarse) {
+  html body .info-card,
+  html body .about-detail-strip > div,
+  html body .contact-card {
+    transition: transform .32s ease, box-shadow .32s ease, max-height .32s ease;
+    transform-origin: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html body .info-card.is-expanded,
+  html body .about-detail-strip > div.is-expanded,
+  html body .contact-card.is-expanded {
+    position: relative;
+    z-index: 8;
+    transform: scale(1.025) !important;
+    box-shadow: 0 22px 48px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.34) !important;
+  }
+}

@@ -22,7 +22,7 @@
   host.appendChild(defs);
   document.body.appendChild(host);
 
-  var SCALE = 34;      // refraction strength (px of displacement at the edge)
+  var SCALE = 68;      // refraction strength (px of displacement at the edge)
   var BEZEL = 0.16;    // edge band width as a fraction of the shorter side
   var uid = 0;
 

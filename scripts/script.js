@@ -9,6 +9,33 @@ const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear())
 
 if(!reduced&&window.VanillaTilt){try{VanillaTilt.init(Array.from(document.querySelectorAll('.about-profile-photo,.info-card,.about-detail-strip>div,.project-card,.contact-card')),{max:7,speed:520,scale:1.018,perspective:1100,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
+// Tap-to-expand on touch screens; a second tap collapses the same card.
+if(matchMedia('(hover: none), (pointer: coarse)').matches){
+  const expandableCards=Array.from(document.querySelectorAll('.info-card,.about-detail-strip > div,.contact-card'));
+  expandableCards.forEach(card=>{
+    card.setAttribute('role',card.matches('form')?'group':'button');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-expanded','false');
+    const toggleExpanded=()=>{
+      const open=!card.classList.contains('is-expanded');
+      expandableCards.forEach(other=>{
+        if(other!==card){other.classList.remove('is-expanded');other.setAttribute('aria-expanded','false');}
+      });
+      card.classList.toggle('is-expanded',open);
+      card.setAttribute('aria-expanded',String(open));
+    };
+    card.addEventListener('click',event=>{
+      if(event.target.closest('a,button,input,textarea,select,label'))return;
+      toggleExpanded();
+    });
+    card.addEventListener('keydown',event=>{
+      if((event.key==='Enter'||event.key===' ')&&event.target===card){
+        event.preventDefault();toggleExpanded();
+      }
+    });
+  });
+}
+
 // Animated WebGL fog on desktop and mobile, with a lower simulation cost on phones.
 const fog=$('#fog-canvas');document.documentElement.classList.add('fog-fallback');
 const startFog=()=>{if(!fog||reduced||typeof window.WebGLFluid!=='function')return;try{
