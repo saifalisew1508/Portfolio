@@ -1,0 +1,146 @@
+/* ===== Navigation fix (loads last) =====
+   Mobile  (<=760px): floating capsule at the bottom, 4 links + More button.
+   Desktop (>=761px): capsule lives INSIDE the header, between the clock and "Let's talk".
+   Replaces the many stacked nav overrides in style.css for .global-glass-nav. */
+
+/* 1. Page-enter animation must never put transform/filter on <body>.
+      A transformed/filtered body becomes the containing block for position:fixed,
+      which is what made the nav float mid-page and bleed text through it. */
+html body.global-page-enter,
+html body.global-page-leaving { animation: none !important; transform: none !important; filter: none !important; }
+html body.global-page-enter main { animation: globalMainEnter .5s cubic-bezier(.2,.8,.25,1) both; }
+html body.global-page-leaving main { animation: globalMainLeave .22s ease-in both; }
+@keyframes globalMainEnter { from { opacity: .4; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes globalMainLeave { to { opacity: .55; } }
+
+/* 2. Items must not scale while the indicator is measuring them. */
+html body .global-nav-item,
+html body .global-nav-item.active { animation: none !important; }
+html body .global-nav-item:hover,
+html body .global-nav-more .global-nav-item:hover { transform: none !important; }
+
+/* ---------- Shared look ---------- */
+html body .global-glass-nav {
+  position: fixed;
+  z-index: 150;
+  display: flex !important;
+  align-items: center;
+  box-sizing: border-box;
+  overflow: visible !important;
+  border-radius: 999px !important;
+  isolation: isolate;
+  transform: none !important;
+}
+html body .global-nav-links { display: flex; align-items: center; height: 100%; }
+html body .global-nav-item,
+html body .global-more-toggle {
+  position: relative; z-index: 1;
+  display: flex !important; align-items: center; justify-content: center;
+  min-width: 0 !important; margin: 0;
+  border-radius: 999px !important;
+  white-space: nowrap; line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+html body .global-nav-item span { overflow: visible !important; max-width: none !important; }
+html body .global-nav-item svg { flex: none; }
+html body .global-nav-more { position: relative; flex: none !important; }
+
+/* ---------- Mobile: bottom capsule ---------- */
+@media (max-width: 760px) {
+  html body .global-glass-nav {
+    left: 10px !important; right: 10px !important; top: auto !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+    width: auto !important; max-width: 560px !important; margin: 0 auto !important;
+    height: 66px !important; min-height: 66px !important;
+    padding: 6px !important; gap: 4px !important;
+  }
+  html body .desktop-nav-links { display: none !important; }
+  html body .mobile-nav-links { display: flex !important; flex: 1 1 0 !important; min-width: 0; gap: 2px; }
+  html body .mobile-nav-links .global-nav-item {
+    flex: 1 1 0 !important; width: auto !important;
+    height: 52px !important; min-height: 52px !important;
+    flex-direction: column !important; gap: 4px !important;
+    padding: 4px 2px !important; font-size: 10px !important;
+  }
+  html body .global-nav-item svg { width: 18px !important; height: 18px !important; }
+  html body .global-nav-more { width: 52px !important; height: 52px !important; }
+  html body .global-more-toggle {
+    width: 52px !important; height: 52px !important; padding: 0 !important; flex: none !important;
+  }
+  html body .global-more-toggle svg { width: 22px !important; height: 22px !important; }
+  html body .global-more-menu {
+    top: auto !important; bottom: calc(100% + 14px) !important;
+    left: auto !important; right: 0 !important;
+    width: min(232px, calc(100vw - 28px)) !important;
+    transform-origin: bottom right;
+  }
+  body { padding-bottom: calc(98px + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 360px) {
+  html body .mobile-nav-links .global-nav-item { font-size: 9px !important; }
+  html body .global-nav-more, html body .global-more-toggle { width: 46px !important; }
+}
+
+/* ---------- Desktop: capsule inside the header ---------- */
+@media (min-width: 761px) {
+  html body .site-header.has-nav {
+    display: grid !important;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center; column-gap: clamp(14px, 2vw, 32px);
+  }
+  html body .global-glass-nav.in-header {
+    position: relative !important;
+    left: auto !important; right: auto !important; top: auto !important; bottom: auto !important;
+    justify-self: center;
+    width: max-content !important; max-width: 100% !important;
+    height: 52px !important; min-height: 52px !important;
+    padding: 4px !important; gap: 2px !important;
+    z-index: 20;
+    background: linear-gradient(145deg, rgba(255,255,255,.10), rgba(255,255,255,.03)) !important;
+    border: 1px solid rgba(196,210,255,.22) !important;
+    box-shadow: inset 2px 2px 6px -2px rgba(255,255,255,.35), 0 8px 24px rgba(0,0,0,.18) !important;
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important; /* header already blurs */
+  }
+  html body .desktop-nav-links { display: flex !important; gap: 2px; }
+  html body .mobile-nav-links { display: none !important; }
+  html body .desktop-nav-links .global-nav-item {
+    flex: none !important; width: auto !important;
+    height: 42px !important; min-height: 42px !important;
+    flex-direction: row !important; gap: 7px !important;
+    padding: 0 15px !important; font-size: 12px !important;
+  }
+  html body .global-nav-item svg { width: 16px !important; height: 16px !important; }
+  html body .global-nav-more { width: 42px !important; height: 42px !important; }
+  html body .global-more-toggle { width: 42px !important; height: 42px !important; padding: 0 !important; }
+  html body .global-more-toggle svg { width: 20px !important; height: 20px !important; }
+  html body .global-more-menu {
+    top: calc(100% + 16px) !important; bottom: auto !important;
+    left: auto !important; right: 0 !important;
+    width: 232px !important; transform-origin: top right;
+    background: linear-gradient(145deg, rgba(30,40,70,.97), rgba(9,15,32,.97)) !important;
+  }
+  body[data-theme="day"] .global-more-menu {
+    background: linear-gradient(145deg, rgba(255,255,255,.97), rgba(232,239,252,.97)) !important;
+  }
+  body { padding-bottom: 0; }
+}
+/* Narrow desktop / tablet: icons only so the header never overflows */
+@media (min-width: 761px) and (max-width: 1040px) {
+  html body .desktop-nav-links .global-nav-item { padding: 0 12px !important; }
+  html body .desktop-nav-links .global-nav-item span {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+}
+/* Fallback: a page with no header keeps a fixed, centred capsule at the top */
+@media (min-width: 761px) {
+  html body .global-glass-nav:not(.in-header) {
+    left: 50% !important; right: auto !important; top: 14px !important; bottom: auto !important;
+    transform: translateX(-50%) !important; width: max-content !important; height: 52px !important; padding: 4px !important;
+  }
+}
+
+/* ---------- More menu: tidy list ---------- */
+html body .global-more-menu { padding: 8px !important; border-radius: 22px !important; max-height: min(70vh, 480px); overflow: auto; }
+html body .global-more-menu a { min-height: 44px !important; padding: 0 14px !important; margin: 2px 0 !important; border-radius: 14px !important; font-size: 13px !important; }
+html body .global-menu-heading { margin: 8px 10px 4px !important; }
+html body .global-theme-options button { border-radius: 14px !important; min-height: 42px; }
