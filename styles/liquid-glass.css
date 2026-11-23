@@ -69,3 +69,10 @@ body[data-theme="day"] .glass-card.lg-refract::before {
 @media (prefers-reduced-motion: reduce) {
   .glass-card.lg-refract::before { animation: none; }
 }
+
+/* Stronger optical edge: lens-like caustics and chromatic rim, not a second border. */
+.glass-card.lg-refract{background:rgba(255,255,255,.035)!important;-webkit-backdrop-filter:var(--lg-filter) blur(1.25px) saturate(205%) brightness(1.08)!important;backdrop-filter:var(--lg-filter) blur(1.25px) saturate(205%) brightness(1.08)!important;box-shadow:inset 0 1.5px 1px rgba(255,255,255,.48),inset 1.5px 0 1px rgba(255,255,255,.22),inset -2px -2px 4px rgba(105,160,255,.18),inset 0 0 26px rgba(255,255,255,.075),0 18px 48px rgba(0,0,0,.24)!important}
+.glass-card.lg-refract::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at 0% 0%,rgba(255,255,255,.38),transparent 25%),radial-gradient(ellipse at 100% 0%,rgba(91,215,239,.22),transparent 28%),radial-gradient(ellipse at 100% 100%,rgba(130,105,255,.2),transparent 30%),radial-gradient(ellipse at 0% 100%,rgba(255,110,170,.16),transparent 25%),linear-gradient(90deg,rgba(255,255,255,.24),transparent 3%,transparent 97%,rgba(110,185,255,.22)),linear-gradient(180deg,rgba(255,255,255,.18),transparent 5%,transparent 95%,rgba(255,255,255,.12));opacity:.9;mix-blend-mode:screen}
+.glass-card.lg-refract>*{position:relative;z-index:1}.glass-card.lg-refract::before{z-index:0}.glass-card.lg-refract:hover::after{opacity:1}
+body[data-theme="day"] .glass-card.lg-refract{background:rgba(255,255,255,.19)!important;box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 1.5px 0 1px rgba(255,255,255,.7),inset -2px -2px 4px rgba(91,125,210,.15),inset 0 0 24px rgba(255,255,255,.25),0 18px 42px rgba(58,78,130,.14)!important}
+body[data-theme="day"] .glass-card.lg-refract::after{opacity:.62}

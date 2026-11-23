@@ -2135,3 +2135,18 @@ html body[data-theme="day"] .lab-concentration-switch .category-pill.active {
     box-shadow: 0 22px 48px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.34) !important;
   }
 }
+
+/* Resume layout: four cards in a true 2 × 2 grid, with normal page scrolling. */
+html body main .resume-track{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important;width:100%!important;overflow:visible!important;padding:3px 0 18px!important;scroll-snap-type:none!important;touch-action:auto!important}
+html body main .resume-track>.resume-columns,html body main .resume-track>.resume-skill-cards{display:contents!important}
+html body main .resume-track .resume-panel{width:auto!important;min-width:0!important;min-height:100%!important;flex:initial!important;scroll-snap-align:none!important}
+@media(max-width:760px){html body main .resume-track{grid-template-columns:minmax(0,1fr)!important;gap:18px!important;overflow:visible!important;padding:3px 0 18px!important}}
+@media(max-width:760px) and (prefers-reduced-motion:no-preference){
+html body main .resume-panel.resume-fragments-ready{overflow:hidden!important;transform:translateY(22px) scale(.965) rotateX(2deg)!important;opacity:.38!important;filter:saturate(.75) blur(1.2px)!important;transform-origin:50% 50%;transition:transform .72s cubic-bezier(.18,.78,.18,1),opacity .55s ease,filter .65s ease!important;will-change:transform,opacity,filter}
+html body main .resume-panel.resume-fragments-ready.is-glass-assembled{transform:translateY(0) scale(1) rotateX(0)!important;opacity:1!important;filter:none!important}
+html body main .resume-panel .resume-glass-shard{position:absolute;inset:0;z-index:4;display:block;pointer-events:none;opacity:.92;clip-path:var(--shard-clip);transform:translate3d(var(--shard-x),var(--shard-y),0) rotate(var(--shard-r)) scale(.82);transform-origin:center;background:linear-gradient(135deg,rgba(255,255,255,.42),rgba(160,194,255,.08) 38%,rgba(91,215,239,.16) 68%,rgba(255,255,255,.2)),linear-gradient(115deg,transparent 35%,rgba(255,255,255,.42) 49%,transparent 61%);box-shadow:inset 1px 1px 1px rgba(255,255,255,.52),inset -1px -1px 2px rgba(120,170,255,.24);transition:transform .68s cubic-bezier(.18,.78,.18,1),opacity .46s ease;transition-delay:var(--shard-delay);mix-blend-mode:screen}
+html body main .resume-panel.is-glass-assembled .resume-glass-shard{transform:translate3d(0,0,0) rotate(0) scale(1);opacity:.12}
+html body main .resume-panel.is-glass-shattered{transform:translateY(-7px) scale(.985) rotateX(-1deg)!important;opacity:.72!important;filter:blur(.65px) saturate(1.25)!important}
+html body main .resume-panel.is-glass-shattered .resume-glass-shard{opacity:.98}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){html body main .resume-panel .resume-glass-shard{display:none!important}}

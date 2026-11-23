@@ -17,10 +17,10 @@
 
   // Tune here. Everything else reads from these values.
   var CONFIG = {
-    scale: 46,     // bend strength in px at the edge (30 subtle, 46 medium, 70 strong)
-    bezel: 0.18,   // edge band width as a fraction of the card's shorter side
-    chroma: 0.09,  // colour split: 0 = no rainbow, 0.09 = visible, 0.15 = strong
-    soft: 2        // blur on the map: higher = smoother, rounder bend
+    scale: 72,     // pronounced lens bend concentrated around the bezel
+    bezel: 0.27,   // wider curved edge band for visible background distortion
+    chroma: 0.16,  // stronger RGB separation at the glass edge
+    soft: 1.25        // blur on the map: higher = smoother, rounder bend
   };
 
   var NS = 'http://www.w3.org/2000/svg';
