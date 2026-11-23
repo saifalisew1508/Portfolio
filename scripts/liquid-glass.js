@@ -13,7 +13,6 @@
   var isChromium = /Chrome\/|Chromium\/|CriOS|EdgA?\//.test(ua) && !/iPhone|iPad|iPod/.test(ua);
   var supported = isChromium && window.CSS && CSS.supports &&
     CSS.supports('backdrop-filter', 'url(#a) blur(2px)');
-  if (!supported) return;
 
   // Tune here. Everything else reads from these values.
   var CONFIG = {
@@ -122,12 +121,14 @@
   function build(card) {
     var w = Math.round(card.offsetWidth), h = Math.round(card.offsetHeight);
     if (w < 40 || h < 40) return; // hidden or tiny: wait for ResizeObserver
-    if (!card.__lgFilter) {
-      var id = 'lg-' + (++uid);
-      card.__lgFilter = makeFilter(id);
-      card.style.setProperty('--lg-filter', 'url(#' + id + ')');
+    if (supported) {
+      if (!card.__lgFilter) {
+        var id = 'lg-' + (++uid);
+        card.__lgFilter = makeFilter(id);
+        card.style.setProperty('--lg-filter', 'url(#' + id + ')');
+      }
+      setBox(card.__lgFilter, w, h);
     }
-    setBox(card.__lgFilter, w, h);
     card.classList.add('lg-refract');
   }
 
