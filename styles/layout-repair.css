@@ -1,7 +1,124 @@
-/* Layout repair: preserve the existing resume card geometry and stable positioning. */
-html body main .resume-slider{position:relative!important;width:100%!important;min-width:0!important}
-html body main .resume-track{display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;gap:14px!important;width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;padding:3px 2px 18px!important;scroll-snap-type:x mandatory!important;scroll-behavior:smooth!important;touch-action:pan-x pan-y!important;-webkit-overflow-scrolling:touch!important}
-html body main .resume-track>.resume-columns,html body main .resume-track>.resume-skill-cards{display:contents!important}
-html body main .resume-track .resume-panel{display:block!important;position:relative!important;flex:0 0 calc(50% - 7px)!important;width:auto!important;min-width:0!important;min-height:0!important;height:auto!important;scroll-snap-align:start!important;transform:none!important;translate:none!important;rotate:none!important;opacity:1!important;filter:none!important;overflow:visible!important;will-change:auto!important}
-@media(max-width:760px){html body main .resume-track{gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important}html body main .resume-track .resume-panel{flex:0 0 min(88%,420px)!important;width:auto!important;min-width:0!important;scroll-snap-align:center!important}}
-@media(prefers-reduced-motion:reduce){html body main .resume-track{scroll-behavior:auto!important}}
+/* Layout repair: preserve the site's original card geometry.
+   This file intentionally changes only visual glass rendering and restores the
+   original resume horizontal slider. It does not resize or reposition other tiles. */
+
+/* Keep the fluid background behind page content on every route. */
+html body #fog-canvas {
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+html body .ambient {
+  z-index:0 !important;
+  pointer-events:none !important;
+}
+html body #site-glass-scene {
+  position:relative !important;
+  z-index:1 !important;
+  display:block !important;
+  width:100% !important;
+  min-height:100vh;
+  height:auto !important;
+  overflow:visible !important;
+  background:transparent !important;
+}
+html body .site-footer {
+  position:relative;
+  z-index:1;
+}
+
+/* The renderer draws the glass. Remove the old CSS imitation on those same
+   surfaces so there is one optical layer, not stacked blur/border/shadow layers.
+   Border colour stays transparent rather than removing the border box. */
+#site-glass-scene [glass] {
+  background:transparent !important;
+  background-image:none !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+  outline:none !important;
+  --glass-depth:1.04;
+  --glass-dome:1.06;
+  --glass-ior:1.46;
+  --glass-frost:.015;
+  --glass-chroma:.008;
+  --glass-pull:1px;
+  --glass-shadow:.14;
+  --glass-press:1.01;
+}
+#site-glass-scene [glass]::before,
+#site-glass-scene [glass]::after {
+  content:none !important;
+  display:none !important;
+}
+
+/* Restore the resume track's original swipe-card layout. Earlier appended
+   rules changed the same track from flex to grid and back, causing collisions. */
+html body main .resume-slider {
+  position:relative !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+html body main .resume-track {
+  display:flex !important;
+  flex-flow:row nowrap !important;
+  align-items:stretch !important;
+  gap:14px !important;
+  width:100% !important;
+  min-width:0 !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  padding:3px 2px 18px !important;
+  scroll-snap-type:x mandatory !important;
+  scroll-behavior:smooth !important;
+  touch-action:pan-x pan-y !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+html body main .resume-track > .resume-columns,
+html body main .resume-track > .resume-skill-cards {
+  display:contents !important;
+}
+html body main .resume-track .resume-panel {
+  display:block !important;
+  position:relative !important;
+  flex:0 0 calc(50% - 7px) !important;
+  width:auto !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  height:auto !important;
+  scroll-snap-align:start !important;
+  transform:none !important;
+  opacity:1 !important;
+  filter:none !important;
+  overflow:visible !important;
+  will-change:auto !important;
+}
+html body main .resume-panel.resume-fragments-ready,
+html body main .resume-panel.is-glass-shattered,
+html body main .resume-panel.is-glass-assembled {
+  transform:none !important;
+  opacity:1 !important;
+  filter:none !important;
+  overflow:visible !important;
+}
+html body main .resume-panel .resume-glass-shard {
+  display:none !important;
+  content:none !important;
+}
+@media(max-width:760px) {
+  html body main .resume-track {
+    gap:12px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x mandatory !important;
+  }
+  html body main .resume-track .resume-panel {
+    flex:0 0 min(88%,420px) !important;
+    width:auto !important;
+    min-width:0 !important;
+    scroll-snap-align:center !important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  html body main .resume-track { scroll-behavior:auto !important; }
+}
