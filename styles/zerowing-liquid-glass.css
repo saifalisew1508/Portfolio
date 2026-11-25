@@ -1,0 +1,39 @@
+/* Visual-only tuning for the locally hosted Zerowing Liquid Glass renderer.
+   No dimensions, layout, positioning, borders, radii or overflow are changed here. */
+#site-glass-scene {
+  display:block;
+  position:relative;
+  width:100%;
+  min-height:100vh;
+  height:auto;
+  overflow:visible;
+  color:inherit;
+  background:transparent;
+}
+#site-glass-scene::part(content) { min-height:100vh; }
+#site-glass-scene::part(canvas) { pointer-events:none; }
+
+/* Keep every original tile's own geometry and layout. Only tune optical properties. */
+#site-glass-scene [glass] {
+  --glass-tint:rgba(120,150,225,.045);
+  --glass-depth:1.06;
+  --glass-dome:1.08;
+  --glass-ior:1.44;
+  --glass-frost:.025;
+  --glass-pull:2px;
+  --glass-shadow:.18;
+  --glass-chroma:.008;
+  --glass-press:1.015;
+}
+#site-glass-scene .global-glass-nav[glass] {
+  --glass-tint:rgba(78,132,226,.10);
+  --glass-depth:1.08;
+  --glass-dome:1.10;
+}
+#site-glass-scene[data-engine-fallback="true"] [glass] {
+  -webkit-backdrop-filter:blur(12px) saturate(155%);
+  backdrop-filter:blur(12px) saturate(155%);
+}
+@media(prefers-reduced-motion:reduce) {
+  #site-glass-scene { --glass-pull:0px; }
+}
