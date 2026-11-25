@@ -15,6 +15,10 @@
     registered.add(el);
   }
 
+  function visible(el) {
+    return !!(el && el.getClientRects && el.getClientRects().length);
+  }
+
   function collect(root) {
     if (!root) return;
     if (root.matches && root.matches('.global-glass-nav')) register(root);
@@ -22,23 +26,26 @@
       var nav = root.querySelector('.global-glass-nav');
       if (nav) register(nav);
     }
-    if (root.matches && root.matches('.glass-card') && !root.matches('.global-glass-nav') && registered.size < contentLimit) register(root);
-    if (root.querySelectorAll) {
-      root.querySelectorAll('.glass-card:not(.global-glass-nav)').forEach(function (card) {
-        if (registered.size < contentLimit) register(card);
-      });
+    function addCard(card) {
+      if (visible(card) && registered.size < contentLimit) register(card);
     }
+    if (root.matches && root.matches('.glass-card:not(.global-glass-nav)')) addCard(root);
+    if (root.querySelectorAll) root.querySelectorAll('.glass-card:not(.global-glass-nav)').forEach(addCard);
   }
 
   collect(scene);
   var observer = new MutationObserver(function (records) {
     records.forEach(function (record) {
+      if (record.type === 'attributes') {
+        collect(record.target);
+        if (record.target.parentElement) collect(record.target.parentElement);
+      }
       record.addedNodes.forEach(function (node) {
         if (node.nodeType === 1) collect(node);
       });
     });
   });
-  observer.observe(scene, { childList:true, subtree:true });
+  observer.observe(scene, { childList:true, subtree:true, attributes:true, attributeFilter:['class','hidden','style'] });
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) scene.setAttribute('reduce-motion', '');
   import('/vendor/liquid-glass.js')
