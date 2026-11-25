@@ -254,3 +254,64 @@ html body .global-more-menu.global-more-menu-glass {
     transform-origin:top right !important;
   }
 }
+
+
+/* Final mobile dock alignment: six equal navigation slots. */
+@media (max-width:760px) {
+  html body .global-glass-nav {
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    align-items:center !important;
+    justify-items:stretch !important;
+    gap:0 !important;
+    padding:5px !important;
+  }
+  html body .global-glass-nav .mobile-nav-links {
+    display:contents !important;
+  }
+  html body .global-glass-nav .mobile-nav-links .global-nav-item {
+    grid-row:1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    height:52px !important;
+    min-height:52px !important;
+    padding:4px 0 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:4px !important;
+    text-align:center !important;
+    box-sizing:border-box !important;
+  }
+  html body .global-glass-nav .global-nav-more {
+    grid-column:6 !important;
+    grid-row:1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    height:52px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+  html body .global-glass-nav .global-more-toggle {
+    width:100% !important;
+    min-width:0 !important;
+    height:52px !important;
+    min-height:52px !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+  html body .global-glass-nav .global-nav-item svg {
+    width:18px !important;height:18px !important;flex:0 0 18px !important;
+  }
+  html body .global-glass-nav .global-nav-item span {
+    display:block !important;
+    width:100% !important;
+    font-size:10px !important;
+    line-height:12px !important;
+    text-align:center !important;
+  }
+}
