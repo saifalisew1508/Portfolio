@@ -1,0 +1,11 @@
+/* Stable, content-coupled glass interactions. No tile is independently dragged or tilted. */
+html body .glass-card,html body .resume-panel{transform:none!important;translate:none!important;rotate:none!important;will-change:auto!important}
+@media(hover:hover) and (pointer:fine){html body .glass-card:hover,html body .resume-panel:hover{transform:none!important;translate:none!important;rotate:none!important}}
+html body .glass-card:active{transform:scale(.992)!important;filter:brightness(1.035);transition:transform .12s ease,filter .12s ease}
+html body .glass-card::before,html body .glass-card::after{pointer-events:none!important}
+html body .global-nav-indicator{display:none!important}
+html body .global-glass-nav .global-nav-item{background:transparent!important;border:1px solid transparent!important;box-shadow:none!important;transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,color .18s ease!important}
+html body .global-glass-nav .global-nav-item.active{background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(120,155,235,.13))!important;border:1px solid rgba(235,244,255,.38)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 4px 12px rgba(10,20,45,.10)!important}
+html body[data-theme="day"] .global-glass-nav .global-nav-item.active{background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(190,210,250,.48))!important;border-color:rgba(255,255,255,.82)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 4px 12px rgba(70,90,145,.10)!important}
+html body .global-glass-nav .global-nav-item:active,html body .global-glass-nav .global-more-toggle:active{transform:scale(.97)!important}
+html body .global-glass-nav .global-nav-item svg,html body .global-glass-nav .global-nav-item span{pointer-events:none}

@@ -10,21 +10,15 @@ var html='<div class="global-nav-links desktop-nav-links">'+desktopLinks.map(fun
 html+='<div class="global-nav-links mobile-nav-links">'+mobileLinks.map(function(a){return '<a class="global-nav-item" data-nav="'+a[0]+'" data-scroll-target="'+a[0]+'" href="'+a[2]+'">'+icons[a[0]]+'<span>'+a[1]+'</span></a>'}).join('')+'</div>';
 html+='<div class="global-nav-more"><button class="global-nav-item global-more-toggle" type="button" data-nav="more" aria-label="More options" aria-expanded="false" aria-haspopup="true">'+icons.more+'</button><div class="global-more-menu" aria-label="More pages and appearance"><p class="global-menu-heading">MORE</p><a href="/game">Game</a><a href="/calculator">Calculator</a><a href="/music">Music</a><div class="global-menu-divider"></div><p class="global-menu-heading">APPEARANCE</p><div class="global-theme-options" role="group" aria-label="Appearance options"></div></div></div>'
 nav.innerHTML=html;
-var indicator=document.createElement('span');indicator.className='global-nav-indicator';indicator.setAttribute('aria-hidden','true');nav.insertBefore(indicator,nav.firstChild);nav.setAttribute("glass","");(document.getElementById("site-glass-scene")||document.body).appendChild(nav);
+(document.getElementById("site-glass-scene")||document.body).appendChild(nav);
 var more=nav.querySelector('.global-nav-more'),toggle=nav.querySelector('.global-more-toggle'),menu=nav.querySelector('.global-more-menu'),themeOptions=nav.querySelector('.global-theme-options'),reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var desktopQuery=window.matchMedia('(min-width: 761px)');
 function links(){return Array.from(nav.querySelectorAll((desktopQuery.matches?'.desktop-nav-links':'.mobile-nav-links')+' .global-nav-item'))}
 function currentKey(){if(!isHome){if(location.hash==='#projects')return 'projects';if(path==='projects.html')return 'projects';if(path==='index.html'&&location.hash==='#resume')return 'resume';return 'more'}var h=location.hash.slice(1);return h==='about'?'about':h==='resume'?'resume':h==='projects'?'projects':h==='contact'?'contact':'home'}
-menu.classList.add('global-more-menu-glass');var activeKey=currentKey(),indicatorReady=false;
-function moveIndicator(item,instant){if(!item)return;var nr=nav.getBoundingClientRect(),r=item.getBoundingClientRect(),x=r.left-nr.left-nav.clientLeft,y=r.top-nr.top-nav.clientTop;indicator.style.width=r.width+'px';indicator.style.height=r.height+'px';indicator.style.transform='translate3d('+x+'px,'+y+'px,0)';indicator.style.willChange='transform,width,height';if(!indicatorReady||instant||reduced){indicator.style.transition='none';indicatorReady=true;indicator.classList.add('is-ready');requestAnimationFrame(function(){indicator.style.removeProperty('transition')})}else indicator.classList.add('is-ready')}
+menu.classList.add('global-more-menu-glass');var activeKey=currentKey();
 function activeItem(){return links().find(function(a){return a.dataset.nav===activeKey})||nav.querySelector('.global-more-toggle')}
-function setActive(key){activeKey=key;var all=Array.from(nav.querySelectorAll('.global-nav-item'));all.forEach(function(a){var active=a.dataset.nav===key||(key==='projects'&&a.dataset.nav==='more');a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});moveIndicator(activeItem())}
-function hoverItem(item){if(!item)return;moveIndicator(item)}
-nav.addEventListener('pointerover',function(e){if(e.pointerType==='touch')return;var item=e.target.closest('.global-nav-item');if(item&&nav.contains(item))hoverItem(item)});
-nav.addEventListener('pointerleave',function(){if(!navDrag)moveIndicator(activeItem())});
-var navDrag=null,suppressClick=false;
-nav.addEventListener('click',function(e){if(!suppressClick)return;suppressClick=false;e.preventDefault();e.stopImmediatePropagation();},true);
-function itemAt(x,y){var el=document.elementFromPoint(x,y);return el&&el.closest?el.closest('.global-nav-item'):null}
+function moveIndicator(){/* Retired: the active glass is now the nav item itself. */}
+function setActive(key){activeKey=key;var all=Array.from(nav.querySelectorAll('.global-nav-item'));all.forEach(function(a){var active=a.dataset.nav===key||(key==='projects'&&a.dataset.nav==='more');a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});}
 function scrollToSection(key){
  if(location.pathname!=='/'&&location.pathname!=='/index.html'){try{sessionStorage.setItem('saif-scroll-target',key)}catch(e){}location.href='/';return}
  var section=document.getElementById(key);if(!section)return;
