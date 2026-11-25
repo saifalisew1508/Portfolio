@@ -1,65 +1,20 @@
-/* Official Zerowing Liquid Glass web component integration.
-   The WebGL canvas renders the scene backdrop; [glass] descendants are ray-traced slabs. */
-#site-glass-scene {
-  display: block;
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  height: auto;
-  overflow: visible !important;
-  color: inherit;
-  background: transparent !important;
-}
-#site-glass-scene::part(content) { min-height: 100vh; height: auto; }
-#site-glass-scene::part(canvas) { pointer-events: none; }
-
-#site-glass-scene [glass] {
-  color: inherit;
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  --glass-frost: .025;
-  --glass-depth: 1.12;
-  --glass-dome: 1.18;
-  --glass-ior: 1.48;
-  --glass-chroma: .012;
-  --glass-pull: 5px;
-  --glass-shadow: .28;
-  --glass-press: 1.025;
-}
-#site-glass-scene .site-header[glass] {
-  --glass-tint: rgba(78,132,226,.10);
-  --glass-depth: 1.16;
-  --glass-dome: 1.22;
-}
-#site-glass-scene .global-glass-nav[glass] {
-  --glass-tint: rgba(76,126,220,.12);
-  --glass-depth: 1.14;
-  --glass-dome: 1.20;
-}
-#site-glass-scene .glass-card[glass] {
-  --glass-tint: rgba(132,164,226,.055);
-  --glass-frost: .035;
-  --glass-depth: 1.12;
-  --glass-dome: 1.18;
-}
-#site-glass-scene .glass-card[glass] > * { position: relative; z-index: 1; }
-#site-glass-scene [glass]:focus-visible { outline: 2px solid rgba(145,190,255,.72); outline-offset: 3px; }
-
-/* Only used if the CDN module itself cannot load. When WebGL is unsupported,
-   the upstream component provides its own native frosted-glass fallback. */
-#site-glass-scene[data-engine-fallback="true"] [glass] {
-  background: linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.045) 54%,rgba(100,145,225,.075)) !important;
-  border: 1px solid rgba(235,244,255,.28) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.48),0 12px 28px rgba(8,18,42,.15) !important;
-  -webkit-backdrop-filter: blur(13px) saturate(175%) !important;
-  backdrop-filter: blur(13px) saturate(175%) !important;
-}
-html[data-theme="day"] #site-glass-scene[data-engine-fallback="true"] [glass] {
-  background: linear-gradient(145deg,rgba(255,255,255,.62),rgba(255,255,255,.24) 56%,rgba(115,150,225,.12)) !important;
-  border-color: rgba(255,255,255,.72) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.92),0 12px 28px rgba(70,90,140,.12) !important;
-}
-@media (prefers-reduced-motion: reduce) { #site-glass-scene { --glass-pull: 0px; } }
+/* Locally hosted Zerowing ray-traced Liquid Glass. */
+#site-glass-scene{display:block;position:relative;width:100%;min-height:100vh;height:auto;overflow:visible!important;color:inherit;background:transparent!important}
+#site-glass-scene::part(content){min-height:100vh;height:auto}
+#site-glass-scene::part(canvas){pointer-events:none}
+#site-glass-scene [glass]{color:inherit;background:transparent!important;background-image:none!important;border:0!important;outline:0;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;--glass-frost:.02;--glass-depth:1.1;--glass-dome:1.16;--glass-ior:1.48;--glass-chroma:.01;--glass-pull:4px;--glass-shadow:.24;--glass-press:1.02}
+#site-glass-scene [glass]::before,#site-glass-scene [glass]::after{content:none!important;display:none!important}
+#site-glass-scene .site-header[glass]{--glass-tint:rgba(78,132,226,.09);--glass-depth:1.14;--glass-dome:1.2}
+#site-glass-scene .global-glass-nav[glass]{--glass-tint:rgba(76,126,220,.12);--glass-depth:1.14;--glass-dome:1.2}
+#site-glass-scene .resume-panel[glass]{--glass-tint:rgba(132,164,226,.045);--glass-frost:.025;--glass-depth:1.12;--glass-dome:1.18}
+#site-glass-scene .glass-card[glass]{--glass-tint:rgba(132,164,226,.05);--glass-frost:.035}
+#site-glass-scene [glass]:focus-visible{outline:2px solid rgba(145,190,255,.72);outline-offset:3px}
+#site-glass-scene[data-engine-fallback="true"] [glass]{background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.035) 55%,rgba(100,145,225,.06))!important;border:1px solid rgba(235,244,255,.25)!important;box-shadow:0 12px 28px rgba(8,18,42,.14)!important;-webkit-backdrop-filter:blur(12px) saturate(165%)!important;backdrop-filter:blur(12px) saturate(165%)!important}
+html[data-theme="day"] #site-glass-scene[data-engine-fallback="true"] [glass]{background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(255,255,255,.22) 56%,rgba(115,150,225,.1))!important;border-color:rgba(255,255,255,.7)!important}
+html body main .resume-track{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:stretch!important;gap:16px!important;width:100%!important;overflow:visible!important;padding:3px 0 18px!important;scroll-snap-type:none!important;touch-action:auto!important}
+html body main .resume-track>.resume-columns,html body main .resume-track>.resume-skill-cards{display:contents!important}
+html body main .resume-track .resume-panel{position:relative!important;width:auto!important;min-width:0!important;min-height:0!important;height:auto!important;flex:initial!important;overflow:visible!important;opacity:1!important;filter:none!important;transform:none!important;scroll-snap-align:none!important;padding:24px!important}
+html body main .resume-panel::before,html body main .resume-panel::after,html body main .resume-glass-shard{display:none!important;content:none!important}
+html body main .resume-panel .timeline-item{position:relative;opacity:1!important;filter:none!important;transform:none!important}
+@media(max-width:760px){html body main .resume-track{grid-template-columns:minmax(0,1fr)!important;gap:16px!important;overflow:visible!important;padding-bottom:22px!important}html body main .resume-track .resume-panel{padding:22px!important;border-radius:24px!important}}
+@media(prefers-reduced-motion:reduce){#site-glass-scene{--glass-pull:0px}}
