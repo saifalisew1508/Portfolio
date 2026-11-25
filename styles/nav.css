@@ -427,3 +427,35 @@ html body .global-more-menu.global-more-menu-glass {
     backdrop-filter:blur(var(--more-glass-blur)) saturate(175%) !important;
   }
 }
+
+
+/* Mobile dock readability: prevent dark content bleeding through the glass. */
+@media (max-width:760px) {
+  html body .global-glass-nav.glass-card {
+    -webkit-backdrop-filter: blur(var(--nav-glass-blur,16px)) saturate(175%) !important;
+    backdrop-filter: blur(var(--nav-glass-blur,16px)) saturate(175%) !important;
+    background: rgba(24,30,48,.72) !important;
+    border: 1px solid rgba(255,255,255,.26) !important;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.34), 0 12px 32px rgba(15,20,38,.22) !important;
+  }
+  html body[data-theme="day"] .global-glass-nav.glass-card {
+    background: rgba(239,245,255,.82) !important;
+    border-color: rgba(255,255,255,.88) !important;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.96), 0 10px 28px rgba(74,94,145,.16) !important;
+  }
+  html body .global-glass-nav .global-nav-item,
+  html body .global-glass-nav .global-more-toggle {
+    color: rgba(245,248,255,.92) !important;
+  }
+  html body[data-theme="day"] .global-glass-nav .global-nav-item,
+  html body[data-theme="day"] .global-glass-nav .global-more-toggle {
+    color: #263149 !important;
+  }
+  html body .global-glass-nav .global-nav-indicator {
+    background: rgba(95,126,238,.88) !important;
+    box-shadow: 0 4px 16px rgba(73,105,225,.24) !important;
+  }
+  html body[data-theme="day"] .global-glass-nav .global-nav-indicator {
+    background: linear-gradient(145deg,rgba(105,139,255,.94),rgba(89,118,232,.88)) !important;
+  }
+}
