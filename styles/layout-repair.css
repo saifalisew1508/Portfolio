@@ -52,27 +52,26 @@ html body .site-footer {
   display:none !important;
 }
 
-/* Restore the resume track's original swipe-card layout. Earlier appended
-   rules changed the same track from flex to grid and back, causing collisions. */
+/* Stable tile layout: resume panels form a clean 2 × 2 grid on desktop
+   and a single aligned column on phones. No horizontal overflow or carousel drift. */
 html body main .resume-slider {
+  display:block !important;
   position:relative !important;
   width:100% !important;
   min-width:0 !important;
 }
 html body main .resume-track {
-  display:flex !important;
-  flex-flow:row nowrap !important;
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  grid-auto-rows:1fr;
   align-items:stretch !important;
-  gap:14px !important;
+  gap:16px !important;
   width:100% !important;
   min-width:0 !important;
-  overflow-x:auto !important;
-  overflow-y:hidden !important;
-  padding:3px 2px 18px !important;
-  scroll-snap-type:x mandatory !important;
-  scroll-behavior:smooth !important;
-  touch-action:pan-x pan-y !important;
-  -webkit-overflow-scrolling:touch !important;
+  overflow:visible !important;
+  padding:3px 0 18px !important;
+  scroll-snap-type:none !important;
+  touch-action:auto !important;
 }
 html body main .resume-track > .resume-columns,
 html body main .resume-track > .resume-skill-cards {
@@ -81,16 +80,16 @@ html body main .resume-track > .resume-skill-cards {
 html body main .resume-track .resume-panel {
   display:block !important;
   position:relative !important;
-  flex:0 0 calc(50% - 7px) !important;
   width:auto !important;
   min-width:0 !important;
-  min-height:0 !important;
+  min-height:100% !important;
   height:auto !important;
-  scroll-snap-align:start !important;
+  margin:0 !important;
   transform:none !important;
   opacity:1 !important;
   filter:none !important;
   overflow:visible !important;
+  scroll-snap-align:none !important;
   will-change:auto !important;
 }
 html body main .resume-panel.resume-fragments-ready,
@@ -105,18 +104,39 @@ html body main .resume-panel .resume-glass-shard {
   display:none !important;
   content:none !important;
 }
+html body main .about-grid,
+html body main .project-grid {
+  align-items:stretch !important;
+  grid-auto-rows:1fr;
+}
+html body main .about-grid > *,
+html body main .project-grid > * {
+  min-width:0;
+  height:100%;
+}
+@media (min-width:761px) and (max-width:980px) {
+  html body main .about-grid,
+  html body main .project-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
+}
 @media(max-width:760px) {
   html body main .resume-track {
-    gap:12px !important;
-    overflow-x:auto !important;
-    overflow-y:hidden !important;
-    scroll-snap-type:x mandatory !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    grid-auto-rows:auto;
+    gap:14px !important;
+    overflow:visible !important;
+    padding:3px 0 18px !important;
   }
   html body main .resume-track .resume-panel {
-    flex:0 0 min(88%,420px) !important;
-    width:auto !important;
+    width:100% !important;
     min-width:0 !important;
-    scroll-snap-align:center !important;
+    min-height:0 !important;
+  }
+  html body main .about-grid,
+  html body main .project-grid {
+    grid-template-columns:minmax(0,1fr) !important;
+    grid-auto-rows:auto;
   }
 }
 @media(prefers-reduced-motion:reduce) {

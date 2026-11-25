@@ -2152,27 +2152,76 @@ html body main .resume-panel.is-glass-shattered .resume-glass-shard{opacity:.98}
 @media(max-width:760px) and (prefers-reduced-motion:reduce){html body main .resume-panel .resume-glass-shard{display:none!important}}
 
 
-/* Simple, solid page backgrounds in both visitor-local themes. */
-html body {
-  background-color:#080b12 !important;
-  background-image:none !important;
+/* Home page: restore the music-page aurora mood and keep motion behind content. */
+html body.home-page {
+  background-color:var(--bg) !important;
+  background-image:
+    radial-gradient(ellipse at 76% 16%,rgba(38,103,190,.20),transparent 38%),
+    radial-gradient(ellipse at 17% 62%,rgba(91,62,174,.18),transparent 40%) !important;
 }
-html body .ambient {
-  background:#080b12 !important;
-  background-image:none !important;
+html body.home-page .ambient {
+  z-index:0 !important;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse at 75% 18%,rgba(27,77,151,.28),transparent 38%),
+    radial-gradient(ellipse at 18% 62%,rgba(54,40,135,.22),transparent 40%),
+    #080b12 !important;
 }
-html body.fog-fallback .ambient::before,
-html body.fog-fallback .ambient::after {
-  content:none !important;
-  display:none !important;
-  animation:none !important;
+html body.home-page .ambient::before,
+html body.home-page .ambient::after {
+  content:"";
+  position:absolute;
+  width:72vw;
+  height:72vw;
+  max-width:1100px;
+  max-height:1100px;
+  border-radius:50%;
+  filter:blur(76px);
+  pointer-events:none;
+  will-change:transform;
+  mix-blend-mode:screen;
 }
-html body[data-theme="day"] {
+html body.home-page .ambient::before {
+  top:-38vh;
+  left:-28vw;
+  background:radial-gradient(circle,rgba(40,116,220,.52) 0%,rgba(55,92,190,.18) 42%,transparent 70%);
+  animation:home-aurora-drift-a 27s ease-in-out infinite alternate;
+}
+html body.home-page .ambient::after {
+  right:-30vw;
+  bottom:-42vh;
+  background:radial-gradient(circle,rgba(119,75,218,.42) 0%,rgba(44,127,164,.16) 44%,transparent 70%);
+  animation:home-aurora-drift-b 34s ease-in-out infinite alternate;
+}
+@keyframes home-aurora-drift-a {
+  0% { transform:translate3d(0,0,0) scale(.92); }
+  100% { transform:translate3d(18vw,16vh,0) scale(1.12); }
+}
+@keyframes home-aurora-drift-b {
+  0% { transform:translate3d(0,0,0) scale(1.08); }
+  100% { transform:translate3d(-17vw,-14vh,0) scale(.9); }
+}
+html body.home-page[data-theme="day"] {
   background-color:#edf2fb !important;
-  background-image:none !important;
+  background-image:
+    radial-gradient(ellipse at 76% 16%,rgba(108,160,255,.22),transparent 40%),
+    radial-gradient(ellipse at 17% 62%,rgba(130,112,255,.13),transparent 42%) !important;
 }
-html body[data-theme="day"] .ambient {
-  background:#edf2fb !important;
-  background-image:none !important;
+html body.home-page[data-theme="day"] .ambient {
+  background:
+    radial-gradient(ellipse at 75% 18%,rgba(108,160,255,.26),transparent 40%),
+    radial-gradient(ellipse at 18% 62%,rgba(130,112,255,.14),transparent 42%),
+    #edf2fb !important;
 }
-
+html body.home-page[data-theme="day"] .ambient::before,
+html body.home-page[data-theme="day"] .ambient::after {
+  opacity:.48;
+  mix-blend-mode:multiply;
+}
+@media(prefers-reduced-motion:reduce) {
+  html body.home-page .ambient::before,
+  html body.home-page .ambient::after {
+    animation:none !important;
+  }
+}
