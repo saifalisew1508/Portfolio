@@ -2150,3 +2150,28 @@ html body main .resume-panel.is-glass-shattered{transform:translateY(-7px) scale
 html body main .resume-panel.is-glass-shattered .resume-glass-shard{opacity:.98}
 }
 @media(max-width:760px) and (prefers-reduced-motion:reduce){html body main .resume-panel .resume-glass-shard{display:none!important}}
+
+
+/* Simple, solid page backgrounds in both visitor-local themes. */
+html body {
+  background-color:#080b12 !important;
+  background-image:none !important;
+}
+html body .ambient {
+  background:#080b12 !important;
+  background-image:none !important;
+}
+html body.fog-fallback .ambient::before,
+html body.fog-fallback .ambient::after {
+  content:none !important;
+  display:none !important;
+  animation:none !important;
+}
+html body[data-theme="day"] {
+  background-color:#edf2fb !important;
+  background-image:none !important;
+}
+html body[data-theme="day"] .ambient {
+  background:#edf2fb !important;
+  background-image:none !important;
+}
