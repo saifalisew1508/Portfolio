@@ -87,7 +87,7 @@ var header=document.querySelector('.site-header'),cta=header&&header.querySelect
 function place(){
  var dock=desktopQuery.matches&&header&&cta;
  if(dock){header.classList.add('glass-card');if(nav.parentNode!==header)header.insertBefore(nav,cta);nav.classList.add('in-header');header.classList.add('has-nav')}
- else{if(header)header.classList.remove('glass-card');if(nav.parentNode!==document.body)document.body.appendChild(nav);nav.classList.remove('in-header');if(header)header.classList.remove('has-nav')}
+ else{if(header)header.classList.remove('glass-card');var scene=document.getElementById('site-glass-scene');if(nav.parentNode!==scene)(scene||document.body).appendChild(nav);nav.classList.remove('in-header');if(header)header.classList.remove('has-nav')}
  closeMenu();
  requestAnimationFrame(function(){moveIndicator(activeItem(),true)});
 }
