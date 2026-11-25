@@ -160,3 +160,39 @@ body[data-theme="day"] .glass-card.lg-refract {
   .glass-card.lg-refract { -webkit-backdrop-filter:blur(12px) saturate(180%) brightness(1.06)!important; backdrop-filter:blur(12px) saturate(180%) brightness(1.06)!important; }
   .global-glass-nav.glass-card.lg-refract { -webkit-backdrop-filter:blur(12px) saturate(175%)!important; backdrop-filter:blur(12px) saturate(175%)!important; }
 }
+
+
+/*
+ * Optical edge correction — replace stacked rim layers with one continuous
+ * glass boundary. The displacement filter remains active where supported.
+ */
+.glass-card.lg-refract {
+  border:1px solid rgba(242,248,255,.34) !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.025) 52%,rgba(110,145,230,.055)) !important;
+  -webkit-backdrop-filter:var(--lg-filter,blur(12px)) blur(1px) saturate(185%) brightness(1.07) !important;
+  backdrop-filter:var(--lg-filter,blur(12px)) blur(1px) saturate(185%) brightness(1.07) !important;
+  box-shadow:0 14px 34px rgba(15,28,65,.16),inset 0 1px 0 rgba(255,255,255,.42) !important;
+  overflow:hidden;
+}
+.glass-card.lg-refract::before {
+  inset:0 !important;
+  border-radius:inherit !important;
+  background:
+    radial-gradient(ellipse 75% 45% at var(--lg-x,30%) var(--lg-y,0%),rgba(255,255,255,.22),transparent 72%),
+    linear-gradient(145deg,rgba(255,255,255,.12),transparent 38%) !important;
+  opacity:1 !important;
+  animation:none !important;
+}
+/* Remove the old rainbow corner bands and nested rim that made edges look doubled. */
+.glass-card.lg-refract::after { content:none !important; display:none !important; }
+body[data-theme="day"] .glass-card.lg-refract {
+  border-color:rgba(255,255,255,.66) !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,.12) 55%,rgba(120,150,230,.075)) !important;
+  box-shadow:0 14px 34px rgba(75,92,145,.12),inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+@media(max-width:760px) {
+  .glass-card.lg-refract {
+    -webkit-backdrop-filter:var(--lg-filter,blur(12px)) blur(1px) saturate(180%) brightness(1.05) !important;
+    backdrop-filter:var(--lg-filter,blur(12px)) blur(1px) saturate(180%) brightness(1.05) !important;
+  }
+}
