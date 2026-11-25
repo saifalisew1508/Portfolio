@@ -100,3 +100,63 @@ body[data-theme="day"] .glass-card.lg-refract::after{opacity:.62}
   -webkit-backdrop-filter:blur(var(--header-glass-blur,12px)) saturate(160%) !important;
   backdrop-filter:blur(var(--header-glass-blur,12px)) saturate(160%) !important;
 }
+
+
+/* Universal 3D glass finish for cards, tiles and panels. */
+.glass-card.lg-refract {
+  transform:translateZ(0);
+  transform-style:preserve-3d;
+  border:1px solid rgba(235,244,255,.30) !important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.19),rgba(255,255,255,.055) 42%,rgba(90,130,220,.075)) !important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.68),
+    inset 1.5px 0 1px rgba(255,255,255,.25),
+    inset -1.5px -2px 3px rgba(78,112,205,.20),
+    inset 0 0 24px rgba(255,255,255,.075),
+    0 3px 0 rgba(255,255,255,.13),
+    0 18px 38px rgba(20,35,75,.20) !important;
+}
+.glass-card.lg-refract::before {
+  background:
+    radial-gradient(ellipse at var(--lg-x,30%) var(--lg-y,0%),rgba(255,255,255,.34),transparent 55%),
+    linear-gradient(115deg,transparent 34%,rgba(255,255,255,.22) 49%,transparent 62%) 0 0 / 260% 100% no-repeat !important;
+}
+.glass-card.lg-refract::after {
+  opacity:1 !important;
+  background:
+    radial-gradient(ellipse at 0% 0%,rgba(255,255,255,.52),transparent 26%),
+    radial-gradient(ellipse at 100% 0%,rgba(103,222,255,.24),transparent 30%),
+    radial-gradient(ellipse at 100% 100%,rgba(133,111,255,.24),transparent 32%),
+    radial-gradient(ellipse at 0% 100%,rgba(255,132,188,.18),transparent 27%),
+    linear-gradient(90deg,rgba(255,255,255,.34),transparent 4%,transparent 96%,rgba(120,190,255,.30)),
+    linear-gradient(180deg,rgba(255,255,255,.25),transparent 7%,transparent 93%,rgba(255,255,255,.16)) !important;
+  mix-blend-mode:screen;
+}
+body[data-theme="day"] .glass-card.lg-refract {
+  background:linear-gradient(145deg,rgba(255,255,255,.48),rgba(255,255,255,.18) 46%,rgba(122,157,245,.12)) !important;
+  border-color:rgba(255,255,255,.76) !important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.98),
+    inset 1.5px 0 1px rgba(255,255,255,.66),
+    inset -1.5px -2px 3px rgba(88,116,190,.17),
+    inset 0 0 24px rgba(255,255,255,.26),
+    0 3px 0 rgba(255,255,255,.65),
+    0 18px 38px rgba(70,91,145,.14) !important;
+}
+@media(hover:hover) and (pointer:fine) {
+  .glass-card.lg-refract:hover {
+    transform:translateY(-2px) translateZ(0);
+    box-shadow:
+      inset 0 2px 1px rgba(255,255,255,.82),
+      inset 1.5px 0 1px rgba(255,255,255,.32),
+      inset -1.5px -2px 3px rgba(78,112,205,.22),
+      0 5px 0 rgba(255,255,255,.14),
+      0 24px 48px rgba(20,35,75,.26) !important;
+  }
+}
+@media(max-width:760px) {
+  .glass-card.lg-refract::before {animation:none!important}
+  .glass-card.lg-refract { -webkit-backdrop-filter:blur(12px) saturate(180%) brightness(1.06)!important; backdrop-filter:blur(12px) saturate(180%) brightness(1.06)!important; }
+  .global-glass-nav.glass-card.lg-refract { -webkit-backdrop-filter:blur(12px) saturate(175%)!important; backdrop-filter:blur(12px) saturate(175%)!important; }
+}

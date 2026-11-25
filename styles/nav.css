@@ -325,7 +325,7 @@ html body .global-more-menu.global-more-menu-glass {
   --more-glass-blur   = More popup
 */
 :root {
-  --nav-glass-blur: 10px;
+  --nav-glass-blur: 12px;
   --header-glass-blur: 12px;
   --more-glass-blur: 14px;
 }
@@ -457,5 +457,42 @@ html body .global-more-menu.global-more-menu-glass {
   }
   html body[data-theme="day"] .global-glass-nav .global-nav-indicator {
     background: linear-gradient(145deg,rgba(105,139,255,.94),rgba(89,118,232,.88)) !important;
+  }
+}
+
+
+/* Active-page capsule: optical liquid lens, matching the header blur. */
+html body .global-glass-nav .global-nav-indicator {
+  z-index:0 !important;
+  border-radius:999px !important;
+  overflow:hidden !important;
+  background:
+    radial-gradient(ellipse at 18% 0%,rgba(255,255,255,.62),transparent 48%),
+    linear-gradient(145deg,rgba(151,190,255,.46),rgba(91,122,232,.30) 52%,rgba(64,93,190,.40)) !important;
+  border:1px solid rgba(255,255,255,.52) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(190%) brightness(1.12) !important;
+  backdrop-filter:blur(12px) saturate(190%) brightness(1.12) !important;
+  box-shadow:
+    inset 0 1.5px 1px rgba(255,255,255,.82),
+    inset 1px 0 1px rgba(255,255,255,.34),
+    inset -1px -2px 3px rgba(53,78,172,.25),
+    0 7px 20px rgba(66,95,202,.24) !important;
+}
+html body .global-glass-nav .global-nav-indicator::before {
+  content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,.48),transparent 35%,transparent 68%,rgba(255,255,255,.17));
+}
+html body .global-glass-nav .global-nav-indicator::after {
+  content:"";position:absolute;left:12%;right:12%;top:2px;height:35%;border-radius:999px;
+  pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.48),rgba(255,255,255,0));
+}
+html body[data-theme="day"] .global-glass-nav .global-nav-indicator {
+  background:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.78),transparent 48%),linear-gradient(145deg,rgba(116,153,255,.66),rgba(93,127,238,.54)) !important;
+  border-color:rgba(255,255,255,.72) !important;
+}
+@media(max-width:760px) {
+  html body .global-glass-nav {
+    -webkit-backdrop-filter:blur(12px) saturate(175%) !important;
+    backdrop-filter:blur(12px) saturate(175%) !important;
   }
 }
