@@ -330,7 +330,7 @@ body[data-theme="day"] .category-pill{background:rgba(255,255,255,.65);border-co
 body[data-theme="day"] .bottom-glass-nav a,body[data-theme="day"] .bottom-glass-nav button{color:#52617a}body[data-theme="day"] .bottom-glass-nav .active{color:#263653;background:rgba(111,126,222,.17)}
 body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 </style>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/webgl-fluid@0.4" defer></script></head>
 <body>
 <script>
 (function(){
@@ -343,7 +343,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
  window.addEventListener('storage',function(e){if(e.key===key){mode=e.newValue||'auto';apply()}});
 })();
 </script>
-<div class="ambient" aria-hidden="true"></div>
+<div class="ambient" aria-hidden="true"></div><canvas id="fog-canvas" aria-hidden="true"></canvas>
 <svg aria-hidden="true" width="0" height="0" style="position:absolute;overflow:hidden">
 <symbol id="i-math" viewBox="0 0 24 24"><rect x="4" y="2.5" width="16" height="19" rx="3"/><path d="M8 6.5h8M8 11h2m4 0h2M8 15h2m4 0h2M8 18.5h2m4 0h2"/></symbol>
 <symbol id="i-currency" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v4c0 1.7 2.7 3 6 3 1.3 0 2.5-.2 3.5-.6M3 11v4c0 1.7 2.7 3 6 3 1.1 0 2.1-.2 3-.5"/><ellipse cx="16" cy="15" rx="5" ry="2.5"/><path d="M11 15v3.5c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V15"/></symbol>
@@ -371,7 +371,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 <symbol id="i-file" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM14 3v5h5M9 13h6m-6 4h6"/></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
 </svg>
-<liquid-glass id="site-glass-scene" backdrop="aurora" dim="0.78" colors="#244a78 #345c9a #5969a8 #245c79" style="--glass-frost:.035;--glass-ior:1.46;--glass-dome:1.18;--glass-chroma:.012;--glass-pull:5px;"><header class="site-header tool-header"><a class="wordmark" href="/" data-scroll-target="home">saif<span>.</span></a><div class="local-clock tool-header-clock" aria-label="Local date and time"><span id="visitor-time">--:--</span><small id="visitor-date">Loading time…</small></div><a class="header-cta" href="/" data-scroll-target="contact">Let's talk <span>↗</span></a></header>
+<liquid-glass id="site-glass-scene" backdrop="aurora" dim="0.25" colors="#244a78 #345c9a #5969a8 #245c79" style="--glass-frost:.035;--glass-ior:1.46;--glass-dome:1.18;--glass-chroma:.012;--glass-pull:5px;"><header class="site-header tool-header"><a class="wordmark" href="/" data-scroll-target="home">saif<span>.</span></a><div class="local-clock tool-header-clock" aria-label="Local date and time"><span id="visitor-time">--:--</span><small id="visitor-date">Loading time…</small></div><a class="header-cta" href="/" data-scroll-target="contact">Let's talk <span>↗</span></a></header>
 <main class="tool-wrap">
 <section class="tool-hero"><span class="tool-kicker">✦ PRECISION TOOLKIT / 2026</span><h1>Your tools,<br><span>beautifully calculated.</span></h1><p>A premium workspace for everyday mathematics, currency exchange, engineering conversions and clinical laboratory calculations.</p></section>
 <nav class="glass-navigation" aria-label="Calculator tools">
@@ -510,6 +510,7 @@ body[data-theme="day"] .lab-calc-sources a{color:#5369bb}
 </main></liquid-glass>
 
 <button class="virtual-keypad-toggle" id="virtual-keypad-toggle" type="button" aria-pressed="false">⌨ Open keypad</button><div class="virtual-keypad hidden" id="virtual-keypad" role="group" aria-label="Numeric keypad"><div class="virtual-keypad-head"><span>NUMBER PAD</span><button type="button" data-vk="done" aria-label="Close numeric keypad">Done ✕</button></div><div class="virtual-keypad-grid"><button type="button" data-vk="7">7</button><button type="button" data-vk="8">8</button><button type="button" data-vk="9">9</button><button type="button" data-vk="4">4</button><button type="button" data-vk="5">5</button><button type="button" data-vk="6">6</button><button type="button" data-vk="1">1</button><button type="button" data-vk="2">2</button><button type="button" data-vk="3">3</button><button type="button" data-vk=".">.</button><button type="button" data-vk="0">0</button><button type="button" data-vk="back">⌫</button><button type="button" data-vk="clear" class="vk-clear">Clear</button><button type="button" data-vk="-">±</button><button type="button" data-vk="done" class="vk-done">Done</button></div></div>
+<script defer src="/scripts/script.js"></script>
 <script defer src="/scripts/calculator.js"></script>
 <script defer src="/scripts/navigation.js"></script>
 </body></html>

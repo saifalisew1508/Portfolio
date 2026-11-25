@@ -2176,6 +2176,3 @@ html body[data-theme="day"] .ambient {
   background-image:none !important;
 }
 
-/* Layout stability: remove the old resume shard animation that obscured content. */
-html body main .resume-panel,html body main .resume-panel.resume-skill-card{opacity:1!important;filter:none!important;transform:none!important;will-change:auto!important}
-html body main .resume-glass-shard{display:none!important}
