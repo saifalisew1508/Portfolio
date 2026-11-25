@@ -8,7 +8,7 @@ html body #fog-canvas {
   pointer-events:none !important;
 }
 html body .ambient {
-  z-index:-1 !important;
+  z-index:0 !important;
   pointer-events:none !important;
 }
 html body #site-glass-scene {
@@ -90,7 +90,7 @@ html body main .resume-track .resume-panel {
   transform:none !important;
   opacity:1 !important;
   filter:none !important;
-  overflow:hidden;
+  overflow:visible !important;
   will-change:auto !important;
 }
 html body main .resume-panel.resume-fragments-ready,
@@ -99,7 +99,7 @@ html body main .resume-panel.is-glass-assembled {
   transform:none !important;
   opacity:1 !important;
   filter:none !important;
-  overflow:hidden !important;
+  overflow:visible !important;
 }
 html body main .resume-panel .resume-glass-shard {
   display:none !important;
