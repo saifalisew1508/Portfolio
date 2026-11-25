@@ -1,4 +1,4 @@
-/* Self-hosted Zerowing Liquid Glass engine; preserve existing card geometry. */
+/* Self-hosted Zerowing Liquid Glass engine; register only existing visible tiles. */
 (function () {
   'use strict';
   var scene = document.getElementById('site-glass-scene');
@@ -7,7 +7,7 @@
   scene.setAttribute('dim', '0.25');
   var registered = new Set();
   var maxGlass = 16;
-  var contentLimit = 15; // reserve one library slot for the shared navigation dock
+  var contentLimit = 15; // one remaining slot for the shared navigation dock
 
   function register(el) {
     if (!el || registered.has(el) || registered.size >= maxGlass) return;
@@ -21,16 +21,17 @@
 
   function collect(root) {
     if (!root) return;
-    if (root.matches && root.matches('.global-glass-nav')) register(root);
+    var nav = root.matches && root.matches('.global-glass-nav')
+      ? root : (root.querySelector && root.querySelector('.global-glass-nav'));
+    if (nav) register(nav);
+
+    function addTile(tile) {
+      if (visible(tile) && registered.size < contentLimit) register(tile);
+    }
+    if (root.matches && root.matches('.glass-card, .resume-panel') && !root.matches('.global-glass-nav')) addTile(root);
     if (root.querySelectorAll) {
-      var nav = root.querySelector('.global-glass-nav');
-      if (nav) register(nav);
+      root.querySelectorAll('.glass-card, .resume-panel').forEach(addTile);
     }
-    function addCard(card) {
-      if (visible(card) && registered.size < contentLimit) register(card);
-    }
-    if (root.matches && root.matches('.glass-card:not(.global-glass-nav)')) addCard(root);
-    if (root.querySelectorAll) root.querySelectorAll('.glass-card:not(.global-glass-nav)').forEach(addCard);
   }
 
   collect(scene);
@@ -45,10 +46,23 @@
       });
     });
   });
-  observer.observe(scene, { childList:true, subtree:true, attributes:true, attributeFilter:['class','hidden','style'] });
+  observer.observe(scene, {
+    childList:true,
+    subtree:true,
+    attributes:true,
+    attributeFilter:['class','hidden','style']
+  });
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) scene.setAttribute('reduce-motion', '');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scene.setAttribute('reduce-motion', '');
+  }
   import('/vendor/liquid-glass.js')
-    .then(function () { scene.setAttribute('data-raytraced', 'true'); scene.removeAttribute('data-engine-fallback'); })
-    .catch(function (error) { scene.setAttribute('data-engine-fallback', 'true'); console.error('Self-hosted Liquid Glass engine failed to load.', error); });
+    .then(function () {
+      scene.setAttribute('data-raytraced', 'true');
+      scene.removeAttribute('data-engine-fallback');
+    })
+    .catch(function (error) {
+      scene.setAttribute('data-engine-fallback', 'true');
+      console.error('Self-hosted Liquid Glass engine failed to load.', error);
+    });
 })();
