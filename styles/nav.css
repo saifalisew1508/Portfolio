@@ -187,3 +187,70 @@ html body .global-more-toggle {
     font-size: 9px !important;
   }
 }
+
+
+/* Navigation regression fix: keep the popup absolutely anchored to More. */
+html body .global-glass-nav.glass-card { position:relative; }
+html body .global-more-menu,
+html body .global-more-menu.global-more-menu-glass {
+  position:absolute !important;
+  z-index:300 !important;
+  box-sizing:border-box !important;
+  width:min(248px,calc(100vw - 32px)) !important;
+  max-width:calc(100vw - 32px) !important;
+  max-height:min(62vh,420px) !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  overscroll-behavior:contain;
+  right:0 !important;
+  left:auto !important;
+}
+@media(max-width:760px) {
+  html body .global-glass-nav.glass-card {
+    position:fixed !important;
+    left:10px !important;right:10px !important;
+    top:auto !important;bottom:calc(10px + env(safe-area-inset-bottom)) !important;
+    width:auto !important;max-width:560px !important;
+    margin:0 auto !important;
+    display:flex !important;flex-flow:row nowrap !important;
+    align-items:center !important;justify-content:space-between !important;
+    box-sizing:border-box !important;
+  }
+  html body .mobile-nav-links {
+    flex:1 1 0 !important;min-width:0 !important;
+    display:flex !important;flex-flow:row nowrap !important;
+    align-items:center !important;justify-content:space-around !important;
+  }
+  html body .mobile-nav-links .global-nav-item {
+    flex:1 1 0 !important;min-width:0 !important;
+    width:auto !important;box-sizing:border-box !important;
+  }
+  html body .global-nav-more {flex:0 0 46px !important;width:46px !important;}
+  html body .global-more-menu,
+  html body .global-more-menu.global-more-menu-glass {
+    top:auto !important;bottom:calc(100% + 12px) !important;
+    right:0 !important;left:auto !important;
+    transform-origin:bottom right !important;
+  }
+}
+@media(min-width:761px) {
+  html body .site-header.has-nav {
+    grid-template-columns:auto auto minmax(0,1fr) auto !important;
+    min-width:0 !important;
+  }
+  html body .global-glass-nav.in-header {
+    position:relative !important;
+    justify-self:center !important;
+    width:max-content !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+  }
+  html body .global-nav-links {min-width:0 !important;flex:0 1 auto !important;}
+  html body .global-more-menu,
+  html body .global-more-menu.global-more-menu-glass {
+    top:calc(100% + 12px) !important;bottom:auto !important;
+    right:0 !important;left:auto !important;
+    transform-origin:top right !important;
+  }
+}

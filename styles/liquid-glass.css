@@ -82,3 +82,15 @@ body[data-theme="day"] .glass-card.lg-refract::after{opacity:.62}
 .site-header.glass-card.lg-refract::after,.global-glass-nav.glass-card.lg-refract::after,.global-more-menu.glass-card.lg-refract::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 0 0,rgba(255,255,255,.34),transparent 30%),radial-gradient(ellipse at 100% 100%,rgba(102,153,255,.2),transparent 32%),linear-gradient(90deg,rgba(255,255,255,.22),transparent 5%,transparent 95%,rgba(125,190,255,.2))}
 @media(max-width:760px){.glass-card.lg-refract::before{animation:none!important}.glass-card.lg-refract{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.48),inset 1px 0 1px rgba(255,255,255,.2),inset -1px -1px 2px rgba(112,154,255,.16),0 8px 22px rgba(0,0,0,.16)!important}.site-header.glass-card.lg-refract,.global-glass-nav.glass-card.lg-refract,.global-more-menu.glass-card.lg-refract{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}.glass-card.lg-refract::after{mix-blend-mode:normal}}
 @media(prefers-reduced-motion:reduce){.glass-card.lg-refract::before{animation:none!important}}
+
+
+/* Style More popup without assigning .glass-card positioning semantics. */
+.global-more-menu.global-more-menu-glass {
+  background:linear-gradient(145deg,rgba(35,45,76,.78),rgba(9,15,32,.72)) !important;
+  border:1px solid rgba(225,237,255,.34) !important;
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.42),inset 1px 0 1px rgba(255,255,255,.18),0 18px 42px rgba(0,0,0,.32) !important;
+}
+.global-more-menu.global-more-menu-glass::before {
+  content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(ellipse at 0 0,rgba(255,255,255,.25),transparent 34%),linear-gradient(135deg,rgba(255,255,255,.09),transparent 55%,rgba(120,155,255,.12));
+}
