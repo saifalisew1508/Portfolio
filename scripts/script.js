@@ -7,7 +7,7 @@ const heroTypingEffect=$('.hero-typewriter');if(heroTypingEffect){const typingLi
 const coarse=matchMedia('(pointer: coarse)').matches;
 const year=$('#year'); if(year)year.textContent=String(new Date().getFullYear());
 
-if(!reduced&&window.VanillaTilt){try{VanillaTilt.init(Array.from(document.querySelectorAll('.about-profile-photo,.info-card,.about-detail-strip>div,.project-card,.contact-card')),{max:7,speed:520,scale:1.018,perspective:1100,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
+if(!reduced&&!coarse&&window.VanillaTilt){try{VanillaTilt.init(Array.from(document.querySelectorAll('.about-profile-photo,.info-card,.about-detail-strip>div,.project-card,.contact-card')),{max:7,speed:520,scale:1.018,perspective:1100,gyroscope:true,gyroscopeMinAngleX:-25,gyroscopeMaxAngleX:25,gyroscopeMinAngleY:-25,gyroscopeMaxAngleY:25});}catch(e){console.warn('Tilt unavailable',e);}}
 
 // Tap-to-expand on touch screens; a second tap collapses the same card.
 if(matchMedia('(hover: none), (pointer: coarse)').matches){
@@ -40,7 +40,7 @@ if(matchMedia('(hover: none), (pointer: coarse)').matches){
 const fog=$('#fog-canvas');document.documentElement.classList.add('fog-fallback');
 const startFog=()=>{if(!fog||reduced||typeof window.WebGLFluid!=='function')return;try{
  const mobile=matchMedia('(max-width:760px)').matches||coarse;
- window.WebGLFluid(fog,{TRIGGER:'hover',IMMEDIATE:true,AUTO:true,INTERVAL:mobile?2600:1900,SIM_RESOLUTION:mobile?72:128,DYE_RESOLUTION:mobile?512:900,DENSITY_DISSIPATION:.965,VELOCITY_DISSIPATION:.38,PRESSURE:.82,PRESSURE_ITERATIONS:20,CURL:24,SPLAT_RADIUS:.16,SPLAT_FORCE:mobile?1050:1500,SPLAT_COUNT:2,SPLAT_COLOR:{r:.25,g:.36,b:.92},COLORFUL:false,SHADING:true,COLOR_UPDATE_SPEED:0,TRANSPARENT:true,BACK_COLOR:{r:0,g:0,b:0},BLOOM:false,BLOOM_ITERATIONS:2,BLOOM_RESOLUTION:mobile?128:256,BLOOM_INTENSITY:.08,BLOOM_THRESHOLD:.35,BLOOM_SOFT_KNEE:.7,SUNRAYS:false});
+ window.WebGLFluid(fog,{TRIGGER:'hover',IMMEDIATE:true,AUTO:true,INTERVAL:mobile?4200:1900,SIM_RESOLUTION:mobile?48:128,DYE_RESOLUTION:mobile?256:900,DENSITY_DISSIPATION:.965,VELOCITY_DISSIPATION:.42,PRESSURE:.78,PRESSURE_ITERATIONS:mobile?8:20,CURL:mobile?10:24,SPLAT_RADIUS:.16,SPLAT_FORCE:mobile?800:1500,SPLAT_COUNT:mobile?1:2,SPLAT_COLOR:{r:.25,g:.36,b:.92},COLORFUL:false,SHADING:!mobile,COLOR_UPDATE_SPEED:0,TRANSPARENT:true,BACK_COLOR:{r:0,g:0,b:0},BLOOM:false,BLOOM_ITERATIONS:mobile?0:2,BLOOM_RESOLUTION:mobile?64:256,BLOOM_INTENSITY:.08,BLOOM_THRESHOLD:.35,BLOOM_SOFT_KNEE:.7,SUNRAYS:false});
  document.documentElement.classList.remove('fog-fallback');
  let inside=false,lastX=-1,lastY=-1;const forwardPointer=e=>{const x=e.clientX,y=e.clientY;if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||y<0||x>innerWidth||y>innerHeight)return;if(!inside){inside=true;fog.dispatchEvent(new MouseEvent('mouseenter',{clientX:x,clientY:y,bubbles:false}));}if(Math.abs(x-lastX)+Math.abs(y-lastY)<1.5)return;lastX=x;lastY=y;fog.dispatchEvent(new MouseEvent('mousemove',{clientX:x,clientY:y,bubbles:true,view:window}));};
  document.addEventListener('pointermove',forwardPointer,{passive:true});addEventListener('blur',()=>{inside=false;lastX=lastY=-1;});document.documentElement.classList.add('fluid-fog-ready');

@@ -11,7 +11,8 @@
 
   var ua = navigator.userAgent;
   var isChromium = /Chrome\/|Chromium\/|CriOS|EdgA?\//.test(ua) && !/iPhone|iPad|iPod/.test(ua);
-  var supported = isChromium && window.CSS && CSS.supports &&
+  var coarse = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(max-width: 760px)').matches;
+  var supported = !coarse && isChromium && window.CSS && CSS.supports &&
     CSS.supports('backdrop-filter', 'url(#a) blur(2px)');
 
   // Tune here. Everything else reads from these values.
@@ -155,11 +156,26 @@
     var ro = 'ResizeObserver' in window ? new ResizeObserver(function (entries) {
       entries.forEach(function (e) { build(e.target); });
     }) : null;
-    document.querySelectorAll('.glass-card').forEach(function (card) {
+    function attach(card) {
+      if (card.__lgAttached) return;
+      card.__lgAttached = true;
       build(card);
-      if (ro) ro.observe(card);
-      track(card);
-    });
+      if (ro && !coarse) ro.observe(card);
+      if (!coarse) track(card);
+    }
+    document.querySelectorAll('.glass-card').forEach(attach);
+    if ('MutationObserver' in window) {
+      var mo = new MutationObserver(function (records) {
+        records.forEach(function (record) {
+          record.addedNodes.forEach(function (node) {
+            if (node.nodeType !== 1) return;
+            if (node.matches && node.matches('.glass-card')) attach(node);
+            if (node.querySelectorAll) node.querySelectorAll('.glass-card').forEach(attach);
+          });
+        });
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
