@@ -94,3 +94,9 @@ body[data-theme="day"] .glass-card.lg-refract::after{opacity:.62}
   content:"";position:absolute;inset:1px;border-radius:inherit;pointer-events:none;
   background:radial-gradient(ellipse at 0 0,rgba(255,255,255,.25),transparent 34%),linear-gradient(135deg,rgba(255,255,255,.09),transparent 55%,rgba(120,155,255,.12));
 }
+
+/* Let nav.css own header/dock/popup blur values through its manual variables. */
+.site-header,.global-glass-nav,.global-more-menu {
+  -webkit-backdrop-filter:blur(var(--header-glass-blur,12px)) saturate(160%) !important;
+  backdrop-filter:blur(var(--header-glass-blur,12px)) saturate(160%) !important;
+}
