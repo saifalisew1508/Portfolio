@@ -1,12 +1,5 @@
-/* Layout repair: preserve the site's original card geometry.
-   This file intentionally changes only visual glass rendering and restores the
-   original resume horizontal slider. It does not resize or reposition other tiles. */
-
-/* Keep the fluid background behind page content on every route. */
-html body #fog-canvas {
-  z-index:0 !important;
-  pointer-events:none !important;
-}
+/* Layout repair: preserve the original page flow and let each tile size to its content. */
+html body #fog-canvas,
 html body .ambient {
   z-index:0 !important;
   pointer-events:none !important;
@@ -26,9 +19,7 @@ html body .site-footer {
   z-index:1;
 }
 
-/* The renderer draws the glass. Remove the old CSS imitation on those same
-   surfaces so there is one optical layer, not stacked blur/border/shadow layers.
-   Border colour stays transparent rather than removing the border box. */
+/* The Liquid Glass renderer owns the optical surface, not the card layout. */
 #site-glass-scene [glass] {
   background:transparent !important;
   background-image:none !important;
@@ -52,22 +43,45 @@ html body .site-footer {
   display:none !important;
 }
 
-/* Stable tile layout: resume panels form a clean 2 × 2 grid on desktop
-   and a single aligned column on phones. No horizontal overflow or carousel drift. */
+/* Never force cards to fill an artificial 1fr row.
+   This was stretching About/Projects tiles and causing visual overlap. */
+html body main .about-grid,
+html body main .project-grid,
+html body main .about-detail-strip {
+  align-items:stretch !important;
+  grid-auto-rows:auto !important;
+  height:auto !important;
+  min-height:0 !important;
+}
+html body main .about-grid > *,
+html body main .project-grid > *,
+html body main .about-detail-strip > * {
+  box-sizing:border-box !important;
+  height:auto !important;
+  min-height:0 !important;
+  min-width:0 !important;
+  align-self:stretch !important;
+}
+
+/* Resume markup has two structural wrappers around four panels.
+   Flatten only those wrappers so the four actual cards form a real 2 × 2 grid. */
 html body main .resume-slider {
   display:block !important;
   position:relative !important;
   width:100% !important;
   min-width:0 !important;
+  height:auto !important;
+  overflow:visible !important;
 }
 html body main .resume-track {
   display:grid !important;
   grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  grid-auto-rows:1fr;
+  grid-auto-rows:auto !important;
   align-items:stretch !important;
   gap:16px !important;
   width:100% !important;
   min-width:0 !important;
+  height:auto !important;
   overflow:visible !important;
   padding:3px 0 18px !important;
   scroll-snap-type:none !important;
@@ -80,11 +94,14 @@ html body main .resume-track > .resume-skill-cards {
 html body main .resume-track .resume-panel {
   display:block !important;
   position:relative !important;
+  box-sizing:border-box !important;
   width:auto !important;
   min-width:0 !important;
-  min-height:100% !important;
+  min-height:0 !important;
   height:auto !important;
   margin:0 !important;
+  flex:none !important;
+  align-self:stretch !important;
   transform:none !important;
   opacity:1 !important;
   filter:none !important;
@@ -104,41 +121,47 @@ html body main .resume-panel .resume-glass-shard {
   display:none !important;
   content:none !important;
 }
-html body main .about-grid,
-html body main .project-grid {
-  align-items:stretch !important;
-  grid-auto-rows:1fr;
-}
-html body main .about-grid > *,
-html body main .project-grid > * {
-  min-width:0;
-  height:100%;
-}
-@media (min-width:761px) and (max-width:980px) {
+
+/* Medium/desktop layouts: consistent two-column cards, with the final tile
+   spanning the row when a section contains three cards. */
+@media (min-width:761px) {
   html body main .about-grid,
   html body main .project-grid {
     grid-template-columns:repeat(2,minmax(0,1fr)) !important;
   }
+  html body main .about-grid > :last-child,
+  html body main .project-grid > :last-child {
+    grid-column:1 / -1;
+  }
+  html body main .about-detail-strip {
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  }
 }
-@media(max-width:760px) {
+
+/* Phone layout: one card per row, no sideways slider or clipped content. */
+@media (max-width:760px) {
+  html body main .about-grid,
+  html body main .project-grid,
+  html body main .about-detail-strip,
   html body main .resume-track {
     grid-template-columns:minmax(0,1fr) !important;
-    grid-auto-rows:auto;
+    grid-auto-rows:auto !important;
     gap:14px !important;
-    overflow:visible !important;
-    padding:3px 0 18px !important;
+  }
+  html body main .about-grid > :last-child,
+  html body main .project-grid > :last-child {
+    grid-column:auto;
   }
   html body main .resume-track .resume-panel {
     width:100% !important;
     min-width:0 !important;
     min-height:0 !important;
+    height:auto !important;
   }
-  html body main .about-grid,
-  html body main .project-grid {
-    grid-template-columns:minmax(0,1fr) !important;
-    grid-auto-rows:auto;
+  html body main .resume-panel .resume-glass-shard {
+    display:none !important;
   }
 }
-@media(prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion:reduce) {
   html body main .resume-track { scroll-behavior:auto !important; }
 }
